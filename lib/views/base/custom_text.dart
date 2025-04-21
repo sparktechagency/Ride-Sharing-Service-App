@@ -5,20 +5,21 @@ import '../../utils/app_colors.dart';
 class CustomText extends StatelessWidget {
   CustomText(
       {super.key,
-      this.maxLine,
-      this.textOverflow,
-      this.fontName,
-      this.textAlign = TextAlign.center,
-      this.left = 0,
-      this.right = 0,
-      this.top = 0,
-      this.bottom = 0,
-      this.fontSize = 12,
-      this.textHeight,
-      this.decoration,
-      this.fontWeight = FontWeight.w400,
-      this.color = Colors.black,
-      this.text = ""});
+        this.maxLine,
+        this.textOverflow,
+        this.fontName,
+        this.textDecoration = TextDecoration.none,
+        this.textAlign = TextAlign.center,
+        this.decorationColor = Colors.transparent,
+        this.left = 0,
+        this.right = 0,
+        this.top = 0,
+        this.bottom = 0,
+        this.fontSize = 14,
+        this.textHeight,
+        this.fontWeight = FontWeight.w400,
+        this.color = Colors.black,
+        this.text = ""});
 
   final double left;
   final TextOverflow? textOverflow;
@@ -29,27 +30,28 @@ class CustomText extends StatelessWidget {
   final FontWeight fontWeight;
   final Color color;
   final String text;
+  final Color decorationColor;
   final TextAlign textAlign;
   final int? maxLine;
   final String? fontName;
   final double? textHeight;
-  final TextDecoration? decoration;
+  final TextDecoration? textDecoration;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          EdgeInsets.only(left: left, right: right, top: top, bottom: bottom),
+      EdgeInsets.only(left: left, right: right, top: top, bottom: bottom),
       child: Text(
         textAlign: textAlign,
         text,
         maxLines: maxLine,
         overflow: textOverflow ?? TextOverflow.ellipsis,
         style: TextStyle(
-          decoration: decoration,
+          decoration: textDecoration,
           fontSize: fontSize,
-          decorationColor: AppColors.primaryColor,
-          fontFamily: fontName ?? "DMSans",
+          decorationColor: Colors.black,
+          fontFamily: fontName ?? "Outfit",
           fontWeight: fontWeight,
           color: color,
         ),

@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 
 ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
-  fontFamily: 'Montserrat',
+  fontFamily: 'Outfit',
   primaryColor: color,
-  scaffoldBackgroundColor: Colors.transparent,
+  scaffoldBackgroundColor: AppColors.backgroundColor,
   secondaryHeaderColor: AppColors.textColor,
   disabledColor: AppColors.subTextColor,
   brightness: Brightness.dark,
@@ -36,9 +36,9 @@ ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
   appBarTheme: AppBarTheme(
       centerTitle: true,
       titleTextStyle: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 18.sp,
-          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.w500,
+          fontSize: 16.sp,
+          fontFamily: 'Outfit',
           color: AppColors.textColor),
       iconTheme: IconThemeData(color: AppColors.borderColor)),
   iconTheme: IconThemeData(color: AppColors.borderColor),

@@ -4,6 +4,7 @@ import '../views/screen/Auth/OtpScreen/otp_screen.dart';
 import '../views/screen/Auth/ResetPass/reset_password_screen.dart';
 import '../views/screen/Auth/SignIn/sign_in_screen.dart';
 import '../views/screen/Auth/SignUp/sign_up_screen.dart';
+import '../views/screen/Auth/SignUp/sign_up_two_screen.dart';
 import '../views/screen/Categories/categories_screen.dart';
 import '../views/screen/Home/home_screen.dart';
 import '../views/screen/Location/location_picker_screen.dart';
@@ -14,6 +15,7 @@ import '../views/screen/Splash/splash_screen.dart';
 class AppRoutes{
   static String splashScreen="/splash_screen";
   static String signUpScreen="/sign_up_screen";
+  static String signUpTwoScreen="/sign_up_two_screen";
   static String signInScreen="/sign_in_screen";
   static String otpScreen="/otp_screen";
   static String forgotPasswordScreen="/forgot_password_screen";
@@ -27,6 +29,7 @@ class AppRoutes{
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
     GetPage(name:signUpScreen, page: ()=>const SignUpScreen()),
+    GetPage(name:signUpTwoScreen, page: ()=> SignUpTwoScreen()),
     GetPage(name:signInScreen, page: ()=> SignInScreen()),
     GetPage(name:otpScreen, page: ()=> OtpScreen()),
     GetPage(name:forgotPasswordScreen, page: ()=> ForgotPasswordScreen()),

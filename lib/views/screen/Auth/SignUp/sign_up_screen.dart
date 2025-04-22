@@ -120,23 +120,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   print("Phone===============> ${phone.completeNumber}");
                 },
               ),
-              //========================> Date Of Birth Day Text Field <==================
-              SizedBox(height: 16.h),
-              CustomText(
-                text: AppStrings.dateOfBirth.tr,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                bottom: 14.h,
-              ),
-              CustomTextField(
-                onTab: () {
-                  _authController.pickBirthDate(context);
-                },
-                readOnly: true,
-                controller: _authController.dateOfBirthCtrl,
-                hintText: AppStrings.dateOfBirth.tr,
-                suffixIcons: SvgPicture.asset(AppIcons.calender),
-              ),
               //========================> Password Text Field <==================
               SizedBox(height: 16.h),
               CustomText(
@@ -149,6 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 isPassword: true,
                 controller: _authController.passwordCtrl,
                 hintText: AppStrings.password.tr,
+                prefixIcon: SvgPicture.asset(AppIcons.lock),
               ),
               //========================> Confirm Password Text Field <==================
               SizedBox(height: 16.h),
@@ -162,6 +146,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 isPassword: true,
                 controller: _authController.confirmCtrl,
                 hintText: AppStrings.confirmPassword.tr,
+                prefixIcon: SvgPicture.asset(AppIcons.lock),
               ),
               SizedBox(height: 16.h),
               _checkboxSection(),
@@ -169,11 +154,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               //========================> Sign Up Button <==================
               CustomButton(
                 onTap: () {
-                  Get.toNamed(AppRoutes.otpScreen);
+                  Get.toNamed(AppRoutes.signUpTwoScreen);
                 },
                 text: AppStrings.signUp.tr,
               ),
-              SizedBox(height: 32.h),
+              SizedBox(height: 16.h),
               //========================> Don’t have an account Sign In Button <==================
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

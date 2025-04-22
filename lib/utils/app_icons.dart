@@ -13,9 +13,11 @@ class AppIcons{
   static String eyeOffIcon="$baseUrl/eye-off.svg";
   static String cardIcon="$baseUrl/credit-card.svg";
   static String personalIcon="$baseUrl/parsong_icon-card.svg";
-  static String calenderIcon="$baseUrl/calender-card.svg";
+  static String calender="$baseUrl/calender.svg";
   static String chats="$baseUrl/chats.svg";
   static String postRides="$baseUrl/postRides.svg";
   static String myOrder="$baseUrl/myOrder.svg";
+  static String clock="$baseUrl/clock.svg";
+  static String lock="$baseUrl/lock.svg";
 
 }

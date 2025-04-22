@@ -102,28 +102,28 @@ class _CustomTextFieldState extends State<CustomTextField> {
             vertical: widget.contenpaddingVertical ?? 16.w),
         filled: true,
         fillColor: widget.filColor ?? AppColors.fillColor,
-        prefixIcon: widget.prefixIcon,
+        prefixIcon: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: widget.prefixIcon,
+        ),
         suffixIcon: widget.isPassword
             ? GestureDetector(
           onTap: toggle,
           child: _suffixIcon(obscureText ? AppIcons.eyeOffIcon : AppIcons.eyeIcon),
         )
-            : widget.suffixIcons,
+            : Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: widget.suffixIcons,
+            ),
         prefixIconConstraints: BoxConstraints(minHeight: 24.h, minWidth: 24.w),
         suffixIconConstraints: BoxConstraints(minHeight: 24.h, minWidth: 24.w),
         errorStyle: const TextStyle(color: Colors.red),
-        suffixIconColor: AppColors.primaryColor,
-        prefixIconColor: AppColors.primaryColor,
+        suffixIconColor: AppColors.greyColor,
+        prefixIconColor: AppColors.greyColor,
         labelText: widget.labelText,
         hintText: widget.hintText,
-        hintStyle: TextStyle(color: AppColors.hintColor, fontFamily: 'Poppins'),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.r),
-          borderSide: BorderSide(
-            width: 1.w,
-            color: AppColors.primaryColor,
-          ),
-        ),
+        hintStyle: TextStyle(color: AppColors.hintColor, fontFamily: 'Outfit'),
+        border: _buildOutlineInputBorder(),
         errorBorder: _buildOutlineInputBorder(),
         focusedBorder: _buildOutlineInputBorder(),
         enabledBorder: _buildOutlineInputBorder(),
@@ -134,19 +134,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   _suffixIcon(String icon) {
     return Padding(
-      padding: EdgeInsets.only(right: 15.w),
+      padding: EdgeInsets.only(right: 16.w),
       child: SvgPicture.asset(
-        color: Colors.black,
         icon,
+        color: Colors.grey,
       ),
     );
   }
 
   _buildOutlineInputBorder() {
     return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.r),
       borderSide: BorderSide(
         width: 1.w,
-        color: AppColors.primaryColor,
+        color: AppColors.borderColor,
       ),
     );
   }

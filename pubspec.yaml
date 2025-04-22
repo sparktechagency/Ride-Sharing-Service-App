@@ -52,6 +52,7 @@ dependencies:
   path_provider: ^2.1.5
   logger: ^2.5.0
   flutter_chat_bubble: ^2.0.2
+  intl_phone_field: ^3.2.0
 
 dev_dependencies:
   flutter_test:

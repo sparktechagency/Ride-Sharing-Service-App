@@ -86,7 +86,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 prefixIcon: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
-                  child: SvgPicture.asset(AppIcons.calenderIcon),
+                  child: SvgPicture.asset(AppIcons.calender),
                 ),
                 hintText: 'CVV/CVC',
               ),
@@ -96,7 +96,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 prefixIcon: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
-                  child: SvgPicture.asset(AppIcons.calenderIcon),
+                  child: SvgPicture.asset(AppIcons.calender),
                 ),
                 hintText: 'MM/YY',
               ),

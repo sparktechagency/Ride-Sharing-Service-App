@@ -21,15 +21,16 @@ class AppStrings {
   static String enterPassword = 'Enter password';
   static String forgotPasswords = 'Forgot Password?';
   static String donotHaveAnAccount = 'Don’t have an account?';
+  static String updatePassword = 'Update Password';
   //=============================> Sign up Screen <=============================
   static String signUp = 'Sign Up';
-  static String withEmail = 'With Email';
+  static String withEmail = ' With Email';
   static String welcomeBackPleaseEnter = 'Welcome Back! Please enter your details.';
   static String userName = 'User Name';
   static String enterUsername = 'Enter username';
   static String phoneNumber = 'Phone number';
   static String confirmPassword = 'Confirm password';
-  static String byCreatingAnAccountIAccept = 'By creating an account, I accept the';
+  static String byCreatingAnAccountIAccept = 'By creating an account, I accept the\n';
   static String termsConditions = 'Terms & Conditions';
   static String privacyPolicy = 'Privacy Policy';
   static String alreadyHaveAnAccount = 'Already have an account?';
@@ -47,20 +48,20 @@ class AppStrings {
   static String greenCardDrivingLicenseFrontSide = 'Green card /Driving license (front side)';
   static String greenCardDrivingLicenseBackSide = 'Green card /Driving license (back side)';
   //==========================> Forgot Password Screen <========================
-  static String forgot = 'Forgot';
+  static String forgot = 'Forgot ';
   static String pleaseEnterYourPhoneNumber = 'Please enter your phone number to reset password.';
   static String sendOTP = 'Send OTP';
-  static String verify = 'Verify';
+  static String verify = 'Verify ';
   static String email = 'Email';
   static String pleaseCheckYourPhoneNumberAndEnterTheCode = 'Please check your phone number and enter the code';
   static String didNotReceiveCode = 'Didn’t receive code?';
-  static String resendIt = 'Resend It';
+  static String resendCode = 'Resend Code';
   static String verifyEmail = 'Verify Email';
   //=========================> Reset Password Screen <==========================
-  static String reset = 'Reset';
+  static String reset = 'Reset ';
   static String enterNewPassword = 'Enter a new password';
   static String resetPassword = 'Reset Password';
-  static String resetPasswords = 'Password Changed!';
+  static String passwordChanged = 'Password Changed!';
   static String returnToTheLoginPage = 'Return to the login page to enter your account with your new password.';
   static String backToSignIn = 'Back to sign in';
   //=====================================================================> Driver Role <=============================================================

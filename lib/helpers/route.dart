@@ -10,10 +10,14 @@ import '../views/screen/Home/home_screen.dart';
 import '../views/screen/Location/location_picker_screen.dart';
 import '../views/screen/Location/location_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
+import '../views/screen/SelectRole/select_role_screen.dart';
+import '../views/screen/Splash/onboarding_screen.dart';
 import '../views/screen/Splash/splash_screen.dart';
 
 class AppRoutes{
   static String splashScreen="/splash_screen";
+  static String onboardingScreen="/onboarding_screen";
+  static String selectRoleScreen="/select_role_screen";
   static String signUpScreen="/sign_up_screen";
   static String signUpTwoScreen="/sign_up_two_screen";
   static String signInScreen="/sign_in_screen";
@@ -28,6 +32,8 @@ class AppRoutes{
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
+    GetPage(name:onboardingScreen, page: ()=>const OnboardingScreen()),
+    GetPage(name:selectRoleScreen, page: ()=>const SelectRoleScreen()),
     GetPage(name:signUpScreen, page: ()=>const SignUpScreen()),
     GetPage(name:signUpTwoScreen, page: ()=> SignUpTwoScreen()),
     GetPage(name:signInScreen, page: ()=> SignInScreen()),

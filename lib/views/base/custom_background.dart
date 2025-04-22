@@ -19,8 +19,8 @@ class CustomBackground extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.purple,
-            Colors.purple.shade100,
+            Color(0xff00AFF5),
+            Color(0xffB4E8FD),
           ],
           stops: const [0.2266, 0.9998],
         ),

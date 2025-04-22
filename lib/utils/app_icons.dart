@@ -19,5 +19,9 @@ class AppIcons{
   static String myOrder="$baseUrl/myOrder.svg";
   static String clock="$baseUrl/clock.svg";
   static String lock="$baseUrl/lock.svg";
+  static String location="$baseUrl/location.svg";
+  static String type="$baseUrl/type.svg";
+  static String model="$baseUrl/model.svg";
+  static String licenseNum="$baseUrl/licenseNum.svg";
 
 }

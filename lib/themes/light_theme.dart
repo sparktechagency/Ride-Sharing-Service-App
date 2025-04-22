@@ -34,14 +34,15 @@ ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
     unselectedLabelStyle: const TextStyle(color: Colors.red),
   ),
   appBarTheme: AppBarTheme(
+    backgroundColor: Colors.white,
       centerTitle: true,
       titleTextStyle: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 16.sp,
           fontFamily: 'Outfit',
           color: AppColors.textColor),
-      iconTheme: IconThemeData(color: AppColors.borderColor)),
-  iconTheme: IconThemeData(color: AppColors.borderColor),
+      iconTheme: IconThemeData(color: AppColors.blackColor)),
+  iconTheme: IconThemeData(color: AppColors.blackColor),
   checkboxTheme: CheckboxThemeData(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(4),
@@ -64,7 +65,7 @@ ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
 
 OutlineInputBorder enableBorder() {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15.r),
+    borderRadius: BorderRadius.circular(16.r),
     borderSide: BorderSide(
       color: AppColors.primaryColor,
     ),
@@ -73,7 +74,7 @@ OutlineInputBorder enableBorder() {
 
 OutlineInputBorder focusedBorder() {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15.r),
+    borderRadius: BorderRadius.circular(16.r),
     borderSide: BorderSide(
       color: AppColors.primaryColor,
     ),
@@ -82,7 +83,7 @@ OutlineInputBorder focusedBorder() {
 
 OutlineInputBorder errorBorder() {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8.r),
+    borderRadius: BorderRadius.circular(16.r),
     borderSide: const BorderSide(
       color: Colors.red,
     ),

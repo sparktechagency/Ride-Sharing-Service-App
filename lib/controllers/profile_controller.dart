@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,8 @@ class ProfileController extends GetxController {
   File? selectedImage;
   RxString imagesPath = ''.obs;
   String title = "Profile Screen";
+  RxString frontSitePath=''.obs;
+  RxString backSitePaths=''.obs;
 
   @override
   void onInit() {
@@ -71,4 +74,23 @@ class ProfileController extends GetxController {
           "${pickedDate.month}-${pickedDate.day}-${pickedDate.year}";
     }
   }
+
+  //==========================> Pick Type Image <=======================
+  Future<Uint8List?> pickTypeImage(ImageSource source, String imageType) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      final Uint8List imageBytes = await pickedFile.readAsBytes();
+      if (imageType == 'frontSite') {
+        frontSitePath.value = pickedFile.path;
+      } else if (imageType == 'backSite') {
+        backSitePaths.value = pickedFile.path;
+      }
+      return imageBytes;
+    }
+    return null;
+  }
+
+
 }

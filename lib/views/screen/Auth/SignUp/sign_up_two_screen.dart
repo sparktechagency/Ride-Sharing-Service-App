@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/helpers/route.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
 import 'package:ride_sharing/views/base/custom_app_bar.dart';
 import 'package:ride_sharing/views/base/custom_button.dart';
@@ -95,12 +96,12 @@ class SignUpTwoScreen extends StatelessWidget {
                 prefixIcon: SvgPicture.asset(AppIcons.licenseNum),
               ),
               //========================> Back And Next Button <==================
-              SizedBox(height: 116.h),
+              SizedBox(height: 98.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CustomButton(
-                    onTap: () {},
+                    onTap: () {Get.back();},
                     text: AppStrings.back.tr,
                     height: 48.h,
                     width: 158.w,
@@ -108,7 +109,7 @@ class SignUpTwoScreen extends StatelessWidget {
                     textColor: AppColors.primaryColor,
                   ),
                   CustomButton(
-                    onTap: () {},
+                    onTap: () {Get.toNamed(AppRoutes.signUpThreeScreen);},
                     text: AppStrings.next.tr,
                     height: 48.h,
                     width: 158.w,

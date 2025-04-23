@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_button.dart';
@@ -161,7 +162,7 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                 ),
               ),
               //=========================> Continue Button <====================
-              CustomButton(onTap: () {}, text: AppStrings.continues.tr),
+              CustomButton(onTap: () {Get.toNamed(AppRoutes.signUpScreen);}, text: AppStrings.continues.tr),
               SizedBox(height: 58.h),
             ],
           ),

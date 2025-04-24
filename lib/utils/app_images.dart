@@ -9,5 +9,6 @@ class AppImages{
   static String map="$baseUrl/map.png";
   static String appLogo="$baseUrl/appLogo.png";
   static String onboard="$baseUrl/onboard.png";
+  static String user ="$baseUrl/user.png";
 
 }

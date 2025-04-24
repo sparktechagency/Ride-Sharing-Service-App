@@ -11,6 +11,7 @@ class AppStrings {
   static String driver = 'Driver';
   static String createYourAccountAndBeginYourJourneyDriver = 'Create your account and begin your journey as a driver';
   static String continues = 'Continue';
+  static String updateProfile = 'Update Profile';
   //=============================> Sign in Screen <=============================
   static String signIn = 'Sign In';
   static String toYourAccount = 'To Your Account';

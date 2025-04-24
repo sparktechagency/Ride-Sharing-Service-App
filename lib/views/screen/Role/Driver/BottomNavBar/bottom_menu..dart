@@ -24,19 +24,29 @@ class BottomMenu extends StatelessWidget {
     bool isSelected = index == menuIndex;
     return BottomNavigationBarItem(
       label: title,
-      icon: Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: SvgPicture.asset(
-          isSelected
-              ? image
-              : image.replaceAll(
-            'fill',
-            'outline',
-          ), // Handle filling and outline icons
-          height: 24.0,
-          width: 24.0,
-          color: colorByIndex(theme, index),
-        ),
+      icon: Column(
+        children: [
+          Container(
+            height: 4.h,
+            width: 32.w,
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.primaryColor : Colors.transparent,
+              borderRadius: BorderRadius.circular(1.r),
+            ),
+          ),
+          SizedBox(height: 5.h),
+          SvgPicture.asset(
+            isSelected
+                ? image
+                : image.replaceAll(
+              'fill',
+              'outline',
+            ), // Handle filling and outline icons
+            height: 24.0,
+            width: 24.0,
+            color: colorByIndex(theme, index),
+          ),
+        ],
       ),
     );
   }
@@ -47,7 +57,7 @@ class BottomMenu extends StatelessWidget {
     List<BottomNavigationBarItem> menuItems = [
       getItem(AppIcons.home, 'Home', theme, 0),
       getItem(AppIcons.postRides, 'Post Rides', theme, 1),
-      getItem(AppIcons.chats, 'Chats', theme, 2),
+      getItem(AppIcons.chats, 'Inbox', theme, 2),
       getItem(AppIcons.myOrder, 'My Orders', theme, 3),
       getItem(AppIcons.profile, 'Profile', theme, 4),
     ];
@@ -76,19 +86,19 @@ class BottomMenu extends StatelessWidget {
           onTap: (value) {
             switch (value) {
               case 0:
-                Get.offAndToNamed(AppRoutes.homeScreen);
+                Get.offAndToNamed(AppRoutes.driverHomeScreen);
                 break;
               case 1:
-                //Get.offAndToNamed(AppRoutes.matchesScreen);
+                Get.offAndToNamed(AppRoutes.postRidesScreen);
                 break;
               case 2:
-               // Get.offAndToNamed(AppRoutes.liveStreamScreen);
+               Get.offAndToNamed(AppRoutes.driverInboxScreen);
                 break;
               case 3:
-                //Get.offAndToNamed(AppRoutes.chatsScreen);
+                Get.offAndToNamed(AppRoutes.myOrdersScreen);
                 break;
               case 4:
-                Get.offAndToNamed(AppRoutes.profileScreen);
+                Get.offAndToNamed(AppRoutes.driverProfileScreen);
                 break;
             }
           },

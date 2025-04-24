@@ -69,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
                   SizedBox(
                       width: 115.w,
                       child: CustomButton(onTap: () {
-                        Get.offAllNamed(AppRoutes.homeScreen);
+                        Get.offAllNamed(AppRoutes.driverHomeScreen);
                       }, text: "Yes")),
                 ],
               ),

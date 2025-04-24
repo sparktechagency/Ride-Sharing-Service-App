@@ -23,5 +23,24 @@ class AppIcons{
   static String type="$baseUrl/type.svg";
   static String model="$baseUrl/model.svg";
   static String licenseNum="$baseUrl/licenseNum.svg";
+  static String notification="$baseUrl/notification.svg";
+  static String send="$baseUrl/send.svg";
+  static String dot="$baseUrl/dot.svg";
+  static String rightArrow="$baseUrl/rightArrow.svg";
+  static String myWallet="$baseUrl/myWallet.svg";
+  static String setting="$baseUrl/setting.svg";
+  static String logout="$baseUrl/logout.svg";
+  static String rating="$baseUrl/rating.svg";
+  static String edit="$baseUrl/edit.svg";
+  static String hello="$baseUrl/hello.svg";
+  static String mail="$baseUrl/mail.svg";
+  static String privacy="$baseUrl/privacy.svg";
+  static String trems="$baseUrl/trems.svg";
+  static String about="$baseUrl/about.svg";
+  static String support="$baseUrl/support.svg";
+  static String doller="$baseUrl/doller.svg";
+  static String call="$baseUrl/call.svg";
+  static String car="$baseUrl/car.svg";
+
 
 }

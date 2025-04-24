@@ -28,7 +28,6 @@ class CustomListTile extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.r),
-              color: Color(0xfffffbe6),
               border: Border.all(
                   width: 1.w, color: borderColor ?? AppColors.borderColor)),
           child: ListTile(

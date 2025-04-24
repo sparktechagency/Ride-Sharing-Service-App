@@ -129,7 +129,7 @@ class SignInScreen extends StatelessWidget {
               ),
               //========================> Sign in Button <==================
               CustomButton(onTap: () {
-                Get.offAllNamed(AppRoutes.homeScreen);
+                Get.offAllNamed(AppRoutes.driverHomeScreen);
               }, text: AppStrings.signIn.tr),
               SizedBox(height: 32.h),
               //========================> Don’t have an account Sign Up Button <==================

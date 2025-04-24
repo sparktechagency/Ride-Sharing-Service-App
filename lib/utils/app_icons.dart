@@ -39,5 +39,8 @@ class AppIcons{
   static String about="$baseUrl/about.svg";
   static String support="$baseUrl/support.svg";
   static String doller="$baseUrl/doller.svg";
+  static String call="$baseUrl/call.svg";
+  static String car="$baseUrl/car.svg";
+
 
 }

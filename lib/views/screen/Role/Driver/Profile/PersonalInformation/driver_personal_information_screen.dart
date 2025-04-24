@@ -53,133 +53,265 @@ class DriverPersonalInformationScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(width: 1.w, color: AppColors.borderColor),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 12.h,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      //=====================> Name and Gender Row <=================
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  text: 'Bashar islam',
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
-                                  maxLine: 3,
-                                  bottom: 8.h,
-                                ),
-                                CustomText(text: 'Male'),
-                              ],
-                            ),
-                          ),
-                        ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //=====================> Personal Information <=================
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 12.h,
                       ),
-                      SizedBox(height: 24.h),
-                      //=====================> Email Row <=================
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  text: AppStrings.email.tr,
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
-                                  maxLine: 3,
-                                  bottom: 8.h,
-                                ),
-                                CustomText(
-                                  text: 'abe@gmail.com',
-                                  maxLine: 5,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 24.h),
-                      //=====================> Phone Number Row <=================
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  text: AppStrings.phoneNumber.tr,
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
-                                  maxLine: 3,
-                                  bottom: 8.h,
-                                ),
-                                CustomText(
-                                  text: '(444) 555-9999',
-                                  maxLine: 5,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 24.h),
-                      //=====================> Location and Distance Row <=================
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  text: AppStrings.location.tr,
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
-                                  maxLine: 3,
-                                  bottom: 8.h,
-                                ),
-                                CustomText(
-                                  text: 'Chicago, IL United States',
-                                  maxLine: 5,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 24.h),
-                      //========================> Driving license photo Section <==========================
-                      CustomText(
-                        text: AppStrings.drivingLicensePhoto.tr,
-                        fontSize: 18.sp,
+                      child: CustomText(
+                        text: AppStrings.personalInformation.tr,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                       ),
-                      SizedBox(height: 16.h),
-                      CustomNetworkImage(
-                        imageUrl: '',
-                        height: 197.h,
-                        width: 362.w,
-                        borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    Divider(thickness: 1.w, color: AppColors.borderColor),
+                    //=====================> Details Information <=================
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 12.h,
                       ),
-                      SizedBox(height: 16.h),
-                      CustomNetworkImage(
-                        imageUrl: '',
-                        height: 197.h,
-                        width: 362.w,
-                        borderRadius: BorderRadius.circular(16.r),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //=====================> Name and Gender Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.profile),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                          text: AppStrings.name.tr,
+                                        ),
+                                        CustomText(
+                                          text: 'Bashar islam',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> Email Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.mail),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                          text: AppStrings.email.tr
+                                        ),
+                                        CustomText(
+                                          text: 'basharKakko@gmail.com',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> Phone Number Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.call),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                            text: AppStrings.phoneNumber.tr
+                                        ),
+                                        CustomText(
+                                          text: '(888) 4455-9999',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> Location and Distance Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.location),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                            text: AppStrings.location.tr
+                                        ),
+                                        CustomText(
+                                          text: 'Dhaka, Bangladesh',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> Vehicles Type Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.type),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                            text: AppStrings.vehiclesType.tr
+                                        ),
+                                        CustomText(
+                                          text: 'Car',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> Vehicles Model Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.car, color: Colors.grey),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                            text: AppStrings.vehiclesModel.tr
+                                        ),
+                                        CustomText(
+                                          text: 'BMW',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> License Plate Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.licenseNum),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                            text: AppStrings.licensePlate.tr
+                                        ),
+                                        CustomText(
+                                          text: '1922 5588',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //========================> Driving license photo Section <==========================
+                          CustomText(
+                            text: AppStrings.drivingLicensePhoto.tr,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomNetworkImage(
+                            imageUrl: '',
+                            height: 197.h,
+                            width: 362.w,
+                            borderRadius: BorderRadius.circular(16.r),
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomNetworkImage(
+                            imageUrl: '',
+                            height: 197.h,
+                            width: 362.w,
+                            borderRadius: BorderRadius.circular(16.r),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

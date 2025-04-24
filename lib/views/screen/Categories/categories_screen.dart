@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../base/bottom_menu..dart';
+import '../Role/Driver/BottomNavBar/bottom_menu..dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({super.key});

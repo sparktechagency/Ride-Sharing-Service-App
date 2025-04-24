@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ride_sharing/controllers/profile_controller.dart';
+import 'package:ride_sharing/helpers/route.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_strings.dart';
 import '../../../base/custom_app_bar.dart';
@@ -116,7 +117,7 @@ class _SignUpThreeScreenState extends State<SignUpThreeScreen> {
                   textColor: AppColors.primaryColor,
                 ),
                 CustomButton(
-                  onTap: () {},
+                  onTap: () {Get.toNamed(AppRoutes.otpScreen);},
                   text: AppStrings.next.tr,
                   height: 48.h,
                   width: 158.w,
@@ -129,7 +130,7 @@ class _SignUpThreeScreenState extends State<SignUpThreeScreen> {
       ),
     );
   }
-
+  //===============================> Add Image Button <=========================
   _addImageButton(String imageType) {
     return Center(
       child: Column(

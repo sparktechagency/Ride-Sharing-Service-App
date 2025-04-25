@@ -18,6 +18,7 @@ import '../views/screen/Role/Driver/Inbox/driver_inbox_screen.dart';
 import '../views/screen/Role/Driver/MyOrders/my_orders_screen.dart';
 import '../views/screen/Role/Driver/MyWallet/my_wallet_screen.dart';
 import '../views/screen/Role/Driver/PostRides/post_rides_screen.dart';
+import '../views/screen/Role/Driver/Profile/EditProfileInfro/driver_edit_profile_screen.dart';
 import '../views/screen/Role/Driver/Profile/PersonalInformation/driver_personal_information_screen.dart';
 import '../views/screen/Role/Driver/Profile/driver_profile_screen.dart';
 import '../views/screen/SelectRole/select_role_screen.dart';
@@ -52,6 +53,7 @@ class AppRoutes{
   static String driverMessageScreen="/driver_message_screen";
   static String driverProfileScreen="/driver_profile_screen";
   static String driverPersonalInformationScreen="/driver_personal_information_screen";
+  static String driverEditProfileScreen="/driver_edit_profile_screen";
   static String locationScreen="/location_screen";
   static String locationPickerScreen="/location_picker_screen";
   static String myWalletScreen="/my_wallet_screen";
@@ -81,6 +83,7 @@ class AppRoutes{
     GetPage(name:driverProfileScreen, page: ()=>const DriverProfileScreen(),transition: Transition.noTransition),
     GetPage(name:driverMessageScreen, page: ()=>const DriverMessageScreen()),
     GetPage(name:driverPersonalInformationScreen, page: ()=>const DriverPersonalInformationScreen()),
+    GetPage(name:driverEditProfileScreen, page: ()=>const DriverEditProfileScreen()),
     GetPage(name:myWalletScreen, page: ()=>const MyWalletScreen()),
    // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
    // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),

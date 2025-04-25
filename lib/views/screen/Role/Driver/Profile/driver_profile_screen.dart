@@ -12,14 +12,13 @@ import '../../../../base/custom_network_image.dart';
 import '../../../../base/custom_text.dart';
 import '../BottomNavBar/bottom_menu..dart';
 
-
 class DriverProfileScreen extends StatelessWidget {
   const DriverProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar:  BottomMenu(4),
+      bottomNavigationBar: BottomMenu(4),
       appBar: AppBar(
         title: CustomText(
           text: AppStrings.profile.tr,
@@ -52,16 +51,26 @@ class DriverProfileScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 12.h),
-                    //=========================> User Name <========================
+                    //=========================> User Name & Rating <========================
                     CustomText(
                       text: 'Bashar Islam',
                       fontWeight: FontWeight.w600,
                       fontSize: 20.sp,
                     ),
+                    SizedBox(height: 12.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomText(text: '4.9'),
+                        SizedBox(width: 8.w),
+                        SvgPicture.asset(AppIcons.star),
+                      ],
+                    ),
+
                     SizedBox(height: 24.h),
                     //===================> Personal Information ListTile <=================
                     CustomListTile(
-                      onTap: (){
+                      onTap: () {
                         Get.toNamed(AppRoutes.driverPersonalInformationScreen);
                       },
                       title: AppStrings.personalInformation.tr,
@@ -70,8 +79,8 @@ class DriverProfileScreen extends StatelessWidget {
                     ),
                     //===================> Rating ListTile <=================
                     CustomListTile(
-                      onTap: (){
-                       //Get.toNamed(AppRoutes.myWalletScreen);
+                      onTap: () {
+                        //Get.toNamed(AppRoutes.myWalletScreen);
                       },
                       title: AppStrings.rating.tr,
                       prefixIcon: SvgPicture.asset(AppIcons.rating),
@@ -79,7 +88,7 @@ class DriverProfileScreen extends StatelessWidget {
                     ),
                     //===================> My Wallet ListTile <=================
                     CustomListTile(
-                      onTap: (){
+                      onTap: () {
                         Get.toNamed(AppRoutes.myWalletScreen);
                       },
                       title: AppStrings.myWallet.tr,
@@ -88,7 +97,7 @@ class DriverProfileScreen extends StatelessWidget {
                     ),
                     //===================> Setting ListTile <=================
                     CustomListTile(
-                      onTap: (){
+                      onTap: () {
                         Get.toNamed(AppRoutes.settingsScreen);
                       },
                       title: AppStrings.settings.tr,
@@ -97,14 +106,13 @@ class DriverProfileScreen extends StatelessWidget {
                     ),
                     //===================> Logout ListTile <=================
                     CustomListTile(
-                      onTap: (){
+                      onTap: () {
                         _showCustomBottomSheet(context);
                       },
                       title: AppStrings.logout.tr,
                       prefixIcon: SvgPicture.asset(AppIcons.logout),
                       suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
                     ),
-        
                   ],
                 ),
               ),
@@ -132,12 +140,12 @@ class DriverProfileScreen extends StatelessWidget {
             color: AppColors.cardColor,
           ),
           height: 265,
-          padding: EdgeInsets.symmetric(horizontal:  16.w, vertical: 8.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           child: Column(
             children: [
               SizedBox(
                 width: 48.w,
-                child: Divider(color: AppColors.greyColor, thickness: 5.5,),
+                child: Divider(color: AppColors.greyColor, thickness: 5.5),
               ),
               SizedBox(height: 12.h),
               CustomText(

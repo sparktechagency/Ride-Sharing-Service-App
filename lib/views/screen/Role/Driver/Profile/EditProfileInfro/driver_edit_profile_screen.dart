@@ -38,14 +38,15 @@ class _DriverEditProfileScreenState extends State<DriverEditProfileScreen> {
                 CustomNetworkImage(
                   imageUrl:
                       'https://s3-alpha-sig.figma.com/img/aba5/7875/06b6763c27225f414df7f949639fd20d?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=BIM9NpRoedGzbRmOCOQwiVNR5~KnNHQyU-~zHD-zQ6niilUr5LM73jnCiN8Gii6tQL~UNbROSw4ojYsBWp6PBzymehTvt~3qZoXlGoIHavo7uIxXMKyK3Vxv~4Kls0MRboaDlqlZWbyTVGQzXuf~T08jG~Rvm5iPK8WATnHVZ-WmE5m0Ysf9eklTkd3JPZd4jyaA6W1twcCM6H2erKBSI0F~SroPsU3JRjet9LxsAIfT1FERORU~z~9MSbXzLWSB-ms98Ns2Ey0YYuSi1ceWrW~oCW9ASwMmYx~LQMJGCjJPfHHRCBVRGx3azfGrtqmxBbasTwGuKx~rHG8wUAIUAw__',
-                  height: 369.h,
-                  width: 402.w,
-                  borderRadius: BorderRadius.circular(8.r),
+                  height: 135.h,
+                  width: 135.w,
+                  borderRadius: BorderRadius.circular(24.r),
+                  border: Border.all(width: 2.w, color: AppColors.primaryColor),
                 ),
                 //==============================> Edit Profile Button <=======================
                 Positioned(
-                  right: 16.w,
-                  top: 16.h,
+                  right: 0.w,
+                  bottom: 0.h,
                   child: InkWell(
                     onTap: () {
                       _controller.pickImage(ImageSource.gallery);
@@ -70,6 +71,12 @@ class _DriverEditProfileScreenState extends State<DriverEditProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //====================> User Name Text Field <================
+                      CustomText(
+                        text: AppStrings.userName.tr,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        bottom: 14.h,
+                      ),
                       CustomTextField(
                         controller: _controller.userNameCTRL,
                         hintText: AppStrings.userName.tr,

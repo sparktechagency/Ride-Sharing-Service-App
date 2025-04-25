@@ -22,27 +22,15 @@ class DriverPersonalInformationScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //==============================> Profile picture section <=======================
-            Stack(
-              children: [
-                CustomNetworkImage(
-                  imageUrl:
-                      'https://s3-alpha-sig.figma.com/img/aba5/7875/06b6763c27225f414df7f949639fd20d?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=BIM9NpRoedGzbRmOCOQwiVNR5~KnNHQyU-~zHD-zQ6niilUr5LM73jnCiN8Gii6tQL~UNbROSw4ojYsBWp6PBzymehTvt~3qZoXlGoIHavo7uIxXMKyK3Vxv~4Kls0MRboaDlqlZWbyTVGQzXuf~T08jG~Rvm5iPK8WATnHVZ-WmE5m0Ysf9eklTkd3JPZd4jyaA6W1twcCM6H2erKBSI0F~SroPsU3JRjet9LxsAIfT1FERORU~z~9MSbXzLWSB-ms98Ns2Ey0YYuSi1ceWrW~oCW9ASwMmYx~LQMJGCjJPfHHRCBVRGx3azfGrtqmxBbasTwGuKx~rHG8wUAIUAw__',
-                  height: 369.h,
-                  width: 402.w,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                //==============================> Edit Profile Button <=======================
-                Positioned(
-                  right: 16.w,
-                  top: 16.h,
-                  child: InkWell(
-                    onTap: () {
-                      //  Get.toNamed(AppRoutes.editProfileScreen);
-                    },
-                    child: SvgPicture.asset(AppIcons.edit),
-                  ),
-                ),
-              ],
+            Center(
+              child: CustomNetworkImage(
+                imageUrl:
+                'https://s3-alpha-sig.figma.com/img/aba5/7875/06b6763c27225f414df7f949639fd20d?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=BIM9NpRoedGzbRmOCOQwiVNR5~KnNHQyU-~zHD-zQ6niilUr5LM73jnCiN8Gii6tQL~UNbROSw4ojYsBWp6PBzymehTvt~3qZoXlGoIHavo7uIxXMKyK3Vxv~4Kls0MRboaDlqlZWbyTVGQzXuf~T08jG~Rvm5iPK8WATnHVZ-WmE5m0Ysf9eklTkd3JPZd4jyaA6W1twcCM6H2erKBSI0F~SroPsU3JRjet9LxsAIfT1FERORU~z~9MSbXzLWSB-ms98Ns2Ey0YYuSi1ceWrW~oCW9ASwMmYx~LQMJGCjJPfHHRCBVRGx3azfGrtqmxBbasTwGuKx~rHG8wUAIUAw__',
+                height: 135.h,
+                width: 135.w,
+                borderRadius: BorderRadius.circular(24.r),
+                border: Border.all(width: 2.w, color: AppColors.primaryColor),
+              ),
             ),
             SizedBox(height: 32.h),
             //==============================> My Bio section <=======================
@@ -72,12 +60,25 @@ class DriverPersonalInformationScreen extends StatelessWidget {
                     //=====================> Details Information <=================
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.h,
+                        horizontal: 12.w, vertical: 12.h,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: (){
+                                Get.toNamed(AppRoutes.driverEditProfileScreen);
+                              },
+                              child: CustomText(
+                                text: AppStrings.editProfile.tr,
+                                fontWeight: FontWeight.w500,
+                                textDecoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 14.h),
                           //=====================> Name and Gender Row <=================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -288,31 +289,40 @@ class DriverPersonalInformationScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 24.h),
-                          //========================> Driving license photo Section <==========================
-                          CustomText(
-                            text: AppStrings.drivingLicensePhoto.tr,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          SizedBox(height: 16.h),
-                          CustomNetworkImage(
-                            imageUrl: '',
-                            height: 197.h,
-                            width: 362.w,
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
-                          SizedBox(height: 16.h),
-                          CustomNetworkImage(
-                            imageUrl: '',
-                            height: 197.h,
-                            width: 362.w,
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
+              ),
+            ),
+            SizedBox(height: 24.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //========================> Driving license photo Section <==========================
+                  CustomText(
+                    text: AppStrings.drivingLicensePhoto.tr,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomNetworkImage(
+                    imageUrl: '',
+                    height: 197.h,
+                    width: 362.w,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomNetworkImage(
+                    imageUrl: '',
+                    height: 197.h,
+                    width: 362.w,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 32.h),

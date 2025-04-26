@@ -109,36 +109,6 @@ class DriverPersonalInformationScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 24.h),
-                          //=====================> Email Row <=================
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(AppIcons.mail),
-                                    SizedBox(width: 12.w),
-                                    Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          text: AppStrings.email.tr
-                                        ),
-                                        CustomText(
-                                          text: 'basharKakko@gmail.com',
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w500,
-                                          maxLine: 3,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 24.h),
                           //=====================> Phone Number Row <=================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,6 +157,36 @@ class DriverPersonalInformationScreen extends StatelessWidget {
                                         ),
                                         CustomText(
                                           text: 'Dhaka, Bangladesh',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> Date of Birth Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.calender),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                            text: AppStrings.dateOfBirth.tr
+                                        ),
+                                        CustomText(
+                                          text: '12/12/2000',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,

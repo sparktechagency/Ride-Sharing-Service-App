@@ -12,6 +12,7 @@ class AppStrings {
   static String createYourAccountAndBeginYourJourneyDriver = 'Create your account and begin your journey as a driver';
   static String continues = 'Continue';
   static String updateProfile = 'Update Profile';
+  static String ridePrice = 'Ride Price';
   //=============================> Sign in Screen <=============================
   static String signIn = 'Sign In';
   static String toYourAccount = 'To Your Account';
@@ -23,6 +24,7 @@ class AppStrings {
   static String forgotPasswords = 'Forgot Password?';
   static String donotHaveAnAccount = 'Don’t have an account?';
   static String updatePassword = 'Update Password';
+  static String reviews = 'Reviews';
   //=============================> Sign up Screen <=============================
   static String signUp = 'Sign Up';
   static String withEmail = ' With Email';
@@ -104,6 +106,8 @@ class AppStrings {
   static String currentTrips = 'Current Trips';
   static String canceled = 'Canceled';
   static String completed = 'Completed';
+  static String completedOrders = 'Completed Orders';
+  static String completedOrdersDetails = 'Completed Orders Details';
   static String myOrders = 'My Orders';
   static String ridesPlanDetails = 'Rides Plan Details';
   static String editRide = 'Edit Ride';

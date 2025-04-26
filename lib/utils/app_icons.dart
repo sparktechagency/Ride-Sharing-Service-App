@@ -43,6 +43,7 @@ class AppIcons{
   static String car="$baseUrl/car.svg";
   static String star="$baseUrl/star.svg";
   static String orderTR="$baseUrl/orderTR.svg";
+  static String bgCalander="$baseUrl/bgCalander.svg";
 
 
 }

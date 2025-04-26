@@ -8,11 +8,16 @@ import '../views/screen/Auth/SignIn/sign_in_screen.dart';
 import '../views/screen/Auth/SignUp/sign_up_screen.dart';
 import '../views/screen/Auth/SignUp/sign_up_three_screen.dart';
 import '../views/screen/Auth/SignUp/sign_up_two_screen.dart';
+import '../views/screen/CanceledOrderDetails/canceled_order_details.dart';
+import '../views/screen/CompletedOrderDetails/completed_order_details.dart';
 import '../views/screen/Location/location_picker_screen.dart';
 import '../views/screen/Location/location_screen.dart';
 import '../views/screen/Notifications/notifications_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
+import '../views/screen/Role/Driver/Home/InnerScreen/active_order_screen.dart';
+import '../views/screen/Role/Driver/Home/InnerScreen/completed_order_screen.dart';
+import '../views/screen/Role/Driver/Home/InnerScreen/recent_order_screen.dart';
 import '../views/screen/Role/Driver/Home/driver_home_screen.dart';
 import '../views/screen/Role/Driver/Inbox/MessageInbox/driver_message_screen.dart';
 import '../views/screen/Role/Driver/Inbox/driver_inbox_screen.dart';
@@ -47,6 +52,8 @@ class AppRoutes{
   static String privacyPolicyScreen="/privacy_policy_screen";
   static String termsServicesScreen="/terms_services_screen";
   static String notificationsScreen="/notifications_screen";
+  static String completedOrderDetails="/completed_order_details";
+  static String canceledOrderDetails="/canceled_order_details";
   //===================================================> Driver Role <=============================================
   static String driverHomeScreen="/driver_home_screen";
   static String postRidesScreen="/post_rides_screen";
@@ -59,6 +66,9 @@ class AppRoutes{
   static String locationScreen="/location_screen";
   static String locationPickerScreen="/location_picker_screen";
   static String myWalletScreen="/my_wallet_screen";
+  static String recentOrderScreen="/recent_order_screen";
+  static String activeOrderScreen="/active_order_screen";
+  static String completedOrderScreen="/completed_order_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -78,6 +88,8 @@ class AppRoutes{
     GetPage(name:privacyPolicyScreen, page: ()=> PrivacyPolicyScreen()),
     GetPage(name:termsServicesScreen, page: ()=> TermsServicesScreen()),
     GetPage(name:notificationsScreen, page: ()=> NotificationsScreen()),
+    GetPage(name:completedOrderDetails, page: ()=> CompletedOrderDetails()),
+    GetPage(name:canceledOrderDetails, page: ()=> CanceledOrderDetails()),
    //===================================================> Driver Role <=============================================
    GetPage(name:driverHomeScreen, page: ()=>const DriverHomeScreen(),transition:Transition.noTransition),
    GetPage(name:postRidesScreen, page: ()=>const PostRidesScreen(),transition:Transition.noTransition),
@@ -88,6 +100,9 @@ class AppRoutes{
     GetPage(name:driverPersonalInformationScreen, page: ()=>const DriverPersonalInformationScreen()),
     GetPage(name:driverEditProfileScreen, page: ()=>const DriverEditProfileScreen()),
     GetPage(name:myWalletScreen, page: ()=>const MyWalletScreen()),
+    GetPage(name:recentOrderScreen, page: ()=>const RecentOrderScreen()),
+    GetPage(name:activeOrderScreen, page: ()=>const ActiveOrderScreen()),
+    GetPage(name:completedOrderScreen, page: ()=>const CompletedOrderScreen()),
    // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
    // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
   ];

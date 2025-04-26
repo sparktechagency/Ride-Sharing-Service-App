@@ -27,7 +27,7 @@ class BottomMenu extends StatelessWidget {
       icon: Column(
         children: [
           Container(
-            height: 4.h,
+            height: 3.h,
             width: 32.w,
             decoration: BoxDecoration(
               color: isSelected ? AppColors.primaryColor : Colors.transparent,

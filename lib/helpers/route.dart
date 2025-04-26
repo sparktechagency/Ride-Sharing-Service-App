@@ -10,6 +10,7 @@ import '../views/screen/Auth/SignUp/sign_up_three_screen.dart';
 import '../views/screen/Auth/SignUp/sign_up_two_screen.dart';
 import '../views/screen/Location/location_picker_screen.dart';
 import '../views/screen/Location/location_screen.dart';
+import '../views/screen/Notifications/notifications_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
 import '../views/screen/Role/Driver/Home/driver_home_screen.dart';
@@ -45,6 +46,7 @@ class AppRoutes{
   static String supportScreen="/support_screen";
   static String privacyPolicyScreen="/privacy_policy_screen";
   static String termsServicesScreen="/terms_services_screen";
+  static String notificationsScreen="/notifications_screen";
   //===================================================> Driver Role <=============================================
   static String driverHomeScreen="/driver_home_screen";
   static String postRidesScreen="/post_rides_screen";
@@ -75,6 +77,7 @@ class AppRoutes{
     GetPage(name:supportScreen, page: ()=> SupportScreen()),
     GetPage(name:privacyPolicyScreen, page: ()=> PrivacyPolicyScreen()),
     GetPage(name:termsServicesScreen, page: ()=> TermsServicesScreen()),
+    GetPage(name:notificationsScreen, page: ()=> NotificationsScreen()),
    //===================================================> Driver Role <=============================================
    GetPage(name:driverHomeScreen, page: ()=>const DriverHomeScreen(),transition:Transition.noTransition),
    GetPage(name:postRidesScreen, page: ()=>const PostRidesScreen(),transition:Transition.noTransition),

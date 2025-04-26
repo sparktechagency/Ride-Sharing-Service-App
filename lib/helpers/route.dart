@@ -13,6 +13,7 @@ import '../views/screen/Location/location_screen.dart';
 import '../views/screen/Notifications/notifications_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
+import '../views/screen/Role/Driver/Home/InnerScreen/active_order_screen.dart';
 import '../views/screen/Role/Driver/Home/InnerScreen/recent_order_screen.dart';
 import '../views/screen/Role/Driver/Home/driver_home_screen.dart';
 import '../views/screen/Role/Driver/Inbox/MessageInbox/driver_message_screen.dart';
@@ -61,6 +62,7 @@ class AppRoutes{
   static String locationPickerScreen="/location_picker_screen";
   static String myWalletScreen="/my_wallet_screen";
   static String recentOrderScreen="/recent_order_screen";
+  static String activeOrderScreen="/active_order_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -91,6 +93,7 @@ class AppRoutes{
     GetPage(name:driverEditProfileScreen, page: ()=>const DriverEditProfileScreen()),
     GetPage(name:myWalletScreen, page: ()=>const MyWalletScreen()),
     GetPage(name:recentOrderScreen, page: ()=>const RecentOrderScreen()),
+    GetPage(name:activeOrderScreen, page: ()=>const ActiveOrderScreen()),
    // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
    // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
   ];

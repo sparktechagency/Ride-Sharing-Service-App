@@ -46,41 +46,46 @@ class DriverHomeScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.only(right: 8.w),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(
-                          width: 1.w,
-                          color: AppColors.borderColor,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12.h,
-                              vertical: 16.h,
-                            ),
-                            child: SvgPicture.asset(AppIcons.orderTR),
+                    child: GestureDetector(
+                      onTap: (){
+                        Get.toNamed(AppRoutes.recentOrderScreen);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          border: Border.all(
+                            width: 1.w,
+                            color: AppColors.borderColor,
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.h),
-                            child: CustomText(
-                              text: AppStrings.recentOrder.tr,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.h,
+                                vertical: 16.h,
+                              ),
+                              child: SvgPicture.asset(AppIcons.orderTR),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.h),
+                              child: CustomText(
+                                text: AppStrings.recentOrder.tr,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18.sp,
+                              ),
+                            ),
+                            SizedBox(height: 6.h),
+                            Divider(thickness: 1.5, color: AppColors.borderColor),
+                            SizedBox(height: 6.h),
+                            CustomText(
+                              text: 'Total(12)'.tr,
                               fontWeight: FontWeight.w500,
                               fontSize: 18.sp,
                             ),
-                          ),
-                          SizedBox(height: 6.h),
-                          Divider(thickness: 1.5, color: AppColors.borderColor),
-                          SizedBox(height: 6.h),
-                          CustomText(
-                            text: 'Total(12)'.tr,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18.sp,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   );

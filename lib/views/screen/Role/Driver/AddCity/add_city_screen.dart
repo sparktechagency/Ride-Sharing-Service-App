@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/helpers/route.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
 import 'package:ride_sharing/utils/app_icons.dart';
 import 'package:ride_sharing/views/base/custom_button.dart';
@@ -235,7 +236,12 @@ class AddCityScreen extends StatelessWidget {
                 ),
                 //=============================> Next Button <====================
                 SizedBox(height: 16.h),
-                CustomButton(onTap: () {}, text: AppStrings.next.tr),
+                CustomButton(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.cityViewScreen);
+                  },
+                  text: AppStrings.next.tr,
+                ),
               ],
             ),
           ),

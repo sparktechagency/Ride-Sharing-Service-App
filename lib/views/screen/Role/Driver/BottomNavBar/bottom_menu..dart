@@ -12,7 +12,7 @@ class BottomMenu extends StatelessWidget {
   const BottomMenu(this.menuIndex, {super.key});
 
   Color colorByIndex(ThemeData theme, int index) {
-    return index == menuIndex ? AppColors.primaryColor : theme.disabledColor;
+    return index == menuIndex ? AppColors.primaryColor : AppColors.greyColor;
   }
 
   BottomNavigationBarItem getItem(

@@ -13,6 +13,7 @@ class AppStrings {
   static String continues = 'Continue';
   static String updateProfile = 'Update Profile';
   static String ridePrice = 'Ride Price';
+  static String postRides = 'Post Rides';
   //=============================> Sign in Screen <=============================
   static String signIn = 'Sign In';
   static String toYourAccount = 'To Your Account';
@@ -158,6 +159,7 @@ class AppStrings {
   static String support  = 'Support';
   static String oldPassword  = 'Old Password';
   static String newPassword  = 'New Password';
+  static String useCurrentLocation    = 'Use current location  ';
   //=================================================================> User Role <===========================================================
   static String recentSearch  = 'Recent Search';
   static String seeAll  = 'See All';

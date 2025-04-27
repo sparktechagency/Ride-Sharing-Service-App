@@ -15,6 +15,9 @@ import '../views/screen/Location/location_screen.dart';
 import '../views/screen/Notifications/notifications_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
+import '../views/screen/Role/Driver/AddCity/add_city_screen.dart';
+import '../views/screen/Role/Driver/CityView/city_view_screen.dart';
+import '../views/screen/Role/Driver/DropOff/drop_off_screen.dart';
 import '../views/screen/Role/Driver/Home/InnerScreen/active_order_screen.dart';
 import '../views/screen/Role/Driver/Home/InnerScreen/completed_order_screen.dart';
 import '../views/screen/Role/Driver/Home/InnerScreen/recent_order_screen.dart';
@@ -23,6 +26,7 @@ import '../views/screen/Role/Driver/Inbox/MessageInbox/driver_message_screen.dar
 import '../views/screen/Role/Driver/Inbox/driver_inbox_screen.dart';
 import '../views/screen/Role/Driver/MyOrders/my_orders_screen.dart';
 import '../views/screen/Role/Driver/MyWallet/my_wallet_screen.dart';
+import '../views/screen/Role/Driver/PickUp/pick_up_screen.dart';
 import '../views/screen/Role/Driver/PostRides/post_rides_screen.dart';
 import '../views/screen/Role/Driver/Profile/EditProfileInfro/driver_edit_profile_screen.dart';
 import '../views/screen/Role/Driver/Profile/PersonalInformation/driver_personal_information_screen.dart';
@@ -69,6 +73,10 @@ class AppRoutes{
   static String recentOrderScreen="/recent_order_screen";
   static String activeOrderScreen="/active_order_screen";
   static String completedOrderScreen="/completed_order_screen";
+  static String pickUpScreen="/pick_up_screen";
+  static String dropOffScreen="/drop_off_screen";
+  static String addCityScreen="/add_city_screen";
+  static String cityViewScreen="/city_view_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -90,9 +98,11 @@ class AppRoutes{
     GetPage(name:notificationsScreen, page: ()=> NotificationsScreen()),
     GetPage(name:completedOrderDetails, page: ()=> CompletedOrderDetails()),
     GetPage(name:canceledOrderDetails, page: ()=> CanceledOrderDetails()),
+   // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
+   // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
    //===================================================> Driver Role <=============================================
    GetPage(name:driverHomeScreen, page: ()=>const DriverHomeScreen(),transition:Transition.noTransition),
-   GetPage(name:postRidesScreen, page: ()=>const PostRidesScreen(),transition:Transition.noTransition),
+   GetPage(name:postRidesScreen, page: ()=> PostRidesScreen(),transition:Transition.noTransition),
    GetPage(name:driverInboxScreen, page: ()=> DriverInboxScreen(),transition:Transition.noTransition),
    GetPage(name:myOrdersScreen, page: ()=> MyOrdersScreen(),transition:Transition.noTransition),
     GetPage(name:driverProfileScreen, page: ()=>const DriverProfileScreen(),transition: Transition.noTransition),
@@ -103,7 +113,10 @@ class AppRoutes{
     GetPage(name:recentOrderScreen, page: ()=>const RecentOrderScreen()),
     GetPage(name:activeOrderScreen, page: ()=>const ActiveOrderScreen()),
     GetPage(name:completedOrderScreen, page: ()=>const CompletedOrderScreen()),
-   // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
-   // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
+    GetPage(name:pickUpScreen, page: ()=> PickUpScreen()),
+    GetPage(name:dropOffScreen, page: ()=> DropOffScreen()),
+    GetPage(name:addCityScreen, page: ()=> AddCityScreen()),
+    GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
+
   ];
 }

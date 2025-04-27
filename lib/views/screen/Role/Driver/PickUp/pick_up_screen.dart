@@ -2,32 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:ride_sharing/helpers/route.dart';
-import 'package:ride_sharing/utils/app_icons.dart';
-import 'package:ride_sharing/utils/app_strings.dart';
-import 'package:ride_sharing/views/base/custom_list_tile.dart';
-import 'package:ride_sharing/views/base/custom_text_field.dart';
+import 'package:ride_sharing/views/base/custom_app_bar.dart';
 
+import '../../../../../utils/app_icons.dart';
+import '../../../../../utils/app_strings.dart';
+import '../../../../base/custom_list_tile.dart';
 import '../../../../base/custom_text.dart';
-import '../BottomNavBar/bottom_menu..dart';
+import '../../../../base/custom_text_field.dart';
 
-class PostRidesScreen extends StatelessWidget {
-  PostRidesScreen({super.key});
-
+class PickUpScreen extends StatelessWidget {
+  PickUpScreen({super.key});
   final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomMenu(1),
-      appBar: AppBar(
-        leading: SizedBox(),
-        title: CustomText(
-          text: AppStrings.createRide.tr,
-          fontWeight: FontWeight.w500,
-          fontSize: 16.sp,
-        ),
-      ),
+      appBar: CustomAppBar(title: AppStrings.pICKUP.tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.sp),
@@ -42,13 +32,16 @@ class PostRidesScreen extends StatelessWidget {
               ),
               //=========================> Search Bar <=========================
               CustomTextField(
-                onTab: () {
-                  Get.toNamed(AppRoutes.pickUpScreen);
-                },
-                readOnly: true,
                 controller: _controller,
                 hintText: AppStrings.enterTheFullAddress.tr,
                 prefixIcon: SvgPicture.asset(AppIcons.search),
+              ),
+              SizedBox(height: 24.h),
+              //=========================> Use Current Location <=========================
+              CustomListTile(
+                title: AppStrings.useCurrentLocation.tr,
+                prefixIcon: SvgPicture.asset(AppIcons.current),
+                suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
               ),
             ],
           ),

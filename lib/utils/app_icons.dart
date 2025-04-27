@@ -44,6 +44,9 @@ class AppIcons{
   static String star="$baseUrl/star.svg";
   static String orderTR="$baseUrl/orderTR.svg";
   static String bgCalander="$baseUrl/bgCalander.svg";
+  static String search="$baseUrl/search.svg";
+  static String current="$baseUrl/current.svg";
+  static String cancel="$baseUrl/cancel.svg";
 
 
 }

@@ -26,6 +26,7 @@ import '../views/screen/Role/Driver/Inbox/MessageInbox/driver_message_screen.dar
 import '../views/screen/Role/Driver/Inbox/driver_inbox_screen.dart';
 import '../views/screen/Role/Driver/MyOrders/my_orders_screen.dart';
 import '../views/screen/Role/Driver/MyWallet/my_wallet_screen.dart';
+import '../views/screen/Role/Driver/PassengersTake/passengers_take_screen.dart';
 import '../views/screen/Role/Driver/PickUp/pick_up_screen.dart';
 import '../views/screen/Role/Driver/PostRides/post_rides_screen.dart';
 import '../views/screen/Role/Driver/Profile/EditProfileInfro/driver_edit_profile_screen.dart';
@@ -77,6 +78,7 @@ class AppRoutes{
   static String dropOffScreen="/drop_off_screen";
   static String addCityScreen="/add_city_screen";
   static String cityViewScreen="/city_view_screen";
+  static String passengersTakeScreen="/passengers_take_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -117,6 +119,8 @@ class AppRoutes{
     GetPage(name:dropOffScreen, page: ()=> DropOffScreen()),
     GetPage(name:addCityScreen, page: ()=> AddCityScreen()),
     GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
+   GetPage(name:passengersTakeScreen, page: ()=> PassengersTakeScreen()),
 
-  ];
+
+ ];
 }

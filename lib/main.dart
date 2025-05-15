@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
                   ),
                   transitionDuration: const Duration(milliseconds: 500),
                   getPages: AppRoutes.page,
-                  initialRoute: AppRoutes.cityViewScreen,
+                  initialRoute: AppRoutes.passengersTakeScreen,
                 );
               },
             );

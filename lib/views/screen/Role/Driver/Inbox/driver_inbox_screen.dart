@@ -7,7 +7,7 @@ import '../../../../../utils/app_strings.dart';
 import '../../../../base/custom_network_image.dart';
 import '../../../../base/custom_text.dart';
 import '../../../../base/custom_text_field.dart';
-import '../BottomNavBar/bottom_menu..dart';
+import '../BottomNavBar/driver_bottom_menu..dart';
 
 
 class DriverInboxScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class DriverInboxScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomMenu(2),
+      bottomNavigationBar: DriverBottomMenu(2),
       appBar: AppBar(title: Text('Chats'.tr)),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),

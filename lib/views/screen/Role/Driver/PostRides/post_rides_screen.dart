@@ -9,7 +9,7 @@ import 'package:ride_sharing/views/base/custom_list_tile.dart';
 import 'package:ride_sharing/views/base/custom_text_field.dart';
 
 import '../../../../base/custom_text.dart';
-import '../BottomNavBar/bottom_menu..dart';
+import '../BottomNavBar/driver_bottom_menu..dart';
 
 class PostRidesScreen extends StatelessWidget {
   PostRidesScreen({super.key});
@@ -19,7 +19,7 @@ class PostRidesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomMenu(1),
+      bottomNavigationBar: DriverBottomMenu(1),
       appBar: AppBar(
         leading: SizedBox(),
         title: CustomText(

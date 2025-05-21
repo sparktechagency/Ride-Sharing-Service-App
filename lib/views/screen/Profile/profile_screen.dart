@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
-import '../Role/Driver/BottomNavBar/bottom_menu..dart';
+import '../Role/Driver/BottomNavBar/driver_bottom_menu..dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_text.dart';
 
@@ -13,7 +13,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return   const Scaffold(
-      bottomNavigationBar: BottomMenu(2),
+      bottomNavigationBar: DriverBottomMenu(2),
     );
   }
 

@@ -9,7 +9,7 @@ import 'package:ride_sharing/views/base/custom_text.dart';
 import '../../../../../helpers/route.dart';
 import '../../../../../utils/app_icons.dart';
 import '../../../../../utils/app_images.dart';
-import '../BottomNavBar/bottom_menu..dart';
+import '../BottomNavBar/driver_bottom_menu..dart';
 
 class DriverHomeScreen extends StatelessWidget {
   const DriverHomeScreen({super.key});
@@ -17,7 +17,7 @@ class DriverHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomMenu(0),
+      bottomNavigationBar: DriverBottomMenu(0),
       appBar: AppBar(
         title: Row(
           children: [

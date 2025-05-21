@@ -6,10 +6,10 @@ import '../../../../../helpers/route.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
 
-class BottomMenu extends StatelessWidget {
+class DriverBottomMenu extends StatelessWidget {
   final int menuIndex;
 
-  const BottomMenu(this.menuIndex, {super.key});
+  const DriverBottomMenu(this.menuIndex, {super.key});
 
   Color colorByIndex(ThemeData theme, int index) {
     return index == menuIndex ? AppColors.primaryColor : AppColors.greyColor;

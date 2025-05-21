@@ -15,6 +15,7 @@ import '../views/screen/Location/location_screen.dart';
 import '../views/screen/Notifications/notifications_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
+import '../views/screen/RatingScreen/rating_screen.dart';
 import '../views/screen/Role/Driver/AddCity/add_city_screen.dart';
 import '../views/screen/Role/Driver/CityView/city_view_screen.dart';
 import '../views/screen/Role/Driver/DropOff/drop_off_screen.dart';
@@ -59,6 +60,7 @@ class AppRoutes{
   static String notificationsScreen="/notifications_screen";
   static String completedOrderDetails="/completed_order_details";
   static String canceledOrderDetails="/canceled_order_details";
+  static String ratingScreen="/rating_screen";
   //===================================================> Driver Role <=============================================
   static String driverHomeScreen="/driver_home_screen";
   static String postRidesScreen="/post_rides_screen";
@@ -100,6 +102,7 @@ class AppRoutes{
     GetPage(name:notificationsScreen, page: ()=> NotificationsScreen()),
     GetPage(name:completedOrderDetails, page: ()=> CompletedOrderDetails()),
     GetPage(name:canceledOrderDetails, page: ()=> CanceledOrderDetails()),
+    GetPage(name:ratingScreen, page: ()=> RatingScreen()),
    // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
    // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
    //===================================================> Driver Role <=============================================

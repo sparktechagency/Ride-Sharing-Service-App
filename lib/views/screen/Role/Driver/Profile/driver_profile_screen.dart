@@ -10,7 +10,7 @@ import '../../../../base/custom_button.dart';
 import '../../../../base/custom_list_tile.dart';
 import '../../../../base/custom_network_image.dart';
 import '../../../../base/custom_text.dart';
-import '../BottomNavBar/bottom_menu..dart';
+import '../BottomNavBar/driver_bottom_menu..dart';
 
 class DriverProfileScreen extends StatelessWidget {
   const DriverProfileScreen({super.key});
@@ -18,7 +18,7 @@ class DriverProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomMenu(4),
+      bottomNavigationBar: DriverBottomMenu(4),
       appBar: AppBar(
         title: CustomText(
           text: AppStrings.profile.tr,
@@ -80,7 +80,7 @@ class DriverProfileScreen extends StatelessWidget {
                     //===================> Rating ListTile <=================
                     CustomListTile(
                       onTap: () {
-                        //Get.toNamed(AppRoutes.myWalletScreen);
+                        Get.toNamed(AppRoutes.ratingScreen);
                       },
                       title: AppStrings.rating.tr,
                       prefixIcon: SvgPicture.asset(AppIcons.rating),

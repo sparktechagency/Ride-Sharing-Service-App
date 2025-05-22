@@ -6,8 +6,7 @@ import '../BottomNavBar/user_bottom_menu..dart';
 import 'InnerWidget/canceled_tab.dart';
 import 'InnerWidget/completed_tab.dart';
 import 'InnerWidget/current_trips_tab.dart';
-import 'InnerWidget/my_ride_tab.dart';
-import 'InnerWidget/ride_request_tab.dart';
+import 'InnerWidget/pending_tab.dart';
 
 class MyRidesScreen extends StatefulWidget {
   const MyRidesScreen({super.key});
@@ -23,7 +22,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -40,7 +39,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 5,
+        length: 4,
         child: Scaffold(
             bottomNavigationBar: UserBottomMenu(1),
             backgroundColor: Colors.white,
@@ -59,7 +58,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                 labelColor: Colors.black,
                 unselectedLabelColor: Colors.grey,
                 tabs: [
-                  //========================> My Ride Tab <====================
+                  //========================> Pending Tab <====================
                   Tab(
                     child: Container(
                       width: 81.w,
@@ -71,25 +70,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'My Ride',
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ),
-                  ),
-                  //========================> Ride Request Tab <====================
-                  Tab(
-                    child: Container(
-                      width: 81.w,
-                      decoration: BoxDecoration(
-                        color: _tabController.index == 1
-                            ? const Color(0xFFebf9ff)
-                            : Colors.transparent,
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: CustomText(
-                          text: 'Ride Request',
+                          text: 'Pending',
                           fontSize: 12.sp,
                         ),
                       ),
@@ -100,7 +81,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                     child: Container(
                       width: 81.w,
                       decoration: BoxDecoration(
-                        color: _tabController.index == 2
+                        color: _tabController.index == 1
                             ? const Color(0xFFebf9ff)
                             : Colors.transparent,
                       ),
@@ -113,12 +94,12 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       ),
                     ),
                   ),
-                  //========================> Canceled Tab <====================
+                  //========================> Canceled Trips Tab <====================
                   Tab(
                     child: Container(
                       width: 81.w,
                       decoration: BoxDecoration(
-                        color: _tabController.index == 3
+                        color: _tabController.index == 2
                             ? const Color(0xFFebf9ff)
                             : Colors.transparent,
                       ),
@@ -136,7 +117,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                     child: Container(
                       width: 81.w,
                       decoration: BoxDecoration(
-                        color: _tabController.index == 4
+                        color: _tabController.index == 3
                             ? const Color(0xFFebf9ff)
                             : Colors.transparent,
                       ),
@@ -155,8 +136,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
             body:TabBarView(
               controller: _tabController,
               children:  [
-                MyRideTab(),
-                RideRequestTab(),
+                PendingTab(),
                 CurrentTripsTab(),
                 CanceledTab(),
                 CompletedTab(),

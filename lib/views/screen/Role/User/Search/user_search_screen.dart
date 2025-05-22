@@ -4,16 +4,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
 import 'package:ride_sharing/utils/app_strings.dart';
-import 'package:ride_sharing/views/base/custom_network_image.dart';
+import 'package:ride_sharing/views/base/custom_button.dart';
 import 'package:ride_sharing/views/base/custom_text.dart';
+import 'package:ride_sharing/views/base/custom_text_field.dart';
 import '../../../../../../helpers/route.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_images.dart';
 import '../BottomNavBar/user_bottom_menu..dart';
 
-
 class UserSearchScreen extends StatelessWidget {
-  const UserSearchScreen({super.key});
+  UserSearchScreen({super.key});
+  final TextEditingController pickUpCTRL = TextEditingController();
+  final TextEditingController dropOffCTRL = TextEditingController();
+  final TextEditingController dateCTRL = TextEditingController();
+  final TextEditingController passengerCTRL = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,69 +42,91 @@ class UserSearchScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 191.h,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(right: 8.w),
-                    child: GestureDetector(
-                      onTap: (){
-                        Get.toNamed(AppRoutes.recentOrderScreen);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.r),
-                          border: Border.all(
-                            width: 1.w,
-                            color: AppColors.borderColor,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12.h,
-                                vertical: 16.h,
-                              ),
-                              child: SvgPicture.asset(AppIcons.orderTR),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12.h),
-                              child: CustomText(
-                                text: AppStrings.recentOrder.tr,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18.sp,
-                              ),
-                            ),
-                            SizedBox(height: 6.h),
-                            Divider(thickness: 1.5, color: AppColors.borderColor),
-                            SizedBox(height: 6.h),
-                            CustomText(
-                              text: 'Total(12)'.tr,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18.sp,
-                            ),
-                          ],
-                        ),
+            //================================> Search Container <=======================
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.r),
+                border: Border.all(width: 1.w, color: AppColors.borderColor),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(10.w),
+                child: Column(
+                  children: [
+                    //================================> Pick Up TextField <=======================
+                    CustomTextField(
+                      controller: pickUpCTRL,
+                      hintText: AppStrings.pICKUP.tr,
+                      prefixIcon: SvgPicture.asset(
+                        AppIcons.location,
+                        color: AppColors.primaryColor,
                       ),
                     ),
-                  );
-                },
+                    SizedBox(height: 8.h),
+                    //================================> DROP OFF TextField <=======================
+                    CustomTextField(
+                      controller: dropOffCTRL,
+                      hintText: AppStrings.dROPOFF.tr,
+                      prefixIcon: SvgPicture.asset(
+                        AppIcons.location,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    //================================> Date TextField <=======================
+                    CustomTextField(
+                      onTab: ()=> pickDate(context),
+                      readOnly: true,
+                      controller: dateCTRL,
+                      hintText: 'Select Date'.tr,
+                      prefixIcon: SvgPicture.asset(
+                        AppIcons.calender,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    //================================> Passenger TextField <=======================
+                    CustomTextField(
+                      keyboardType: TextInputType.number,
+                      controller: passengerCTRL,
+                      hintText: 'Passenger'.tr,
+                      prefixIcon: SvgPicture.asset(
+                        AppIcons.profileOutline,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    //================================> Search Button <=======================
+                    CustomButton(
+                      onTap: () {},
+                      height: 45.h,
+                      text: AppStrings.search.tr,
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 24.h),
-            //================================> Recently accepted order <=======================
-            CustomText(
-              text: AppStrings.recentlyAcceptedOrder.tr,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w500,
-              bottom: 16.h,
+            //================================> Recently Search <=======================
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  text: AppStrings.recentSearch.tr,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                //================================> See All Button <=======================
+                InkWell(
+                  onTap: () {},
+                  child: CustomText(
+                    text: AppStrings.seeAll.tr,
+                    fontWeight: FontWeight.w500,
+                    textDecoration: TextDecoration.underline,
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 16.h),
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
@@ -126,108 +152,42 @@ class UserSearchScreen extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    CustomNetworkImage(
-                                      imageUrl:
-                                          'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                                      height: 38.h,
-                                      width: 38.w,
-                                      boxShape: BoxShape.circle,
+                                    SvgPicture.asset(
+                                      AppIcons.clock,
+                                      color: AppColors.primaryColor,
                                     ),
                                     SizedBox(width: 8.w),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        CustomText(
-                                          text: 'Mr. Imran',
-                                          bottom: 4.h,
-                                          fontWeight: FontWeight.w500,
-                                        ),
                                         Row(
                                           children: [
-                                            CustomText(text: '4.9', right: 4.w),
-                                            SvgPicture.asset(AppIcons.star),
+                                            CustomText(
+                                              text: 'Dhaka',
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16.sp,
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            Icon(Icons.arrow_forward_outlined),
+                                            SizedBox(width: 8.w),
+                                            CustomText(
+                                              text: 'Sylhet',
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16.sp,
+                                            ),
                                           ],
+                                        ),
+                                        CustomText(
+                                          text: 'Thu 10 Apr. 1 Passenger',
+                                          color: Colors.grey,
                                         ),
                                       ],
                                     ),
                                   ],
                                 ),
                                 //========================> Status Container <=================
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryColor,
-                                    borderRadius: BorderRadius.circular(10.r),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 12.h,
-                                      vertical: 4.h,
-                                    ),
-                                    child: CustomText(
-                                      text: AppStrings.ongoing,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Divider(thickness: 1.5, color: AppColors.borderColor),
-                          //========================> Details Container <=================
-                          Padding(
-                            padding: EdgeInsets.all(12.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  text: '\$15.99',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 22.sp,
-                                  bottom: 8.h,
-                                ),
-                                CustomText(
-                                  text:
-                                      'Booking Time : Sat 12 April 2025  8.30 PM',
-                                  fontWeight: FontWeight.w500,
-                                  bottom: 8.h,
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          text: AppStrings.pICKUP,
-                                          right: 4.w,
-                                          bottom: 12.h,
-                                        ),
-                                        CustomText(text: 'Dhaka', right: 4.w),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 102.w,
-                                      child: Divider(
-                                        thickness: 1.5,
-                                        color: AppColors.borderColor,
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          text: AppStrings.dROPOFF,
-                                          left: 4.w,
-                                          bottom: 12.h,
-                                        ),
-                                        CustomText(text: 'Rangpur', left: 4.w),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                SvgPicture.asset(AppIcons.rightArrow),
                               ],
                             ),
                           ),
@@ -242,5 +202,30 @@ class UserSearchScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+  //==========================> Show Calender Function <=======================
+  Future<void> pickDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(3050),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            dialogBackgroundColor: Colors.white,
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onSurface: Colors.black, // Text color
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedDate != null) {
+      dateCTRL.text =
+      "${pickedDate.month}-${pickedDate.day}-${pickedDate.year}";
+    }
   }
 }

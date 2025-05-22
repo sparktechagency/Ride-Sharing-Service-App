@@ -33,6 +33,13 @@ import '../views/screen/Role/Driver/PostRides/post_rides_screen.dart';
 import '../views/screen/Role/Driver/Profile/EditProfileInfro/driver_edit_profile_screen.dart';
 import '../views/screen/Role/Driver/Profile/PersonalInformation/driver_personal_information_screen.dart';
 import '../views/screen/Role/Driver/Profile/driver_profile_screen.dart';
+import '../views/screen/Role/User/Inbox/MessageInbox/user_message_screen.dart';
+import '../views/screen/Role/User/Inbox/user_inbox_screen.dart';
+import '../views/screen/Role/User/MyRides/my_rides_screen.dart';
+import '../views/screen/Role/User/Profile/EditProfileInfro/user_edit_profile_screen.dart';
+import '../views/screen/Role/User/Profile/PersonalInformation/user_personal_information_screen.dart';
+import '../views/screen/Role/User/Profile/user_profile_screen.dart';
+import '../views/screen/Role/User/Search/user_search_screen.dart';
 import '../views/screen/SelectRole/select_role_screen.dart';
 import '../views/screen/Settings/settings_screen.dart';
 import '../views/screen/Splash/onboarding_screen.dart';
@@ -81,6 +88,14 @@ class AppRoutes{
   static String addCityScreen="/add_city_screen";
   static String cityViewScreen="/city_view_screen";
   static String passengersTakeScreen="/passengers_take_screen";
+  //===================================================> User Role <=============================================
+  static String userSearchScreen="/user_search_screen";
+  static String userProfileScreen="/user_profile_screen";
+  static String userEditProfileScreen="/user_edit_profile_screen";
+  static String userPersonalInformationScreen="/user_personal_information_screen";
+  static String userInboxScreen="/user_inbox_screen";
+  static String userMessageScreen="/user_message_screen";
+  static String myRidesScreen="/my_rides_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -123,6 +138,14 @@ class AppRoutes{
     GetPage(name:addCityScreen, page: ()=> AddCityScreen()),
     GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
    GetPage(name:passengersTakeScreen, page: ()=> PassengersTakeScreen()),
+   //===================================================> User Role <=============================================
+   GetPage(name:userSearchScreen, page: ()=> UserSearchScreen()),
+   GetPage(name:userProfileScreen, page: ()=> UserProfileScreen()),
+   GetPage(name:userEditProfileScreen, page: ()=> UserEditProfileScreen()),
+   GetPage(name:userPersonalInformationScreen, page: ()=> UserPersonalInformationScreen()),
+   GetPage(name:userInboxScreen, page: ()=> UserInboxScreen()),
+   GetPage(name:userMessageScreen, page: ()=> UserMessageScreen()),
+   GetPage(name:myRidesScreen, page: ()=> MyRidesScreen()),
 
 
  ];

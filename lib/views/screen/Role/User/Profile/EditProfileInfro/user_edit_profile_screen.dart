@@ -1,0 +1,211 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import '../../../../../../controllers/profile_controller.dart';
+import '../../../../../../utils/app_colors.dart';
+import '../../../../../../utils/app_icons.dart';
+import '../../../../../../utils/app_strings.dart';
+import '../../../../../base/custom_app_bar.dart';
+import '../../../../../base/custom_button.dart';
+import '../../../../../base/custom_network_image.dart';
+import '../../../../../base/custom_text.dart';
+import '../../../../../base/custom_text_field.dart';
+
+
+class UserEditProfileScreen extends StatefulWidget {
+  const UserEditProfileScreen({super.key});
+
+  @override
+  State<UserEditProfileScreen> createState() => _UserEditProfileScreenState();
+}
+
+class _UserEditProfileScreenState extends State<UserEditProfileScreen> {
+  final ProfileController _controller = Get.put(ProfileController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(title: AppStrings.personalInformation.tr),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            //==============================> Profile picture section <=======================
+            Stack(
+              children: [
+                CustomNetworkImage(
+                  imageUrl:
+                      'https://s3-alpha-sig.figma.com/img/aba5/7875/06b6763c27225f414df7f949639fd20d?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=BIM9NpRoedGzbRmOCOQwiVNR5~KnNHQyU-~zHD-zQ6niilUr5LM73jnCiN8Gii6tQL~UNbROSw4ojYsBWp6PBzymehTvt~3qZoXlGoIHavo7uIxXMKyK3Vxv~4Kls0MRboaDlqlZWbyTVGQzXuf~T08jG~Rvm5iPK8WATnHVZ-WmE5m0Ysf9eklTkd3JPZd4jyaA6W1twcCM6H2erKBSI0F~SroPsU3JRjet9LxsAIfT1FERORU~z~9MSbXzLWSB-ms98Ns2Ey0YYuSi1ceWrW~oCW9ASwMmYx~LQMJGCjJPfHHRCBVRGx3azfGrtqmxBbasTwGuKx~rHG8wUAIUAw__',
+                  height: 135.h,
+                  width: 135.w,
+                  borderRadius: BorderRadius.circular(24.r),
+                  border: Border.all(width: 2.w, color: AppColors.primaryColor),
+                ),
+                //==============================> Edit Profile Button <=======================
+                Positioned(
+                  right: 0.w,
+                  bottom: 0.h,
+                  child: InkWell(
+                    onTap: () {
+                      _controller.pickImage(ImageSource.gallery);
+                    },
+                    child: SvgPicture.asset(AppIcons.edit),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 22.h),
+            //==============================> Container Text Field <=======================
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.r),
+                  border: Border.all(width: 1.w, color: AppColors.borderColor),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(12.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //====================> User Name Text Field <================
+                      CustomText(
+                        text: AppStrings.userName.tr,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        bottom: 14.h,
+                      ),
+                      CustomTextField(
+                        controller: _controller.userNameCTRL,
+                        hintText: AppStrings.userName.tr,
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: SvgPicture.asset(AppIcons.profile),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      //====================> Phone Number Text Field <================
+                      CustomText(
+                        text: AppStrings.phoneNumber.tr,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        bottom: 14.h,
+                      ),
+                      IntlPhoneField(
+                        decoration: InputDecoration(
+                          hintText: "Phone number",
+                          contentPadding:EdgeInsets.symmetric(horizontal: 12.h, vertical: 16.h),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                            borderSide: BorderSide(color: AppColors.borderColor),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                            borderSide: BorderSide(color: AppColors.borderColor),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                            borderSide: BorderSide(color: AppColors.borderColor, width: 1.w),
+                          ),
+                        ),
+                        showCountryFlag: true,
+                        initialCountryCode: 'US',
+                        flagsButtonMargin: EdgeInsets.only(left: 10.w),
+                        disableLengthCheck: true,
+                        dropdownIconPosition: IconPosition.trailing,
+                        onChanged: (phone) {
+                          print("Phone===============> ${phone.completeNumber}");
+                        },
+                      ),
+                      SizedBox(height: 16.h),
+                      //========================> Address Text Field <==================
+                      CustomText(
+                        text: AppStrings.address.tr,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        bottom: 14.h,
+                      ),
+                      CustomTextField(
+                        controller: _controller.addressCtrl,
+                        hintText: AppStrings.enterYourAddress.tr,
+                        prefixIcon: SvgPicture.asset(AppIcons.location),
+                      ),
+                      //========================> Date Of Birth Day Text Field <==================
+                      SizedBox(height: 16.h),
+                      CustomText(
+                        text: AppStrings.dateOfBirth.tr,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        bottom: 14.h,
+                      ),
+                      CustomTextField(
+                        onTab: () {
+                          _controller.pickBirthDate(context);
+                        },
+                        readOnly: true,
+                        controller: _controller.dateBirthCTRL,
+                        hintText: AppStrings.dateOfBirth.tr,
+                        prefixIcon: SvgPicture.asset(AppIcons.calender),
+                      ),
+                      //========================> Vehicles type Text Field <==================
+                      SizedBox(height: 16.h),
+                      CustomText(
+                        text: AppStrings.vehiclesType.tr,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        bottom: 14.h,
+                      ),
+                      CustomTextField(
+                        controller: _controller.typeCTRL,
+                        hintText: AppStrings.vehiclesType.tr,
+                        prefixIcon: SvgPicture.asset(AppIcons.type),
+                      ),
+                      //========================> Vehicles model Text Field <==================
+                      SizedBox(height: 16.h),
+                      CustomText(
+                        text: AppStrings.vehiclesModel.tr,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        bottom: 14.h,
+                      ),
+                      CustomTextField(
+                        controller: _controller.modelCTRL,
+                        hintText: AppStrings.vehiclesModel.tr,
+                        prefixIcon: SvgPicture.asset(AppIcons.model),
+                      ),
+                      //========================> License plate Text Field <==================
+                      SizedBox(height: 16.h),
+                      CustomText(
+                        text: AppStrings.licensePlate.tr,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        bottom: 14.h,
+                      ),
+                      CustomTextField(
+                        keyboardType: TextInputType.number,
+                        controller: _controller.licenseCTRL,
+                        hintText: AppStrings.typeNumber.tr,
+                        prefixIcon: SvgPicture.asset(AppIcons.licenseNum),
+                      ),
+                      SizedBox(height: 16.h),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 22.h),
+            //==============================> Update profile Button <=======================
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 12.w),
+              child: CustomButton(onTap: (){}, text: AppStrings.updateProfile.tr),
+            ),
+            SizedBox(height: 22.h),
+
+          ],
+        ),
+      ),
+    );
+  }
+}

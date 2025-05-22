@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:ride_sharing/views/base/custom_button.dart';
+
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
 
-class MyRideTab extends StatelessWidget {
-  const MyRideTab({super.key});
+class PendingTab extends StatelessWidget {
+  const PendingTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,7 @@ class MyRideTab extends StatelessWidget {
                           //========================> Status Container <=================
                           Container(
                             decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
+                              color: AppColors.greyColor,
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                             child: Padding(
@@ -78,7 +81,7 @@ class MyRideTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.ongoing,
+                                text: AppStrings.pending,
                                 color: Colors.white,
                               ),
                             ),
@@ -144,6 +147,33 @@ class MyRideTab extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Divider(thickness: 1.5, color: AppColors.borderColor),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomButton(
+                              onTap: (){},
+                              width: 100.w,
+                              height: 34.h,
+                              text: AppStrings.view.tr
+
+                          ),
+                          SizedBox(width: 8.w),
+                          CustomButton(
+                              onTap: (){},
+                              width: 100.w,
+                              height: 34.h,
+                              text: AppStrings.cancel.tr,
+                            color: Colors.white,
+                            textColor: Colors.black,
+
+                          ),
+                        ],
+                      ),
+                    )
+
                   ],
                 ),
               ),

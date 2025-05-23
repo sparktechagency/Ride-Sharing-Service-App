@@ -14,7 +14,6 @@ import '../views/screen/Location/location_picker_screen.dart';
 import '../views/screen/Location/location_screen.dart';
 import '../views/screen/Notifications/notifications_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
-import '../views/screen/Profile/profile_screen.dart';
 import '../views/screen/RatingScreen/rating_screen.dart';
 import '../views/screen/Role/Driver/AddCity/add_city_screen.dart';
 import '../views/screen/Role/Driver/CityView/city_view_screen.dart';
@@ -39,6 +38,8 @@ import '../views/screen/Role/User/MyRides/my_rides_screen.dart';
 import '../views/screen/Role/User/Profile/EditProfileInfro/user_edit_profile_screen.dart';
 import '../views/screen/Role/User/Profile/PersonalInformation/user_personal_information_screen.dart';
 import '../views/screen/Role/User/Profile/user_profile_screen.dart';
+import '../views/screen/Role/User/Search/InnerScreen/ride_details_screen.dart';
+import '../views/screen/Role/User/Search/InnerScreen/see_all_screen.dart';
 import '../views/screen/Role/User/Search/user_search_screen.dart';
 import '../views/screen/SelectRole/select_role_screen.dart';
 import '../views/screen/Settings/settings_screen.dart';
@@ -96,6 +97,8 @@ class AppRoutes{
   static String userInboxScreen="/user_inbox_screen";
   static String userMessageScreen="/user_message_screen";
   static String myRidesScreen="/my_rides_screen";
+  static String seeAllScreen="/see_all_screen";
+  static String rideDetailsScreen="/ride_details_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -139,13 +142,15 @@ class AppRoutes{
     GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
    GetPage(name:passengersTakeScreen, page: ()=> PassengersTakeScreen()),
    //===================================================> User Role <=============================================
-   GetPage(name:userSearchScreen, page: ()=> UserSearchScreen()),
-   GetPage(name:userProfileScreen, page: ()=> UserProfileScreen()),
+   GetPage(name:userSearchScreen, page: ()=> UserSearchScreen(),transition: Transition.noTransition),
+   GetPage(name:myRidesScreen, page: ()=> MyRidesScreen(),transition: Transition.noTransition),
+   GetPage(name:userInboxScreen, page: ()=> UserInboxScreen(),transition: Transition.noTransition),
+   GetPage(name:userProfileScreen, page: ()=> UserProfileScreen(),transition: Transition.noTransition),
    GetPage(name:userEditProfileScreen, page: ()=> UserEditProfileScreen()),
    GetPage(name:userPersonalInformationScreen, page: ()=> UserPersonalInformationScreen()),
-   GetPage(name:userInboxScreen, page: ()=> UserInboxScreen()),
    GetPage(name:userMessageScreen, page: ()=> UserMessageScreen()),
-   GetPage(name:myRidesScreen, page: ()=> MyRidesScreen()),
+   GetPage(name:seeAllScreen, page: ()=> SeeAllScreen()),
+   GetPage(name:rideDetailsScreen, page: ()=> RideDetailsScreen()),
 
 
  ];

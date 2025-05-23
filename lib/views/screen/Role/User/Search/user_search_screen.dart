@@ -117,7 +117,7 @@ class UserSearchScreen extends StatelessWidget {
                 ),
                 //================================> See All Button <=======================
                 InkWell(
-                  onTap: () {},
+                  onTap: () {Get.toNamed(AppRoutes.seeAllScreen);},
                   child: CustomText(
                     text: AppStrings.seeAll.tr,
                     fontWeight: FontWeight.w500,

@@ -141,7 +141,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
           children: [
             CustomNetworkImage(
               imageUrl:
-                  'https://s3-alpha-sig.figma.com/img/0d5f/4dda/49cb09f2ad38026f413dfa61a56c4f80?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=PHldIpDAPspD0nQZwImBKXKPOAjivFZtkI3T-f7eUII0rqE2Q5-REQKF~hYiJ6RHD97GPnh2hJC8gkagrszi9va0YpHw3vWnpCLwfBX2Rr3wOOljNw-nGUczPFrL0PNnqjJ6XUzRZtiGcIRhM~Ebp0wAnEhMFZ6Rt~lRkvJus~lAji8LYA9zq3Oj2C-Y9Qqy5qXTt6tGV7XwHzomE5ADLAvBtG5ozIP5QItEZlPVpXEcCwRSVC0NwYGHFBgyAMUw57rH4Mz28zAu25~FOZqVyVmST-WYgeGzZ2NFDZQXzrzissKqeYkWdivQzKlq1vdt7y4tAd80ZQ4EpPJX3sl6Ww__',
+                  'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
               height: 45.h,
               width: 45.w,
               boxShape: BoxShape.circle,

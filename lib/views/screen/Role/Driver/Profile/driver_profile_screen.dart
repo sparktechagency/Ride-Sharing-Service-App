@@ -41,7 +41,7 @@ class DriverProfileScreen extends StatelessWidget {
                     //====================> User Profile Image <====================
                     CustomNetworkImage(
                       imageUrl:
-                          'https://s3-alpha-sig.figma.com/img/2a57/e2b5/f2e35b52b3ad296902cc9866a80aa709?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=heS~PlIjnLbXA8zL~5KfvDdu6eE9yJ7HhGDj-~gTdzUaYH0w5vmbHdj3rVynDs8pD8Cr3IdqiR5GtrGjZSf6QlNuBJ4sGPeJbJwgMEqZMpU720dL0hYyd8F6lEkymW8AKZ53GN5H7D2ukQQqq09fmLW5Byr53frYdlF~ScGZ5QkbstE6Qdx-iwNjeVpMK6uuNKLAGKTzgqvaKWSTwZXZUA18qkULO6Yx3kEBypLSA~Ea6X9adXYWyjz8vWx6N72hcfvsugtfknKW8zgp7EgRF6LAcxOyDxD0ufuGTINhL-nYCVIle1HHuMc~3ToFDT~Iv8BDlLa2-Eaa~YgwvCEG1g__',
+                          'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
                       height: 135.h,
                       width: 135.w,
                       borderRadius: BorderRadius.circular(24.r),

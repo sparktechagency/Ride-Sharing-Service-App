@@ -49,7 +49,7 @@ class _UserEditProfileScreenState extends State<UserEditProfileScreen> {
                   bottom: 0.h,
                   child: InkWell(
                     onTap: () {
-                      _controller.pickImage(ImageSource.gallery);
+                      _showImagePickerOption();
                     },
                     child: SvgPicture.asset(AppIcons.edit),
                   ),
@@ -206,6 +206,66 @@ class _UserEditProfileScreenState extends State<UserEditProfileScreen> {
           ],
         ),
       ),
+    );
+  }
+  //====================================> Pick Image Gallery and Camera <====================
+  void _showImagePickerOption() {
+    showModalBottomSheet(
+      backgroundColor: AppColors.whiteColor,
+      context: context,
+      builder: (builder) {
+        return Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Row(
+            children: [
+              //=========================> Pick Image Gallery <==================
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _controller.pickImage(ImageSource.gallery);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.image,
+                          size: 50.w, color: AppColors.primaryColor),
+                      SizedBox(height: 8.h),
+                      CustomText(
+                        text: 'Gallery',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        fontSize: 16.sp,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              //=========================> Pick Image Camera <====================
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _controller.pickImage(ImageSource.camera);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.camera_alt,
+                          size: 50.w, color: AppColors.primaryColor),
+                      SizedBox(height: 8.h),
+                      CustomText(
+                        text: 'Camera',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        fontSize: 16.sp,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

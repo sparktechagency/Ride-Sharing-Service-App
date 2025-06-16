@@ -51,8 +51,9 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
               ),
               centerTitle: true,
               bottom: TabBar(
-
                 padding: EdgeInsets.zero,
+                labelPadding: EdgeInsets.zero,
+                indicatorPadding: EdgeInsets.zero,
                 controller: _tabController,
                 indicatorColor: AppColors.primaryColor,
                 labelColor: Colors.black,
@@ -61,7 +62,6 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                   //========================> Pending Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 0
                             ? const Color(0xFFebf9ff)
@@ -79,7 +79,6 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                   //========================> Current Trips Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 1
                             ? const Color(0xFFebf9ff)
@@ -97,7 +96,6 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                   //========================> Canceled Trips Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 2
                             ? const Color(0xFFebf9ff)
@@ -115,7 +113,6 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                   //========================> Completed Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 3
                             ? const Color(0xFFebf9ff)

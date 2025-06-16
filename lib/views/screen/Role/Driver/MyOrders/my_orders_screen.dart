@@ -53,8 +53,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
               ),
               centerTitle: true,
               bottom: TabBar(
-
                 padding: EdgeInsets.zero,
+                labelPadding: EdgeInsets.zero,
+                indicatorPadding: EdgeInsets.zero,
                 controller: _tabController,
                 indicatorColor: AppColors.primaryColor,
                 labelColor: Colors.black,
@@ -63,7 +64,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                   //========================> My Ride Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 0
                             ? const Color(0xFFebf9ff)
@@ -81,7 +81,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                   //========================> Ride Request Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 1
                             ? const Color(0xFFebf9ff)
@@ -99,7 +98,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                   //========================> Current Trips Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 2
                             ? const Color(0xFFebf9ff)
@@ -117,7 +115,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                   //========================> Canceled Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 3
                             ? const Color(0xFFebf9ff)
@@ -135,7 +132,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                   //========================> Completed Tab <====================
                   Tab(
                     child: Container(
-                      width: 81.w,
                       decoration: BoxDecoration(
                         color: _tabController.index == 4
                             ? const Color(0xFFebf9ff)

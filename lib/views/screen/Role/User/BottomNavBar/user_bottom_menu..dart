@@ -12,7 +12,7 @@ class UserBottomMenu extends StatelessWidget {
   const UserBottomMenu(this.menuIndex, {super.key});
 
   Color colorByIndex(ThemeData theme, int index) {
-    return index == menuIndex ? AppColors.primaryColor : AppColors.greyColor;
+    return index == menuIndex ? AppColors.blackColor : AppColors.blackColor;
   }
 
   BottomNavigationBarItem getItem(
@@ -24,29 +24,34 @@ class UserBottomMenu extends StatelessWidget {
     bool isSelected = index == menuIndex;
     return BottomNavigationBarItem(
       label: title,
-      icon: Column(
-        children: [
-          Container(
-            height: 3.h,
-            width: 32.w,
-            decoration: BoxDecoration(
-              color: isSelected ? AppColors.primaryColor : Colors.transparent,
-              borderRadius: BorderRadius.circular(1.r),
+      icon: Container(
+        decoration: BoxDecoration(
+          color: isSelected ? Color(0xffe1f5fe).withOpacity(0.9) : Colors.transparent,
+        ),
+        child: Column(
+          children: [
+            Container(
+              height: 3.h,
+              width: 32.w,
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.primaryColor : Colors.transparent,
+                borderRadius: BorderRadius.circular(1.r),
+              ),
             ),
-          ),
-          SizedBox(height: 5.h),
-          SvgPicture.asset(
-            isSelected
-                ? image
-                : image.replaceAll(
-              'fill',
-              'outline',
-            ), // Handle filling and outline icons
-            height: 24.0,
-            width: 24.0,
-            color: colorByIndex(theme, index),
-          ),
-        ],
+            SizedBox(height: 5.h),
+            SvgPicture.asset(
+              isSelected
+                  ? image
+                  : image.replaceAll(
+                'fill',
+                'outline',
+              ), // Handle filling and outline icons
+              height: 24.0,
+              width: 24.0,
+              color: colorByIndex(theme, index),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -55,10 +60,10 @@ class UserBottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
-      getItem(AppIcons.searchHMIcon, 'Search', theme, 0),
-      getItem(AppIcons.myRide, 'My Rides', theme, 1),
-      getItem(AppIcons.chats, 'Inbox', theme, 2),
-      getItem(AppIcons.profile, 'Profile', theme, 3),
+      getItem(AppIcons.searchHMIcon, 'Search'.tr, theme, 0),
+      getItem(AppIcons.myRide, 'My Rides'.tr, theme, 1),
+      getItem(AppIcons.chats, 'Inbox'.tr, theme, 2),
+      getItem(AppIcons.profile, 'Profile'.tr, theme, 3),
     ];
 
     return Container(
@@ -79,8 +84,8 @@ class UserBottomMenu extends StatelessWidget {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: AppColors.primaryColor,
-          unselectedItemColor: Colors.grey[600],
+          selectedItemColor: AppColors.blackColor,
+          unselectedItemColor: AppColors.blackColor,
           currentIndex: menuIndex,
           onTap: (value) {
             switch (value) {

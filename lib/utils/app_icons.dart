@@ -49,6 +49,7 @@ class AppIcons{
   static String cancel="$baseUrl/cancel.svg";
   static String myRide="$baseUrl/myRide.svg";
   static String searchHMIcon="$baseUrl/sh.svg";
+  static String downArrow="$baseUrl/downArrow.svg";
 
 
 }

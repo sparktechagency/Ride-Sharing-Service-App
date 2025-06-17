@@ -7,7 +7,6 @@ import 'package:ride_sharing/utils/app_images.dart';
 import 'package:ride_sharing/utils/app_strings.dart';
 import 'package:ride_sharing/views/base/custom_button.dart';
 import 'package:ride_sharing/views/base/custom_text.dart';
-
 import '../../../controllers/localization_controller.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_constants.dart';

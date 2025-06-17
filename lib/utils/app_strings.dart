@@ -175,4 +175,6 @@ class AppStrings {
   static String bookingDetails  = 'Booking Details';
   static String iAcceptThe  = 'I Accept The';
   static String payNow  = 'Pay Now';
+  static String language  = 'Language';
+  static String chooseYourLanguage  = 'Choose Your Language';
 }

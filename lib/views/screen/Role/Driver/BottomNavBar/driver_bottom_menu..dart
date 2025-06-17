@@ -60,11 +60,11 @@ class DriverBottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
-      getItem(AppIcons.home, 'Home', theme, 0),
-      getItem(AppIcons.postRides, 'Post Rides', theme, 1),
-      getItem(AppIcons.chats, 'Inbox', theme, 2),
-      getItem(AppIcons.myOrder, 'My Orders', theme, 3),
-      getItem(AppIcons.profile, 'Profile', theme, 4),
+      getItem(AppIcons.home, 'Home'.tr, theme, 0),
+      getItem(AppIcons.postRides, 'Post Rides'.tr, theme, 1),
+      getItem(AppIcons.chats, 'Inbox'.tr, theme, 2),
+      getItem(AppIcons.myOrder, 'My Orders'.tr, theme, 3),
+      getItem(AppIcons.profile, 'Profile'.tr, theme, 4),
     ];
 
     return Container(

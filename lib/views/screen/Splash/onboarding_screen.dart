@@ -21,6 +21,7 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+
   LocalizationController localizationController = Get.find<LocalizationController>();
   final List<String> language = ['English', 'Spanish'];
   String? selectedLanguage;
@@ -88,10 +89,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         int selectedIndex = language.indexOf(newValue);
                         if (selectedIndex != -1) {
                           Locale newLocale = Locale(
-                            AppConstants
-                                .languages[selectedIndex].languageCode,
-                            AppConstants
-                                .languages[selectedIndex].countryCode,
+                            AppConstants.languages[selectedIndex].languageCode,
+                            AppConstants.languages[selectedIndex].countryCode,
                           );
                           setState(() {
                             localizationController.setLanguage(newLocale);
@@ -105,6 +104,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
+          //===========================> Logo And Text Section <===================================
           SizedBox(height: 132.h),
           Image.asset(AppImages.onboard, width: 404.w, height: 228.h),
           SizedBox(height: 32.h),

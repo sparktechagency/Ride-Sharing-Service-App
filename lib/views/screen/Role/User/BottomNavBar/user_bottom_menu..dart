@@ -60,10 +60,10 @@ class UserBottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
-      getItem(AppIcons.searchHMIcon, 'Search', theme, 0),
-      getItem(AppIcons.myRide, 'My Rides', theme, 1),
-      getItem(AppIcons.chats, 'Inbox', theme, 2),
-      getItem(AppIcons.profile, 'Profile', theme, 3),
+      getItem(AppIcons.searchHMIcon, 'Search'.tr, theme, 0),
+      getItem(AppIcons.myRide, 'My Rides'.tr, theme, 1),
+      getItem(AppIcons.chats, 'Inbox'.tr, theme, 2),
+      getItem(AppIcons.profile, 'Profile'.tr, theme, 3),
     ];
 
     return Container(

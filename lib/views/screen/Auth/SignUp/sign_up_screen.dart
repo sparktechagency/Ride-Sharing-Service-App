@@ -96,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               IntlPhoneField(
                 decoration: InputDecoration(
-                  hintText: "Phone number",
+                  hintText: "Phone number".tr,
                   contentPadding:EdgeInsets.symmetric(horizontal: 12.h, vertical: 16.h),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12.r)),

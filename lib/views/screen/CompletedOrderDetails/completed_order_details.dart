@@ -65,7 +65,7 @@ class CompletedOrderDetails extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.completed,
+                                text: AppStrings.completed.tr,
                                 color: Colors.white,
                               ),
                             ),
@@ -110,7 +110,7 @@ class CompletedOrderDetails extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.dROPOFF,
+                                    text: AppStrings.dROPOFF.tr,
                                     bottom: 12.h,
                                   ),
                                   CustomText(text: 'Rangpur', bottom: 12.h),
@@ -131,7 +131,7 @@ class CompletedOrderDetails extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomText(
-                            text: AppStrings.ridePrice,
+                            text: AppStrings.ridePrice.tr,
                             fontWeight: FontWeight.w500,
                           ),
                           CustomText(

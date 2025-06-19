@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
@@ -79,7 +80,7 @@ class CanceledTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.canceled,
+                                text: AppStrings.canceled.tr,
                                 color: Colors.white,
                               ),
                             ),

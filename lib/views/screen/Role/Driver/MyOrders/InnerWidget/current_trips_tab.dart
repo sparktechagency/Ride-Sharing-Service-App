@@ -81,7 +81,7 @@ class CurrentTripsTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.ongoing,
+                                text: AppStrings.ongoing.tr,
                                 color: Colors.white,
                               ),
                             ),

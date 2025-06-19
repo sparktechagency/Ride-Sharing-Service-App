@@ -123,7 +123,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   maxLine: 5,
                 ),
                 SizedBox(height: 32.h),
-                CustomButton(onTap: () {Get.toNamed(AppRoutes.selectRoleScreen);}, text: AppStrings.getStarted.tr),
+                CustomButton(onTap: () {Get.toNamed(AppRoutes.signUpScreen);}, text: AppStrings.getStarted.tr),
               ],
             ),
           ),

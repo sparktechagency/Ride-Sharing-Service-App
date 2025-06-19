@@ -118,7 +118,7 @@ class RideRequestTab extends StatelessWidget {
                                 CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.dROPOFF,
+                                    text: AppStrings.dROPOFF.tr,
                                     left: 4.w,
                                     bottom: 12.h,
                                   ),

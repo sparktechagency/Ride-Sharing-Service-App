@@ -79,10 +79,20 @@ class DriverHomeScreen extends StatelessWidget {
                             SizedBox(height: 6.h),
                             Divider(thickness: 1.5, color: AppColors.borderColor),
                             SizedBox(height: 6.h),
-                            CustomText(
-                              text: 'Total(12)'.tr,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18.sp,
+                            Row(
+                              children: [
+                                CustomText(
+                                  text: 'Total'.tr,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18.sp,
+                                ),
+                                CustomText(
+                                  left: 4.w,
+                                  text: '(12)',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18.sp,
+                                ),
+                              ],
                             ),
                           ],
                         ),

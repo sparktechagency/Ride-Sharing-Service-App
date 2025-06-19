@@ -68,7 +68,7 @@ class SettingsScreen extends StatelessWidget {
                  _languageBottomSheet(context);
                 },
                 title: AppStrings.language.tr,
-                prefixIcon: SvgPicture.asset(AppIcons.about),
+                prefixIcon: SvgPicture.asset(AppIcons.myRide),
                 suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
               ),
               //=====================> Delete Account List Tile <===================

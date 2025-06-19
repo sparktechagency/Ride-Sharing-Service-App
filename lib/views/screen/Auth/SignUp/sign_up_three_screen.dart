@@ -138,6 +138,7 @@ class _SignUpThreeScreenState extends State<SignUpThreeScreen> {
         children: [
           CustomText(
             text: 'Choose a file or drag & drop it here'.tr,
+            maxLine: 3,
             color: Colors.grey,
           ),
           CustomButton(

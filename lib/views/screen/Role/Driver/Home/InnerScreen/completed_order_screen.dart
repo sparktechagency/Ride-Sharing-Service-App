@@ -83,7 +83,7 @@ class CompletedOrderScreen extends StatelessWidget {
                                   vertical: 4.h,
                                 ),
                                 child: CustomText(
-                                  text: AppStrings.completed,
+                                  text: AppStrings.completed.tr,
                                   color: Colors.white,
                                 ),
                               ),
@@ -111,7 +111,7 @@ class CompletedOrderScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      text: AppStrings.pICKUP,
+                                      text: AppStrings.pICKUP.tr,
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Dhaka', bottom: 12.h),
@@ -129,7 +129,7 @@ class CompletedOrderScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      text: AppStrings.dROPOFF,
+                                      text: AppStrings.dROPOFF.tr,
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Rangpur', bottom: 12.h),

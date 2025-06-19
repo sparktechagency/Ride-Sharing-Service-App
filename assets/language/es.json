@@ -31,7 +31,7 @@
   "Enter username": "Introduce el nombre de usuario",
   "Phone number": "Número de teléfono",
   "Confirm password": "Confirmar contraseña",
-  "By creating an account, I accept the": "Al crear una cuenta, acepto los",
+  "By creating an account, I accept the\n": "Al crear una cuenta, acepto los\n",
   "Terms & Conditions": "Términos y condiciones",
   "Privacy Policy": "Política de privacidad",
   "Already have an account?": "¿Ya tienes una cuenta?",
@@ -172,5 +172,10 @@
   "Choose Your Language": "Elige tu idioma",
   "Home": "Inicio",
   "Inbox": "Bandeja de entrada",
-  "My Rides": "Mis viajes"
+  "My Rides": "Mis viajes",
+  "Total": "Total",
+  "Block User": "Bloquear usuario",
+  "Are you sure you want to log out?": "¿Estás seguro que deseas cerrar la sesión?",
+  "Choose a file or drag & drop it here": "Elija un archivo o arrástrelo y suéltelo aquí",
+  "Browse File": "Explorar archivo"
 }

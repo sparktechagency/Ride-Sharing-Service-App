@@ -77,7 +77,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.pICKUP,
+                                    text: AppStrings.pICKUP.tr,
                                     bottom: 12.h,
                                   ),
                                   CustomText(text: 'Dhaka', bottom: 12.h),
@@ -99,7 +99,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.dROPOFF,
+                                    text: AppStrings.dROPOFF.tr,
                                     bottom: 12.h,
                                   ),
                                   CustomText(text: 'Rangpur', bottom: 12.h),
@@ -137,7 +137,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomText(
-                                text: AppStrings.ridePrice,
+                                text: AppStrings.ridePrice.tr,
                                 fontWeight: FontWeight.w500,
                               ),
                               CustomText(

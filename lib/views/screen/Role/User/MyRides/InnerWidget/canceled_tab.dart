@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:get/get.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -79,7 +79,7 @@ class CanceledTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.canceled,
+                                text: AppStrings.canceled.tr,
                                 color: Colors.white,
                               ),
                             ),
@@ -114,7 +114,7 @@ class CanceledTab extends StatelessWidget {
                                 CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.pICKUP,
+                                    text: AppStrings.pICKUP.tr,
                                     right: 4.w,
                                     bottom: 12.h,
                                   ),
@@ -133,7 +133,7 @@ class CanceledTab extends StatelessWidget {
                                 CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.dROPOFF,
+                                    text: AppStrings.dROPOFF.tr,
                                     left: 4.w,
                                     bottom: 12.h,
                                   ),

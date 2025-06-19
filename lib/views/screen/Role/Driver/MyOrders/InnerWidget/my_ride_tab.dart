@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -78,7 +79,7 @@ class MyRideTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.ongoing,
+                                text: AppStrings.ongoing.tr,
                                 color: Colors.white,
                               ),
                             ),
@@ -132,7 +133,7 @@ class MyRideTab extends StatelessWidget {
                                 CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.dROPOFF,
+                                    text: AppStrings.dROPOFF.tr,
                                     left: 4.w,
                                     bottom: 12.h,
                                   ),

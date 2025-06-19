@@ -97,7 +97,9 @@ class UserSearchScreen extends StatelessWidget {
                     SizedBox(height: 8.h),
                     //================================> Search Button <=======================
                     CustomButton(
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(AppRoutes.seeAllScreen);
+                      },
                       height: 45.h,
                       text: AppStrings.search.tr,
                     ),

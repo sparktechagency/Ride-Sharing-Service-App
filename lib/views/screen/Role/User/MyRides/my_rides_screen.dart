@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
 import '../../../../base/custom_text.dart';
 import '../BottomNavBar/user_bottom_menu..dart';
@@ -46,7 +47,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: CustomText(
-                text: "My Rides",
+                text: "My Rides".tr,
                 fontSize: 16.sp,
               ),
               centerTitle: true,
@@ -70,7 +71,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Pending',
+                          text: 'Pending'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -87,7 +88,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Current Trips',
+                          text: 'Current Trips'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -104,7 +105,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Canceled',
+                          text: 'Canceled'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -121,7 +122,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Completed',
+                          text: 'Completed'.tr,
                           fontSize: 12.sp,
                         ),
                       ),

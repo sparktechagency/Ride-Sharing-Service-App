@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../controllers/auth_controller.dart';
 import '../../../../helpers/route.dart';
 import '../../../../utils/app_colors.dart';
+import '../../../../utils/app_icons.dart';
 import '../../../../utils/app_images.dart';
 import '../../../../utils/app_strings.dart';
 import '../../../base/custom_button.dart';
@@ -67,6 +69,8 @@ class ResetPasswordScreen extends StatelessWidget {
                 isPassword: true,
                 controller: passCTRL,
                 hintText: AppStrings.password.tr,
+                prefixIcon: SvgPicture.asset(AppIcons.lock),
+
               ),
               //========================> Confirm Password Text Field <==================
               SizedBox(height: 16.h),
@@ -74,6 +78,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 isPassword: true,
                 controller: confirmPassCTRL,
                 hintText: AppStrings.confirmPassword.tr,
+                prefixIcon: SvgPicture.asset(AppIcons.lock),
               ),
               SizedBox(height: 32.h),
               //========================> Reset Password Button <==================

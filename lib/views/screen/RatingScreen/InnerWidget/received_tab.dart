@@ -103,9 +103,19 @@ class ReceivedTab extends StatelessWidget {
                         }),
                       ),
                       SizedBox(height: 8.h),
-                      CustomText(
-                          text: '52 Reviews',
-                          fontSize: 14.sp,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomText(
+                              text: '52',
+                              fontSize: 14.sp,
+                          ),
+                          CustomText(
+                            left: 4.w,
+                            text: 'Reviews',
+                            fontSize: 14.sp,
+                          ),
+                        ],
                       ),
                     ],
                   ),

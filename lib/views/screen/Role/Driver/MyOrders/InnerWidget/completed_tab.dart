@@ -81,7 +81,7 @@ class CompletedTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.completed,
+                                text: AppStrings.completed.tr,
                                 color: Colors.white,
                               ),
                             ),

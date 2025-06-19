@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../base/custom_text.dart';
 
@@ -104,9 +105,19 @@ class GivenTab extends StatelessWidget {
                         }),
                       ),
                       SizedBox(height: 8.h),
-                      CustomText(
-                        text: '52 Reviews',
-                        fontSize: 14.sp,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomText(
+                            text: '52',
+                            fontSize: 14.sp,
+                          ),
+                          CustomText(
+                            left: 4.w,
+                            text: 'Reviews'.tr,
+                            fontSize: 14.sp,
+                          ),
+                        ],
                       ),
                     ],
                   ),

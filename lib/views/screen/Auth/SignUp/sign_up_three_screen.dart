@@ -29,103 +29,109 @@ class _SignUpThreeScreenState extends State<SignUpThreeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: ''),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //======================> Front side image upload section <===========================
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 1.w, color: AppColors.borderColor),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(24.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      text: AppStrings.greenCardDrivingLicenseFrontSide.tr,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      bottom: 16.h,
-                    ),
-                    DottedBorderContainer(
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child:
-                            frontSiteImage != null
-                                ? Image.memory(
-                                  frontSiteImage!,
-                                  fit: BoxFit.cover,
-                                )
-                                : _addImageButton('frontSite'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //======================> Front side image upload section <===========================
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1.w, color: AppColors.borderColor),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: AppStrings.greenCardDrivingLicenseFrontSide.tr,
+                        fontSize: 16.sp,
+                        maxLine: 2,
+                        textAlign: TextAlign.start,
+                        fontWeight: FontWeight.w500,
+                        bottom: 16.h,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 16.h),
-            //=======================> Back side image upload section <===========================
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 1.w, color: AppColors.borderColor),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(24.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      text: AppStrings.greenCardDrivingLicenseBackSide.tr,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      bottom: 16.h,
-                    ),
-                    DottedBorderContainer(
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child:
-                            backSiteImage != null
-                                ? Image.memory(
-                                  backSiteImage!,
-                                  fit: BoxFit.cover,
-                                )
-                                : _addImageButton('backSite'),
+                      DottedBorderContainer(
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child:
+                              frontSiteImage != null
+                                  ? Image.memory(
+                                    frontSiteImage!,
+                                    fit: BoxFit.cover,
+                                  )
+                                  : _addImageButton('frontSite'),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            //========================> Back And Next Button <==================
-            SizedBox(height: 32.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CustomButton(
-                  onTap: () {
-                    Get.back();
-                  },
-                  text: AppStrings.back.tr,
-                  height: 48.h,
-                  width: 158.w,
-                  color: Colors.white,
-                  textColor: AppColors.primaryColor,
+              SizedBox(height: 16.h),
+              //=======================> Back side image upload section <===========================
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1.w, color: AppColors.borderColor),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-                CustomButton(
-                  onTap: () {Get.toNamed(AppRoutes.otpScreen);},
-                  text: AppStrings.next.tr,
-                  height: 48.h,
-                  width: 158.w,
+                child: Padding(
+                  padding: EdgeInsets.all(24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: AppStrings.greenCardDrivingLicenseBackSide.tr,
+                        fontSize: 16.sp,
+                        maxLine: 2,
+                        textAlign: TextAlign.start,
+                        fontWeight: FontWeight.w500,
+                        bottom: 16.h,
+                      ),
+                      DottedBorderContainer(
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child:
+                              backSiteImage != null
+                                  ? Image.memory(
+                                    backSiteImage!,
+                                    fit: BoxFit.cover,
+                                  )
+                                  : _addImageButton('backSite'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-            SizedBox(height: 32.h),
-          ],
+              ),
+              //========================> Back And Next Button <==================
+              SizedBox(height: 24.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomButton(
+                    onTap: () {
+                      Get.back();
+                    },
+                    text: AppStrings.back.tr,
+                    height: 48.h,
+                    width: 158.w,
+                    color: Colors.white,
+                    textColor: AppColors.primaryColor,
+                  ),
+                  CustomButton(
+                    onTap: () {Get.toNamed(AppRoutes.otpScreen);},
+                    text: AppStrings.next.tr,
+                    height: 48.h,
+                    width: 158.w,
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+            ],
+          ),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/views/base/custom_button.dart';
 
+import '../../../../../../helpers/route.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -81,7 +82,7 @@ class PendingTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.pending,
+                                text: AppStrings.pending.tr,
                                 color: Colors.white,
                               ),
                             ),
@@ -120,6 +121,7 @@ class PendingTab extends StatelessWidget {
                           SizedBox(height: 8.h),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment:
@@ -142,7 +144,7 @@ class PendingTab extends StatelessWidget {
                               ),
                               Column(
                                 crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                CrossAxisAlignment.end,
                                 children: [
                                   CustomText(
                                     text: AppStrings.dROPOFF.tr,
@@ -164,7 +166,9 @@ class PendingTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustomButton(
-                              onTap: (){},
+                              onTap: (){
+                                Get.toNamed(AppRoutes.rideDetailsScreen);
+                              },
                               width: 100.w,
                               height: 34.h,
                               text: AppStrings.view.tr

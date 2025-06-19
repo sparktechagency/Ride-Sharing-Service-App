@@ -84,39 +84,43 @@ class CompletedOrderDetails extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.pICKUP,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Dhaka', bottom: 12.h),
-                                  CustomText(
-                                    text: AppStrings.passenger.tr,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: AppStrings.vehiclesType.tr),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.pICKUP,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Dhaka', bottom: 12.h),
+                                    CustomText(
+                                      text: AppStrings.passenger.tr,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: AppStrings.vehiclesType.tr),
+                                  ],
+                                ),
                               ),
                               SizedBox(
-                                width: 148.w,
+                                width: 102.w,
                                 child: Divider(
                                   thickness: 1.5,
                                   color: AppColors.borderColor,
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.dROPOFF.tr,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Rangpur', bottom: 12.h),
-                                  CustomText(text: '1 Passenger', bottom: 12.h),
-                                  CustomText(text: 'Car'),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.dROPOFF.tr,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Rangpur', bottom: 12.h),
+                                    CustomText(text: '1 Passenger', bottom: 12.h),
+                                    CustomText(text: 'Car'),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

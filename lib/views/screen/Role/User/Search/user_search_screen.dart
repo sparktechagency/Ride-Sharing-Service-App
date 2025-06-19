@@ -39,99 +39,101 @@ class UserSearchScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //================================> Search Container <=======================
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(width: 1.w, color: AppColors.borderColor),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(10.w),
-                child: Column(
-                  children: [
-                    //================================> Pick Up TextField <=======================
-                    CustomTextField(
-                      controller: pickUpCTRL,
-                      hintText: AppStrings.pICKUP.tr,
-                      prefixIcon: SvgPicture.asset(
-                        AppIcons.location,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    //================================> DROP OFF TextField <=======================
-                    CustomTextField(
-                      controller: dropOffCTRL,
-                      hintText: AppStrings.dROPOFF.tr,
-                      prefixIcon: SvgPicture.asset(
-                        AppIcons.location,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    //================================> Date TextField <=======================
-                    CustomTextField(
-                      onTab: ()=> pickDate(context),
-                      readOnly: true,
-                      controller: dateCTRL,
-                      hintText: 'Select Date'.tr,
-                      prefixIcon: SvgPicture.asset(
-                        AppIcons.calender,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    //================================> Passenger TextField <=======================
-                    CustomTextField(
-                      keyboardType: TextInputType.number,
-                      controller: passengerCTRL,
-                      hintText: 'Passenger'.tr,
-                      prefixIcon: SvgPicture.asset(
-                        AppIcons.profileOutline,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    //================================> Search Button <=======================
-                    CustomButton(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.seeAllScreen);
-                      },
-                      height: 45.h,
-                      text: AppStrings.search.tr,
-                    ),
-                  ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //================================> Search Container <=======================
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.r),
+                  border: Border.all(width: 1.w, color: AppColors.borderColor),
                 ),
-              ),
-            ),
-            SizedBox(height: 24.h),
-            //================================> Recently Search <=======================
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: AppStrings.recentSearch.tr,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-                //================================> See All Button <=======================
-                InkWell(
-                  onTap: () {Get.toNamed(AppRoutes.seeAllScreen);},
-                  child: CustomText(
-                    text: AppStrings.seeAll.tr,
-                    fontWeight: FontWeight.w500,
-                    textDecoration: TextDecoration.underline,
+                child: Padding(
+                  padding: EdgeInsets.all(10.w),
+                  child: Column(
+                    children: [
+                      //================================> Pick Up TextField <=======================
+                      CustomTextField(
+                        controller: pickUpCTRL,
+                        hintText: AppStrings.pICKUP.tr,
+                        prefixIcon: SvgPicture.asset(
+                          AppIcons.location,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      //================================> DROP OFF TextField <=======================
+                      CustomTextField(
+                        controller: dropOffCTRL,
+                        hintText: AppStrings.dROPOFF.tr,
+                        prefixIcon: SvgPicture.asset(
+                          AppIcons.location,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      //================================> Date TextField <=======================
+                      CustomTextField(
+                        onTab: ()=> pickDate(context),
+                        readOnly: true,
+                        controller: dateCTRL,
+                        hintText: 'Select Date'.tr,
+                        prefixIcon: SvgPicture.asset(
+                          AppIcons.calender,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      //================================> Passenger TextField <=======================
+                      CustomTextField(
+                        keyboardType: TextInputType.number,
+                        controller: passengerCTRL,
+                        hintText: 'Passenger'.tr,
+                        prefixIcon: SvgPicture.asset(
+                          AppIcons.profileOutline,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      //================================> Search Button <=======================
+                      CustomButton(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.seeAllScreen);
+                        },
+                        height: 45.h,
+                        text: AppStrings.search.tr,
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 16.h),
-            Expanded(
-              child: ListView.builder(
+              ),
+              SizedBox(height: 24.h),
+              //================================> Recently Search <=======================
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    text: AppStrings.recentSearch.tr,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  //================================> See All Button <=======================
+                  InkWell(
+                    onTap: () {Get.toNamed(AppRoutes.seeAllScreen);},
+                    child: CustomText(
+                      text: AppStrings.seeAll.tr,
+                      fontWeight: FontWeight.w500,
+                      textDecoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+              //================================> List View <=======================
+              ListView.builder(
                 scrollDirection: Axis.vertical,
+                shrinkWrap: true,
                 itemCount: 3,
                 itemBuilder: (context, index) {
                   return Padding(
@@ -161,7 +163,7 @@ class UserSearchScreen extends StatelessWidget {
                                     SizedBox(width: 8.w),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
@@ -199,12 +201,13 @@ class UserSearchScreen extends StatelessWidget {
                   );
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+
   //==========================> Show Calender Function <=======================
   Future<void> pickDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(

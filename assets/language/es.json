@@ -63,7 +63,7 @@
   "Password Changed!": "¡Contraseña cambiada!",
   "Return to the login page to enter your account with your new password.": "Vuelve a la página de inicio de sesión para ingresar a tu cuenta con la nueva contraseña.",
   "Back to sign in": "Volver a iniciar sesión",
-  "Recent Order": "Pedido reciente",
+  "Recent Orders": "Pedidos recientes",
   "Active Orders": "Pedidos activos",
   "Recently accepted order": "Pedido aceptado recientemente",
   "Ongoing": "En curso",
@@ -177,5 +177,7 @@
   "Block User": "Bloquear usuario",
   "Are you sure you want to log out?": "¿Estás seguro que deseas cerrar la sesión?",
   "Choose a file or drag & drop it here": "Elija un archivo o arrástrelo y suéltelo aquí",
-  "Browse File": "Explorar archivo"
+  "Browse File": "Explorar archivo",
+  "Cash Payment": "Pago al contado",
+  "Online Payment": "Pago en línea"
 }

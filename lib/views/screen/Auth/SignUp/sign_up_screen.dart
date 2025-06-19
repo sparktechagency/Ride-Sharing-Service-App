@@ -205,14 +205,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
         Text.rich(
-          maxLines: 2,
+          maxLines: 3,
           TextSpan(
             text: AppStrings.byCreatingAnAccountIAccept.tr,
-            style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 12.w, fontWeight: FontWeight.w500),
             children: [
               TextSpan(
                 text: AppStrings.termsConditions.tr,
-                style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 12.w, fontWeight: FontWeight.bold),
                 recognizer:
                     TapGestureRecognizer()
                       ..onTap = () {
@@ -222,7 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const TextSpan(text: ' & '),
               TextSpan(
                 text: AppStrings.privacyPolicy.tr,
-                style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 12.w, fontWeight: FontWeight.bold),
                 recognizer:
                     TapGestureRecognizer()
                       ..onTap = () {

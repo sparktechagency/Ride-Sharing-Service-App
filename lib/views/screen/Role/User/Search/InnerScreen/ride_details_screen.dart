@@ -73,39 +73,43 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.pICKUP.tr,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Dhaka', bottom: 12.h),
-                                  CustomText(
-                                    text: AppStrings.passenger.tr,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: AppStrings.vehiclesType.tr),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.pICKUP.tr,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Dhaka', bottom: 12.h),
+                                    CustomText(
+                                      text: AppStrings.passenger.tr,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: AppStrings.vehiclesType.tr),
+                                  ],
+                                ),
                               ),
                               SizedBox(
-                                width: 148.w,
+                                width: 106.w,
                                 child: Divider(
                                   thickness: 1.5,
                                   color: AppColors.borderColor,
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.dROPOFF.tr,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Rangpur', bottom: 12.h),
-                                  CustomText(text: '1 Passenger', bottom: 12.h),
-                                  CustomText(text: 'Car'),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.dROPOFF.tr,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Rangpur', bottom: 12.h),
+                                    CustomText(text: '1 Passenger', bottom: 12.h),
+                                    CustomText(text: 'Car'),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -481,14 +485,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                     ),
                   ),
                   _paymentOption(
-                    'Cash Payment',
+                    'Cash Payment'.tr,
                     15.99,
                     'cash',
                     selectedPayment,
                     (val) => setState(() => selectedPayment = val),
                   ),
                   _paymentOption(
-                    'Online Payment',
+                    'Online Payment'.tr,
                     15.99,
                     'online',
                     selectedPayment,

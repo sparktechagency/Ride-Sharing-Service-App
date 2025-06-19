@@ -108,18 +108,21 @@ class CanceledTab extends StatelessWidget {
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.pICKUP.tr,
-                                    right: 4.w,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Dhaka', right: 4.w),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.pICKUP.tr,
+                                      right: 4.w,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Dhaka', right: 4.w),
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 width: 102.w,
@@ -128,17 +131,19 @@ class CanceledTab extends StatelessWidget {
                                   color: AppColors.borderColor,
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.dROPOFF.tr,
-                                    left: 4.w,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Rangpur', left: 4.w),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.end,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.dROPOFF.tr,
+                                      left: 4.w,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Rangpur', left: 4.w),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

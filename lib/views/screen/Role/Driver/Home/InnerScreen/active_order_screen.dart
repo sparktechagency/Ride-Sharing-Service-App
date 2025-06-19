@@ -121,13 +121,14 @@ class ActiveOrderScreen extends StatelessWidget {
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
                                   crossAxisAlignment:
                                   CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      text: AppStrings.pICKUP,
+                                      text: AppStrings.pICKUP.tr,
                                       right: 4.w,
                                       bottom: 12.h,
                                     ),
@@ -143,7 +144,7 @@ class ActiveOrderScreen extends StatelessWidget {
                                 ),
                                 Column(
                                   crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                                  CrossAxisAlignment.end,
                                   children: [
                                     CustomText(
                                       text: AppStrings.dROPOFF.tr,

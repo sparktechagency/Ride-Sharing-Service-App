@@ -47,7 +47,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Align(
               alignment: Alignment.topRight,
               child: Container(
-                width: 110.w,
+                width: 132.w,
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 decoration: BoxDecoration(
                   color: AppColors.fillColor,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import '../../../../../../helpers/route.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -119,18 +120,21 @@ class CurrentTripsTab extends StatelessWidget {
                           SizedBox(height: 8.h),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.pICKUP.tr,
-                                    right: 4.w,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Dhaka', right: 4.w),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.pICKUP.tr,
+                                      right: 4.w,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Dhaka', right: 4.w),
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 width: 102.w,
@@ -139,17 +143,19 @@ class CurrentTripsTab extends StatelessWidget {
                                   color: AppColors.borderColor,
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.dROPOFF.tr,
-                                    left: 4.w,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Rangpur', left: 4.w),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.end,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.dROPOFF.tr,
+                                      left: 4.w,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Rangpur', left: 4.w),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -163,7 +169,9 @@ class CurrentTripsTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustomButton(
-                              onTap: (){},
+                              onTap: (){
+                                Get.toNamed(AppRoutes.rideDetailsScreen);
+                              },
                               width: 100.w,
                               height: 34.h,
                               text: AppStrings.view.tr
@@ -171,7 +179,9 @@ class CurrentTripsTab extends StatelessWidget {
                           ),
                           SizedBox(width: 8.w),
                           CustomButton(
-                            onTap: (){},
+                            onTap: (){
+                              Get.toNamed(AppRoutes.userMessageScreen);
+                            },
                             width: 100.w,
                             height: 34.h,
                             text: AppStrings.chats.tr,

@@ -24,11 +24,11 @@ class SupportScreen extends StatelessWidget {
             color: AppColors.cardColor,
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
             child: Column(
               children: [
                 SvgPicture.asset(AppIcons.hello),
-                SizedBox(height: 32.h),
+                SizedBox(height: 16.h),
                 CustomListTile(
                   title: 'Support@info.com',
                   prefixIcon: SvgPicture.asset(AppIcons.mail),

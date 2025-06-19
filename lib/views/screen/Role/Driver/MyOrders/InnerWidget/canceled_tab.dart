@@ -101,21 +101,32 @@ class CanceledTab extends StatelessWidget {
                             fontSize: 22.sp,
                             bottom: 8.h,
                           ),
-                          CustomText(
-                            text:
-                            'Booking Time : Sat 12 April 2025  8.30 PM',
-                            fontWeight: FontWeight.w500,
-                            bottom: 8.h,
+                          Row(
+                            children: [
+                              CustomText(
+                                text:
+                                'Booking Time :'.tr,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              CustomText(
+                                text:
+                                'Sat 12 April 2025  8.30 PM',
+                                fontWeight: FontWeight.w500,
+                                left: 4.h,
+                              ),
+                            ],
                           ),
+                          SizedBox(height: 8.h),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.pICKUP,
+                                    text: AppStrings.pICKUP.tr,
                                     right: 4.w,
                                     bottom: 12.h,
                                   ),
@@ -131,10 +142,10 @@ class CanceledTab extends StatelessWidget {
                               ),
                               Column(
                                 crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                CrossAxisAlignment.end,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.dROPOFF,
+                                    text: AppStrings.dROPOFF.tr,
                                     left: 4.w,
                                     bottom: 12.h,
                                   ),

@@ -12,7 +12,13 @@ import '../../../../../utils/app_images.dart';
 import '../BottomNavBar/driver_bottom_menu..dart';
 
 class DriverHomeScreen extends StatelessWidget {
-  const DriverHomeScreen({super.key});
+  DriverHomeScreen({super.key});
+
+  List<Map<String, String>> orderData = [
+    {'title': 'Recent Orders'.tr},
+    {'title': 'Active Orders'.tr},
+    {'title': 'Completed Orders'.tr},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +48,19 @@ class DriverHomeScreen extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
+                itemCount: orderData.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.only(right: 8.w),
                     child: GestureDetector(
-                      onTap: (){
-                        Get.toNamed(AppRoutes.recentOrderScreen);
-                      },
+                      onTap: () {
+                        if (index == 0) {
+                          Get.toNamed(AppRoutes.recentOrderScreen);
+                        } else if (index == 1) {
+                          Get.toNamed(AppRoutes.activeOrderScreen);
+                        } else {
+                          Get.toNamed(AppRoutes.completedOrderScreen);
+                        }                      },
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16.r),
@@ -71,13 +82,16 @@ class DriverHomeScreen extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.h),
                               child: CustomText(
-                                text: AppStrings.recentOrder.tr,
+                                text: orderData[index]['title'] ?? '',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18.sp,
                               ),
                             ),
                             SizedBox(height: 6.h),
-                            Divider(thickness: 1.5, color: AppColors.borderColor),
+                            Divider(
+                              thickness: 1.5,
+                              color: AppColors.borderColor,
+                            ),
                             SizedBox(height: 6.h),
                             Row(
                               children: [
@@ -174,7 +188,7 @@ class DriverHomeScreen extends StatelessWidget {
                                       vertical: 4.h,
                                     ),
                                     child: CustomText(
-                                      text: AppStrings.ongoing,
+                                      text: AppStrings.ongoing.tr,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -195,26 +209,38 @@ class DriverHomeScreen extends StatelessWidget {
                                   fontSize: 22.sp,
                                   bottom: 8.h,
                                 ),
-                                CustomText(
-                                  text:
-                                      'Booking Time : Sat 12 April 2025  8.30 PM',
-                                  fontWeight: FontWeight.w500,
-                                  bottom: 8.h,
+                                Row(
+                                  children: [
+                                    CustomText(
+                                      text: 'Booking Time :'.tr,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    CustomText(
+                                      text: 'Sat 12 April 2025  8.30 PM',
+                                      fontWeight: FontWeight.w500,
+                                      left: 4.h,
+                                    ),
+                                  ],
                                 ),
+                                SizedBox(height: 8.h),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          text: AppStrings.pICKUP,
-                                          right: 4.w,
-                                          bottom: 12.h,
-                                        ),
-                                        CustomText(text: 'Dhaka', right: 4.w),
-                                      ],
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CustomText(
+                                            text: AppStrings.pICKUP.tr,
+                                            right: 4.w,
+                                            bottom: 12.h,
+                                          ),
+                                          CustomText(text: 'Dhaka', right: 4.w),
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(
                                       width: 102.w,
@@ -223,17 +249,22 @@ class DriverHomeScreen extends StatelessWidget {
                                         color: AppColors.borderColor,
                                       ),
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          text: AppStrings.dROPOFF,
-                                          left: 4.w,
-                                          bottom: 12.h,
-                                        ),
-                                        CustomText(text: 'Rangpur', left: 4.w),
-                                      ],
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          CustomText(
+                                            text: AppStrings.dROPOFF,
+                                            left: 4.w,
+                                            bottom: 12.h,
+                                          ),
+                                          CustomText(
+                                            text: 'Rangpur',
+                                            left: 4.w,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

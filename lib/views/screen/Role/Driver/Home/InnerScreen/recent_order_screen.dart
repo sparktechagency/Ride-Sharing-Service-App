@@ -116,7 +116,7 @@ class RecentOrderScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     CustomText(
                                       text: AppStrings.dROPOFF.tr,

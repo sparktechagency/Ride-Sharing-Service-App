@@ -124,7 +124,7 @@ class AppRoutes{
    // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
    // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
    //===================================================> Driver Role <=============================================
-   GetPage(name:driverHomeScreen, page: ()=>const DriverHomeScreen(),transition:Transition.noTransition),
+   GetPage(name:driverHomeScreen, page: ()=> DriverHomeScreen(),transition:Transition.noTransition),
    GetPage(name:postRidesScreen, page: ()=> PostRidesScreen(),transition:Transition.noTransition),
    GetPage(name:driverInboxScreen, page: ()=> DriverInboxScreen(),transition:Transition.noTransition),
    GetPage(name:myOrdersScreen, page: ()=> MyOrdersScreen(),transition:Transition.noTransition),

@@ -63,7 +63,7 @@
   "Password Changed!": "Password Changed!",
   "Return to the login page to enter your account with your new password.": "Return to the login page to enter your account with your new password.",
   "Back to sign in": "Back to sign in",
-  "Recent Order": "Recent Order",
+  "Recent Orders": "Recent Orders",
   "Active Orders": "Active Orders",
   "Recently accepted order": "Recently accepted order",
   "Ongoing": "Ongoing",
@@ -177,5 +177,7 @@
   "Block User": "Block User",
   "Are you sure you want to log out?": "Are you sure you want to log out?",
   "Choose a file or drag & drop it here": "Choose a file or drag & drop it here",
-  "Browse File": "Browse File"
+  "Browse File": "Browse File",
+  "Cash Payment": "Cash Payment",
+  "Online Payment": "Online Payment"
 }

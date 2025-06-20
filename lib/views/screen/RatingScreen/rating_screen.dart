@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import '../../../utils/app_colors.dart';
 import '../../base/custom_text.dart';
 import 'InnerWidget/given_tab.dart';
@@ -43,7 +44,7 @@ class _RatingScreenState extends State<RatingScreen> with SingleTickerProviderSt
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: CustomText(
-                text: "Rating",
+                text: "Rating".tr,
                 fontSize: 16.sp,
               ),
               centerTitle: true,
@@ -67,7 +68,7 @@ class _RatingScreenState extends State<RatingScreen> with SingleTickerProviderSt
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Received',
+                          text: 'Received'.tr,
                           fontSize: 14.sp,
                         ),
                       ),
@@ -85,7 +86,7 @@ class _RatingScreenState extends State<RatingScreen> with SingleTickerProviderSt
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Given',
+                          text: 'Given'.tr,
                           fontSize: 14.sp,
                         ),
                       ),

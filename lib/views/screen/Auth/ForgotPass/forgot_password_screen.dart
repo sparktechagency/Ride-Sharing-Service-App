@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import '../../../../controllers/auth_controller.dart';
 import '../../../../helpers/route.dart';
 import '../../../../utils/app_colors.dart';
@@ -21,6 +22,7 @@ class ForgotPasswordScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 164.h),
               Center(child: Image.asset(AppImages.appLogo, width: 91.w, height: 94.h)),
@@ -58,12 +60,40 @@ class ForgotPasswordScreen extends StatelessWidget {
               ),
               //========================> Forgot Password Sub Title <==================
               SizedBox(height: 14.h),
-              CustomText(text: AppStrings.pleaseEnterYourPhoneNumber.tr, maxLine: 3),
-              //========================> Email Text Field <==================
-              SizedBox(height: 32.h),
-              CustomTextField(
-                controller: _authController.forgetEmailTextCtrl,
-                hintText: AppStrings.email.tr,
+              Center(child: CustomText(text: AppStrings.pleaseEnterYourPhoneNumber.tr, maxLine: 3)),
+              //=============================> Phone number Text Field <====================
+              SizedBox(height: 16.h),
+              CustomText(
+                text: AppStrings.phoneNumber.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                bottom: 14.h,
+              ),
+              IntlPhoneField(
+                decoration: InputDecoration(
+                  hintText: "Phone number".tr,
+                  contentPadding:EdgeInsets.symmetric(horizontal: 12.h, vertical: 16.h),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                    borderSide: BorderSide(color: AppColors.borderColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                    borderSide: BorderSide(color: AppColors.borderColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                    borderSide: BorderSide(color: AppColors.borderColor, width: 1.w),
+                  ),
+                ),
+                showCountryFlag: true,
+                initialCountryCode: 'US',
+                flagsButtonMargin: EdgeInsets.only(left: 10.w),
+                disableLengthCheck: true,
+                dropdownIconPosition: IconPosition.trailing,
+                onChanged: (phone) {
+                  print("Phone===============> ${phone.completeNumber}");
+                },
               ),
               SizedBox(height: 32.h),
               //========================> Send OTP Button <==================

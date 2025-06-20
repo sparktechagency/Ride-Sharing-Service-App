@@ -424,31 +424,27 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
       padding: EdgeInsets.zero,
       icon: SvgPicture.asset(AppIcons.dot, color: Colors.white),
       onSelected: (int result) {
-        if (result == 0) {
-          print('View Profile');
-        } else if (result == 1) {
-          print('Delete Chat ');
-        }
+          print('Block User');
       },
       itemBuilder:
           (BuildContext context) => <PopupMenuEntry<int>>[
             PopupMenuItem<int>(
               value: 0,
-              child: const Text(
-                'View Profile',
+              child: Text(
+                'Block User'.tr,
                 style: TextStyle(color: Colors.black),
               ),
             ),
-            PopupMenuItem<int>(
+           /* PopupMenuItem<int>(
               onTap: () {
                 _showCustomBottomSheet(context);
               },
               value: 1,
-              child: const Text(
-                'Delete Chat',
+              child:  Text(
+                'Delete Chat'.tr,
                 style: TextStyle(color: Colors.black),
               ),
-            ),
+            ),*/
           ],
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),

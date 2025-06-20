@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -78,7 +79,7 @@ class MyRideTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.ongoing,
+                                text: AppStrings.ongoing.tr,
                                 color: Colors.white,
                               ),
                             ),
@@ -99,14 +100,25 @@ class MyRideTab extends StatelessWidget {
                             fontSize: 22.sp,
                             bottom: 8.h,
                           ),
-                          CustomText(
-                            text:
-                            'Booking Time : Sat 12 April 2025  8.30 PM',
-                            fontWeight: FontWeight.w500,
-                            bottom: 8.h,
+                          Row(
+                            children: [
+                              CustomText(
+                                text:
+                                'Booking Time :'.tr,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              CustomText(
+                                text:
+                                'Sat 12 April 2025  8.30 PM',
+                                fontWeight: FontWeight.w500,
+                                left: 8.h,
+                              ),
+                            ],
                           ),
+                          SizedBox(height: 8.h),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment:
@@ -129,10 +141,10 @@ class MyRideTab extends StatelessWidget {
                               ),
                               Column(
                                 crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                CrossAxisAlignment.end,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.dROPOFF,
+                                    text: AppStrings.dROPOFF.tr,
                                     left: 4.w,
                                     bottom: 12.h,
                                   ),

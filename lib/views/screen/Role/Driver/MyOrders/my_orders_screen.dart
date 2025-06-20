@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
 
 import '../../../../base/custom_text.dart';
@@ -48,7 +49,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: CustomText(
-                text: "My Orders",
+                text: "My Orders".tr,
                 fontSize: 16.sp,
               ),
               centerTitle: true,
@@ -72,7 +73,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'My Ride',
+                          text: 'My Ride'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -89,7 +90,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Ride Request',
+                          text: 'Ride Request'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -106,7 +107,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Current Trips',
+                          text: 'Current Trips'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -123,7 +124,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Canceled',
+                          text: 'Canceled'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -140,7 +141,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Completed',
+                          text: 'Completed'.tr,
                           fontSize: 12.sp,
                         ),
                       ),

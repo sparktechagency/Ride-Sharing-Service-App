@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:get/get.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -79,7 +79,7 @@ class CanceledTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.canceled,
+                                text: AppStrings.canceled.tr,
                                 color: Colors.white,
                               ),
                             ),
@@ -108,18 +108,21 @@ class CanceledTab extends StatelessWidget {
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.pICKUP,
-                                    right: 4.w,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Dhaka', right: 4.w),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.pICKUP.tr,
+                                      right: 4.w,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Dhaka', right: 4.w),
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 width: 102.w,
@@ -128,17 +131,19 @@ class CanceledTab extends StatelessWidget {
                                   color: AppColors.borderColor,
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.dROPOFF,
-                                    left: 4.w,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Rangpur', left: 4.w),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.end,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.dROPOFF.tr,
+                                      left: 4.w,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Rangpur', left: 4.w),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

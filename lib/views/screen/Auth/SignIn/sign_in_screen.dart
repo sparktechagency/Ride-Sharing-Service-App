@@ -73,7 +73,7 @@ class SignInScreen extends StatelessWidget {
               ),
               IntlPhoneField(
                 decoration: InputDecoration(
-                  hintText: "Phone number",
+                  hintText: "Phone number".tr,
                   contentPadding:EdgeInsets.symmetric(horizontal: 12.h, vertical: 16.h),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12.r)),
@@ -129,7 +129,7 @@ class SignInScreen extends StatelessWidget {
               ),
               //========================> Sign in Button <==================
               CustomButton(onTap: () {
-                Get.offAllNamed(AppRoutes.driverHomeScreen);
+                Get.offAllNamed(AppRoutes.selectRoleScreen);
               }, text: AppStrings.signIn.tr),
               SizedBox(height: 32.h),
               //========================> Don’t have an account Sign Up Button <==================

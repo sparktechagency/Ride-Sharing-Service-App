@@ -47,7 +47,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Align(
               alignment: Alignment.topRight,
               child: Container(
-                width: 110.w,
+                width: 132.w,
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 decoration: BoxDecoration(
                   color: AppColors.fillColor,
@@ -123,7 +123,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   maxLine: 5,
                 ),
                 SizedBox(height: 32.h),
-                CustomButton(onTap: () {Get.toNamed(AppRoutes.selectRoleScreen);}, text: AppStrings.getStarted.tr),
+                CustomButton(onTap: () {Get.toNamed(AppRoutes.signUpScreen);}, text: AppStrings.getStarted.tr),
               ],
             ),
           ),

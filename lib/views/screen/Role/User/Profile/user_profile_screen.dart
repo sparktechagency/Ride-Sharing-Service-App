@@ -140,7 +140,7 @@ class UserProfileScreen extends StatelessWidget {
               ),
               SizedBox(height: 12.h),
               CustomText(
-                text: 'Logout',
+                text: 'Logout'.tr,
                 fontWeight: FontWeight.w500,
                 fontSize: 24.sp,
               ),
@@ -167,7 +167,7 @@ class UserProfileScreen extends StatelessWidget {
                     onTap: () {
                       Get.back();
                     },
-                    text: "No",
+                    text: "No".tr,
                     color: Colors.white,
                     textColor: AppColors.primaryColor,
                   ),
@@ -178,7 +178,7 @@ class UserProfileScreen extends StatelessWidget {
                     onTap: () {
                       Get.offAllNamed(AppRoutes.signInScreen);
                     },
-                    text: "Yes",
+                    text: "Yes".tr,
                   ),
                 ],
               ),

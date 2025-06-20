@@ -310,14 +310,14 @@ class DriverPersonalInformationScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
                   CustomNetworkImage(
-                    imageUrl: '',
+                    imageUrl: 'https://static.vecteezy.com/system/resources/previews/053/227/245/non_2x/graphic-representation-of-a-driver-s-license-card-with-a-male-photo-personal-details-and-security-features-png.png',
                     height: 197.h,
                     width: 362.w,
                     borderRadius: BorderRadius.circular(16.r),
                   ),
                   SizedBox(height: 16.h),
                   CustomNetworkImage(
-                    imageUrl: '',
+                    imageUrl: 'https://static.vecteezy.com/system/resources/previews/053/227/245/non_2x/graphic-representation-of-a-driver-s-license-card-with-a-male-photo-personal-details-and-security-features-png.png',
                     height: 197.h,
                     width: 362.w,
                     borderRadius: BorderRadius.circular(16.r),

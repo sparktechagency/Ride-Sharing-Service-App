@@ -162,7 +162,13 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                 ),
               ),
               //=========================> Continue Button <====================
-              CustomButton(onTap: () {Get.toNamed(AppRoutes.signUpScreen);}, text: AppStrings.continues.tr),
+              CustomButton(onTap: () {
+                if(selectedRole.first){
+                  Get.offAllNamed(AppRoutes.userSearchScreen);
+                } else {
+                  Get.offAllNamed(AppRoutes.driverHomeScreen);
+                }
+                }, text: AppStrings.continues.tr),
               SizedBox(height: 58.h),
             ],
           ),

@@ -64,7 +64,7 @@ class CanceledOrderDetails extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.cancel,
+                                text: AppStrings.cancel.tr,
                                 color: Colors.white,
                               ),
                             ),
@@ -87,7 +87,7 @@ class CanceledOrderDetails extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.pICKUP,
+                                    text: AppStrings.pICKUP.tr,
                                     bottom: 12.h,
                                   ),
                                   CustomText(text: 'Dhaka', bottom: 12.h),
@@ -109,7 +109,7 @@ class CanceledOrderDetails extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.dROPOFF,
+                                    text: AppStrings.dROPOFF.tr,
                                     bottom: 12.h,
                                   ),
                                   CustomText(text: 'Rangpur', bottom: 12.h),

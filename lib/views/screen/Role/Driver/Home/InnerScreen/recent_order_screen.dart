@@ -101,7 +101,7 @@ class RecentOrderScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      text: AppStrings.pICKUP,
+                                      text: AppStrings.pICKUP.tr,
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Dhaka', bottom: 12.h),
@@ -116,10 +116,10 @@ class RecentOrderScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     CustomText(
-                                      text: AppStrings.dROPOFF,
+                                      text: AppStrings.dROPOFF.tr,
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Rangpur', bottom: 12.h),

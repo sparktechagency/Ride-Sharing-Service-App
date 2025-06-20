@@ -424,22 +424,18 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       padding: EdgeInsets.zero,
       icon: SvgPicture.asset(AppIcons.dot, color: Colors.white),
       onSelected: (int result) {
-        if (result == 0) {
-          print('View Profile');
-        } else if (result == 1) {
-          print('Delete Chat ');
-        }
+          print('Block User');
       },
       itemBuilder:
           (BuildContext context) => <PopupMenuEntry<int>>[
             PopupMenuItem<int>(
               value: 0,
-              child: const Text(
-                'View Profile',
+              child: Text(
+                'Block User'.tr,
                 style: TextStyle(color: Colors.black),
               ),
             ),
-            PopupMenuItem<int>(
+           /* PopupMenuItem<int>(
               onTap: () {
                 _showCustomBottomSheet(context);
               },
@@ -448,7 +444,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                 'Delete Chat',
                 style: TextStyle(color: Colors.black),
               ),
-            ),
+            ),*/
           ],
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
@@ -507,7 +503,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     onTap: () {
                       Get.back();
                     },
-                    text: "No",
+                    text: "No".tr,
                     color: Colors.white,
                     textColor: AppColors.primaryColor,
                   ),
@@ -518,7 +514,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     onTap: () {
                       // Get.offAllNamed(AppRoutes.signInScreen);
                     },
-                    text: "Yes",
+                    text: "Yes".tr,
                   ),
                 ],
               ),

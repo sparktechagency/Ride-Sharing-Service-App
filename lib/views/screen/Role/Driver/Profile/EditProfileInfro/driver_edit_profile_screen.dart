@@ -86,7 +86,7 @@ class _DriverEditProfileScreenState extends State<DriverEditProfileScreen> {
                         ),
                       ),
                       SizedBox(height: 16.h),
-                      //====================> Phone Number Text Field <================
+                      /*//====================> Phone Number Text Field <================
                       CustomText(
                         text: AppStrings.phoneNumber.tr,
                         fontSize: 16.sp,
@@ -119,7 +119,7 @@ class _DriverEditProfileScreenState extends State<DriverEditProfileScreen> {
                           print("Phone===============> ${phone.completeNumber}");
                         },
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 16.h),*/
                       //========================> Address Text Field <==================
                       CustomText(
                         text: AppStrings.address.tr,

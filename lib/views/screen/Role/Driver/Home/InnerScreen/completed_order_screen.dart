@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/helpers/route.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -83,7 +84,7 @@ class CompletedOrderScreen extends StatelessWidget {
                                   vertical: 4.h,
                                 ),
                                 child: CustomText(
-                                  text: AppStrings.completed,
+                                  text: AppStrings.completed.tr,
                                   color: Colors.white,
                                 ),
                               ),
@@ -111,7 +112,7 @@ class CompletedOrderScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      text: AppStrings.pICKUP,
+                                      text: AppStrings.pICKUP.tr,
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Dhaka', bottom: 12.h),
@@ -126,10 +127,10 @@ class CompletedOrderScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     CustomText(
-                                      text: AppStrings.dROPOFF,
+                                      text: AppStrings.dROPOFF.tr,
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Rangpur', bottom: 12.h),
@@ -147,7 +148,7 @@ class CompletedOrderScreen extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: CustomButton(
-                            onTap: () {},
+                            onTap: () {Get.toNamed(AppRoutes.completedOrderDetails);},
                             text: AppStrings.view.tr,
                             width: 100.w,
                             height: 34.h,
@@ -165,3 +166,4 @@ class CompletedOrderScreen extends StatelessWidget {
     );
   }
 }
+

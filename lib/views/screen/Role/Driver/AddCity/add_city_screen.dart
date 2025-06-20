@@ -168,7 +168,7 @@ class AddCityScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 CustomText(
-                                  text: AppStrings.pICKUP,
+                                  text: AppStrings.pICKUP.tr,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -199,7 +199,7 @@ class AddCityScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 CustomText(
-                                  text: AppStrings.pICKUP,
+                                  text: AppStrings.pICKUP.tr,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 CustomText(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/helpers/route.dart';
 
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
@@ -81,7 +82,7 @@ class CompletedTab extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               child: CustomText(
-                                text: AppStrings.completed,
+                                text: AppStrings.completed.tr,
                                 color: Colors.white,
                               ),
                             ),
@@ -102,26 +103,39 @@ class CompletedTab extends StatelessWidget {
                             fontSize: 22.sp,
                             bottom: 8.h,
                           ),
-                          CustomText(
-                            text:
-                            'Booking Time : Sat 12 April 2025  8.30 PM',
-                            fontWeight: FontWeight.w500,
-                            bottom: 8.h,
+                          Row(
+                            children: [
+                              CustomText(
+                                text:
+                                'Booking Time :'.tr,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              CustomText(
+                                text:
+                                'Sat 12 April 2025  8.30 PM',
+                                fontWeight: FontWeight.w500,
+                                left: 4.h,
+                              ),
+                            ],
                           ),
+                          SizedBox(height: 8.h),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.pICKUP,
-                                    right: 4.w,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Dhaka', right: 4.w),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.pICKUP.tr,
+                                      right: 4.w,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Dhaka', right: 4.w),
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 width: 102.w,
@@ -130,17 +144,19 @@ class CompletedTab extends StatelessWidget {
                                   color: AppColors.borderColor,
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: AppStrings.dROPOFF,
-                                    left: 4.w,
-                                    bottom: 12.h,
-                                  ),
-                                  CustomText(text: 'Rangpur', left: 4.w),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.end,
+                                  children: [
+                                    CustomText(
+                                      text: AppStrings.dROPOFF.tr,
+                                      left: 4.w,
+                                      bottom: 12.h,
+                                    ),
+                                    CustomText(text: 'Rangpur', left: 4.w),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -154,7 +170,9 @@ class CompletedTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustomButton(
-                              onTap: (){},
+                              onTap: (){
+                                Get.toNamed(AppRoutes.rideDetailsScreen);
+                              },
                               width: 100.w,
                               height: 34.h,
                               text: AppStrings.view.tr

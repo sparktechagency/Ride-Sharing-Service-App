@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:get/get.dart';
 import '../../../base/custom_text.dart';
 
 class GivenTab extends StatelessWidget {
@@ -10,9 +10,9 @@ class GivenTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: Expanded(
-        child: Center(
-          child: Container(
+      child: Column(
+        children: [
+          Container(
             padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.shade400, width: 1.w),
@@ -21,11 +21,9 @@ class GivenTab extends StatelessWidget {
             ),
             child: Row(
               children: [
-                //===================> Ratings and bars <====================
                 Expanded(
-                  flex: 3,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    // Use Column instead of Row to avoid flex issues
                     children: List.generate(5, (index) {
                       int starCount = 5 - index;
                       double value;
@@ -52,14 +50,12 @@ class GivenTab extends StatelessWidget {
                           children: [
                             Text(
                               '$starCount',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             SizedBox(width: 4.w),
-                            Icon(
-                              Icons.star,
-                              size: 16.w,
-                              color: Colors.orange,
-                            ),
+                            Icon(Icons.star, size: 16.w, color: Colors.orange),
                             SizedBox(width: 8.w),
                             Expanded(
                               child: ClipRRect(
@@ -69,7 +65,8 @@ class GivenTab extends StatelessWidget {
                                   minHeight: 10.h,
                                   backgroundColor: Colors.orange.shade100,
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.orange),
+                                    Colors.orange,
+                                  ),
                                 ),
                               ),
                             ),
@@ -79,18 +76,15 @@ class GivenTab extends StatelessWidget {
                     }),
                   ),
                 ),
-                SizedBox(width: 16.w),
-                //===================> Rating summary and stars <=====================
                 Expanded(
-                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CustomText(
-                          text: '4.0',
-                          fontSize: 30.sp,
-                          fontWeight: FontWeight.bold
+                        text: '4.0',
+                        fontSize: 30.sp,
+                        fontWeight: FontWeight.bold,
                       ),
                       SizedBox(height: 4.h),
                       Row(
@@ -104,17 +98,24 @@ class GivenTab extends StatelessWidget {
                         }),
                       ),
                       SizedBox(height: 8.h),
-                      CustomText(
-                        text: '52 Reviews',
-                        fontSize: 14.sp,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomText(text: '52', fontSize: 14.sp),
+                          CustomText(
+                            left: 4.w,
+                            text: 'Reviews'.tr,
+                            fontSize: 14.sp,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

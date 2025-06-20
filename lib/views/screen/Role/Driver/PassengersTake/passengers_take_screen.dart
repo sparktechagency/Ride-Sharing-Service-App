@@ -175,8 +175,8 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
       onTap: method,
       child: Container(
         decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-        width: 44,
-        height: 44,
+        width: 44.w,
+        height: 44.h,
         child: icon,
       ),
     );

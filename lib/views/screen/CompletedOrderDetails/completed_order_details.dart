@@ -232,7 +232,7 @@ class CompletedOrderDetails extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 24.h),
-                          //=====================> Phone Number Row <=================
+                         /* //=====================> Phone Number Row <=================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -261,7 +261,7 @@ class CompletedOrderDetails extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 24.h),
+                          SizedBox(height: 24.h),*/
                           //=====================> Date of Birth Row <=================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

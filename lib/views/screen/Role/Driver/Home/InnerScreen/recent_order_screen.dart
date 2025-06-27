@@ -105,7 +105,7 @@ class RecentOrderScreen extends StatelessWidget {
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Dhaka', bottom: 12.h),
-                                    CustomText(text: 'Passenger'),
+                                    CustomText(text: 'Passenger'.tr),
                                   ],
                                 ),
                                 SizedBox(
@@ -123,7 +123,12 @@ class RecentOrderScreen extends StatelessWidget {
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Rangpur', bottom: 12.h),
-                                    CustomText(text: '1 Passenger'),
+                                    Row(
+                                      children: [
+                                        CustomText(text: '1  '),
+                                        CustomText(text: 'Person'.tr),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ],

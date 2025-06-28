@@ -45,12 +45,21 @@ class SeeAllScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CustomText(
-                                  text:
-                                      'Booking Time : Sat 12 April 2025  8.30 PM',
-                                  fontWeight: FontWeight.w500,
-                                  bottom: 8.h,
+                                Row(
+                                  children: [
+                                    CustomText(
+                                      text:
+                                          'Booking Time :'.tr,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    CustomText(
+                                      text:
+                                          ' Sat 12 April 2025  8.30 PM',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ],
                                 ),
+                                SizedBox(height: 8.h),
                                 CustomText(
                                   text: '\$15.99',
                                   fontWeight: FontWeight.w600,
@@ -71,7 +80,7 @@ class SeeAllScreen extends StatelessWidget {
                                             bottom: 12.h,
                                           ),
                                           CustomText(text: 'Dhaka', bottom: 8.w),
-                                          CustomText(text: 'Passenger'),
+                                          CustomText(text: 'Passenger'.tr),
                                         ],
                                       ),
                                     ),
@@ -96,7 +105,13 @@ class SeeAllScreen extends StatelessWidget {
                                             text: 'Rangpur',
                                             bottom: 8.w,
                                           ),
-                                          CustomText(text: '1 person'),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              CustomText(text: '1  '),
+                                              CustomText(text: 'Person'.tr),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),

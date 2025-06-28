@@ -106,7 +106,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       bottom: 12.h,
                                     ),
                                     CustomText(text: 'Rangpur', bottom: 12.h),
-                                    CustomText(text: '1 Passenger', bottom: 12.h),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        CustomText(text: '1  '),
+                                        CustomText(text: 'Passenger'.tr),
+                                      ],
+                                    ),
+                                    SizedBox(height: 12.h),
                                     CustomText(text: 'Car'),
                                   ],
                                 ),
@@ -127,7 +134,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomText(
-                                text: AppStrings.passenger,
+                                text: AppStrings.passenger.tr,
                                 fontWeight: FontWeight.w500,
                               ),
                               CustomText(
@@ -138,7 +145,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             ],
                           ),
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               CustomText(
                                 text: AppStrings.ridePrice.tr,

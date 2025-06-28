@@ -38,96 +38,98 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: 48.h),
-          //===========================> Language Dropdown Button <===================================
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                width: 132.w,
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                decoration: BoxDecoration(
-                  color: AppColors.fillColor,
-                  borderRadius: BorderRadius.circular(16.r),
-                  border:
-                  Border.all(color: AppColors.primaryColor, width: 1),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    focusColor: Colors.white,
-                    value: selectedLanguage ?? language[0],
-                    dropdownColor: AppColors.whiteColor,
-                    style: TextStyle(
-                      color: AppColors.borderColor,
-                      fontSize: 14.sp,
-                    ),
-                    borderRadius: BorderRadius.circular(8.r),
-                    hint: CustomText(
-                      text: 'Language'.tr,
-                      fontSize: 16.sp,
-                    ),
-                    icon: SvgPicture.asset(
-                      AppIcons.downArrow,
-                      color: AppColors.primaryColor,
-                    ),
-                    isExpanded: true,
-                    items: language.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: CustomText(
-                          text: value,
-                          fontSize: 16.sp,
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        int selectedIndex = language.indexOf(newValue);
-                        if (selectedIndex != -1) {
-                          Locale newLocale = Locale(
-                            AppConstants.languages[selectedIndex].languageCode,
-                            AppConstants.languages[selectedIndex].countryCode,
-                          );
-                          setState(() {
-                            localizationController.setLanguage(newLocale);
-                            selectedLanguage = language[selectedIndex];
-                          });
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 58.h),
+            //===========================> Language Dropdown Button <===================================
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  width: 116.w,
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.fillColor,
+                    borderRadius: BorderRadius.circular(16.r),
+                    border:
+                    Border.all(color: AppColors.primaryColor, width: 1),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      focusColor: Colors.white,
+                      value: selectedLanguage ?? language[0],
+                      dropdownColor: AppColors.whiteColor,
+                      style: TextStyle(
+                        color: AppColors.borderColor,
+                        fontSize: 14.sp,
+                      ),
+                      borderRadius: BorderRadius.circular(8.r),
+                      hint: CustomText(
+                        text: 'Language'.tr,
+                        fontSize: 16.sp,
+                      ),
+                      icon: SvgPicture.asset(
+                        AppIcons.downArrow,
+                        color: AppColors.primaryColor,
+                      ),
+                      isExpanded: true,
+                      items: language.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: CustomText(
+                            text: value,
+                            fontSize: 16.sp,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        if (newValue != null) {
+                          int selectedIndex = language.indexOf(newValue);
+                          if (selectedIndex != -1) {
+                            Locale newLocale = Locale(
+                              AppConstants.languages[selectedIndex].languageCode,
+                              AppConstants.languages[selectedIndex].countryCode,
+                            );
+                            setState(() {
+                              localizationController.setLanguage(newLocale);
+                              selectedLanguage = language[selectedIndex];
+                            });
+                          }
                         }
-                      }
-                    },
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          //===========================> Logo And Text Section <===================================
-          SizedBox(height: 132.h),
-          Image.asset(AppImages.onboard, width: 404.w, height: 228.h),
-          SizedBox(height: 32.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              children: [
-                CustomText(
-                  text: AppStrings.rideEasyArriveFastYour.tr,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24.sp,
-                  maxLine: 5,
-                ),
-                SizedBox(height: 12.h),
-                CustomText(
-                  text: AppStrings.welcomeToRideSharingService.tr,
-                  maxLine: 5,
-                ),
-                SizedBox(height: 32.h),
-                CustomButton(onTap: () {Get.toNamed(AppRoutes.signUpScreen);}, text: AppStrings.getStarted.tr),
-              ],
+            //===========================> Logo And Text Section <===================================
+            SizedBox(height: 132.h),
+            Image.asset(AppImages.onboard, width: 404.w, height: 228.h),
+            SizedBox(height: 32.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Column(
+                children: [
+                  CustomText(
+                    text: AppStrings.rideEasyArriveFastYour.tr,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24.sp,
+                    maxLine: 5,
+                  ),
+                  SizedBox(height: 12.h),
+                  CustomText(
+                    text: AppStrings.welcomeToRideSharingService.tr,
+                    maxLine: 5,
+                  ),
+                  SizedBox(height: 32.h),
+                  CustomButton(onTap: () {Get.toNamed(AppRoutes.signUpScreen);}, text: AppStrings.getStarted.tr),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

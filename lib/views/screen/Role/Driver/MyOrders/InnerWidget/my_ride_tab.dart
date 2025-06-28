@@ -125,7 +125,7 @@ class MyRideTab extends StatelessWidget {
                                 CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: AppStrings.pICKUP,
+                                    text: AppStrings.pICKUP.tr,
                                     right: 4.w,
                                     bottom: 12.h,
                                   ),

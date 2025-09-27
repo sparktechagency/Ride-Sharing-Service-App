@@ -25,6 +25,7 @@ class AppStrings {
   static String forgotPasswords = 'Forgot Password?';
   static String donotHaveAnAccount = 'Don’t have an account?';
   static String updatePassword = 'Update Password';
+  static String availableSeat = 'Available Seat :';
   static String reviews = 'Reviews';
   //=============================> Sign up Screen <=============================
   static String signUp = 'Sign Up';

@@ -1,6 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/helpers/route.dart';
 import '../../../utils/app_colors.dart';
@@ -18,9 +19,9 @@ class CompletedOrderDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: SingleChildScrollView(
           child: Column(
             children: [
               //==================================> Ride Details <===================
@@ -53,17 +54,13 @@ class CompletedOrderDetails extends StatelessWidget {
                               ],
                             ),
                           ),
-                          //========================> Status Container <=================
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors.green,
+                              color: AppColors.primaryColor,
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12.h,
-                                vertical: 4.h,
-                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 12.h, vertical: 4.h),
                               child: CustomText(
                                 text: AppStrings.completed.tr,
                                 color: Colors.white,
@@ -78,50 +75,46 @@ class CompletedOrderDetails extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.all(12.w),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          //============================> Pickup and Drop Row <====================================
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomText(
-                                      text: AppStrings.pICKUP,
-                                      bottom: 12.h,
-                                    ),
-                                    CustomText(text: 'Dhaka', bottom: 12.h),
-                                    CustomText(
-                                      text: AppStrings.passenger.tr,
-                                      bottom: 12.h,
-                                    ),
-                                    CustomText(text: AppStrings.vehiclesType.tr),
-                                  ],
-                                ),
-                              ),
+                              CustomText(text: AppStrings.pICKUP.tr, maxLine: 3, textAlign: TextAlign.start, bottom: 12.h),
                               SizedBox(
-                                width: 102.w,
+                                width: 148.w,
                                 child: Divider(
                                   thickness: 1.5,
                                   color: AppColors.borderColor,
                                 ),
                               ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    CustomText(
-                                      text: AppStrings.dROPOFF.tr,
-                                      bottom: 12.h,
-                                    ),
-                                    CustomText(text: 'Rangpur', bottom: 12.h),
-                                    CustomText(text: '1 Passenger', bottom: 12.h),
-                                    CustomText(text: 'Car'),
-                                  ],
-                                ),
-                              ),
+                              CustomText(text: AppStrings.pICKUP.tr, textAlign: TextAlign.start, maxLine: 3, bottom: 12.h),
+                            ],
+                          ),
+                          //============================> Location Row <====================================
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(text: 'Dhaka', maxLine: 3, textAlign: TextAlign.start, bottom: 12.h),
+                              CustomText(text: 'Rangpur', textAlign: TextAlign.start, maxLine: 3, bottom: 12.h),
+                            ],
+                          ),
+                          //============================> Total Passengers Row <====================================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(text: 'Total Passengers seat', textAlign: TextAlign.start, maxLine: 3, bottom: 12.h),
+                              CustomText(text: '20 Passenger', textAlign: TextAlign.start, maxLine: 3, bottom: 12.h),
+                            ],
+                          ),
+                          //============================> Booking Seat Row <====================================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(text: 'Booking Seat', textAlign: TextAlign.start, maxLine: 3),
+                              CustomText(text: '20 Passenger', textAlign: TextAlign.start, maxLine: 3),
                             ],
                           ),
                         ],
@@ -129,34 +122,60 @@ class CompletedOrderDetails extends StatelessWidget {
                     ),
                     Divider(thickness: 1.5, color: AppColors.borderColor),
                     Padding(
-                      padding: EdgeInsets.all(12.w),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      padding: EdgeInsets.all(10.w),
+                      child: Column(
                         children: [
-                          CustomText(
-                            text: AppStrings.ridePrice.tr,
-                            fontWeight: FontWeight.w500,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(
+                                text: AppStrings.availableSeat.tr,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              CustomText(
+                                text: '0 seat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20.sp,
+                              ),
+                            ],
                           ),
-                          CustomText(
-                            text: '\$ 15.99',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20.sp,
-                            color: AppColors.primaryColor,
-                            right: 24.w,
+                          SizedBox(height: 12.h),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(
+                                text: AppStrings.ridePrice.tr,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              CustomText(
+                                text: '\$ 15.99',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20.sp,
+                                color: AppColors.primaryColor,
+                                right: 24.w,
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 16.w, bottom: 6.h),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: CustomButton(
-                          onTap: () {},
-                          text: AppStrings.giveReview.tr,
-                          width: 100.w,
-                          height: 34.h,
+                    //========================> Completed Trip Container <=================
+                    Container(
+                      width: double.maxFinite,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(16.r),
+                          bottomRight: Radius.circular(16.r),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: CustomText(
+                          text: 'Completed Trip'.tr,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -207,7 +226,7 @@ class CompletedOrderDetails extends StatelessWidget {
                             children: [
                               CustomNetworkImage(
                                 imageUrl:
-                                    'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
                                 height: 38.h,
                                 width: 38.w,
                                 boxShape: BoxShape.circle,
@@ -232,36 +251,6 @@ class CompletedOrderDetails extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 24.h),
-                         /* //=====================> Phone Number Row <=================
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(AppIcons.call),
-                                    SizedBox(width: 12.w),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          text: AppStrings.phoneNumber.tr,
-                                        ),
-                                        CustomText(
-                                          text: '(888) 4455-9999',
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w500,
-                                          maxLine: 3,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 24.h),*/
                           //=====================> Date of Birth Row <=================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,12 +261,9 @@ class CompletedOrderDetails extends StatelessWidget {
                                     SvgPicture.asset(AppIcons.calender),
                                     SizedBox(width: 12.w),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        CustomText(
-                                          text: AppStrings.dateOfBirth.tr,
-                                        ),
+                                        CustomText(text: AppStrings.dateOfBirth.tr),
                                         CustomText(
                                           text: '12/12/2000',
                                           fontSize: 16.sp,
@@ -302,12 +288,9 @@ class CompletedOrderDetails extends StatelessWidget {
                                     SvgPicture.asset(AppIcons.location),
                                     SizedBox(width: 12.w),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        CustomText(
-                                          text: AppStrings.location.tr,
-                                        ),
+                                        CustomText(text: AppStrings.location.tr),
                                         CustomText(
                                           text: 'Dhaka, Bangladesh',
                                           fontSize: 16.sp,
@@ -332,12 +315,9 @@ class CompletedOrderDetails extends StatelessWidget {
                                     SvgPicture.asset(AppIcons.type),
                                     SizedBox(width: 12.w),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        CustomText(
-                                          text: AppStrings.vehiclesType.tr,
-                                        ),
+                                        CustomText(text: AppStrings.vehiclesType.tr),
                                         CustomText(
                                           text: 'Car',
                                           fontSize: 16.sp,
@@ -359,7 +339,6 @@ class CompletedOrderDetails extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             bottom: 16.h,
                           ),
-
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16.r),
@@ -375,7 +354,7 @@ class CompletedOrderDetails extends StatelessWidget {
                                 children: [
                                   CustomNetworkImage(
                                     imageUrl:
-                                        'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                    'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
                                     height: 38.h,
                                     width: 38.w,
                                     boxShape: BoxShape.circle,
@@ -383,8 +362,7 @@ class CompletedOrderDetails extends StatelessWidget {
                                   SizedBox(width: 8.w),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         CustomText(
                                           text: 'Mr. Imran',
@@ -399,7 +377,7 @@ class CompletedOrderDetails extends StatelessWidget {
                                         Row(
                                           children: List.generate(
                                             5,
-                                            (index) => const Icon(
+                                                (index) => const Icon(
                                               Icons.star,
                                               color: Colors.orange,
                                               size: 20,
@@ -408,7 +386,7 @@ class CompletedOrderDetails extends StatelessWidget {
                                         ),
                                         CustomText(
                                           text:
-                                              'very helpful man and cool guy. very helpful man and cool guy. very helpful man and cool guy...',
+                                          'very helpful man and cool guy. very helpful man and cool guy. very helpful man and cool guy...',
                                           maxLine: 10,
                                           textAlign: TextAlign.start,
                                         ),

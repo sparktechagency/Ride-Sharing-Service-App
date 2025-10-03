@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import '../views/screen/AboutUs/about_us_screen.dart';
+import '../views/screen/ActiveOrderDetails/active_order_details.dart';
 import '../views/screen/Auth/ChangePass/change_password_screen.dart';
 import '../views/screen/Auth/ForgotPass/forgot_password_screen.dart';
 import '../views/screen/Auth/OtpScreen/otp_screen.dart';
@@ -47,6 +48,7 @@ import '../views/screen/Splash/onboarding_screen.dart';
 import '../views/screen/Splash/splash_screen.dart';
 import '../views/screen/Support/support_screen.dart';
 import '../views/screen/TermsofServices/terms_services_screen.dart';
+import '../views/screen/TotalUser/total_user_screen.dart';
 
 class AppRoutes{
   static String splashScreen="/splash_screen";
@@ -66,9 +68,11 @@ class AppRoutes{
   static String privacyPolicyScreen="/privacy_policy_screen";
   static String termsServicesScreen="/terms_services_screen";
   static String notificationsScreen="/notifications_screen";
+  static String activeOrderDetails="/active_order_details";
   static String completedOrderDetails="/completed_order_details";
   static String canceledOrderDetails="/canceled_order_details";
   static String ratingScreen="/rating_screen";
+  static String totalUserScreen="/total_screen_screen";
   //===================================================> Driver Role <=============================================
   static String driverHomeScreen="/driver_home_screen";
   static String postRidesScreen="/post_rides_screen";
@@ -118,9 +122,11 @@ class AppRoutes{
     GetPage(name:privacyPolicyScreen, page: ()=> PrivacyPolicyScreen()),
     GetPage(name:termsServicesScreen, page: ()=> TermsServicesScreen()),
     GetPage(name:notificationsScreen, page: ()=> NotificationsScreen()),
+    GetPage(name:activeOrderDetails, page: ()=> ActiveOrderDetails()),
     GetPage(name:completedOrderDetails, page: ()=> CompletedOrderDetails()),
     GetPage(name:canceledOrderDetails, page: ()=> CanceledOrderDetails()),
     GetPage(name:ratingScreen, page: ()=> RatingScreen()),
+    GetPage(name:totalUserScreen, page: ()=> TotalUserScreen()),
    // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
    // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
    //===================================================> Driver Role <=============================================

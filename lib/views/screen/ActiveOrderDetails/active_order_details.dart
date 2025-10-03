@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/helpers/route.dart';
+
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_app_bar.dart';
-import '../../base/custom_button.dart';
 import '../../base/custom_network_image.dart';
 import '../../base/custom_text.dart';
 
-class CompletedOrderDetails extends StatelessWidget {
-  const CompletedOrderDetails({super.key});
+class ActiveOrderDetails extends StatelessWidget {
+  const ActiveOrderDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
+      appBar: CustomAppBar(title: AppStrings.details.tr),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: SingleChildScrollView(
@@ -152,7 +151,7 @@ class CompletedOrderDetails extends StatelessWidget {
                                 maxLine: 3,
                               ),
                               CustomText(
-                                text: '20 Passenger',
+                                text: '08 Passenger',
                                 textAlign: TextAlign.start,
                                 maxLine: 3,
                               ),
@@ -175,7 +174,7 @@ class CompletedOrderDetails extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                               CustomText(
-                                text: '0 seat',
+                                text: '12 seat',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20.sp,
                               ),
@@ -214,7 +213,7 @@ class CompletedOrderDetails extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(12.0),
                         child: CustomText(
-                          text: 'Completed Trip'.tr,
+                          text: 'Star Trip'.tr,
                           color: Colors.white,
                         ),
                       ),
@@ -236,6 +235,18 @@ class CompletedOrderDetails extends StatelessWidget {
                     text: '(8)',
                     fontWeight: FontWeight.w600,
                     fontSize: 18.sp,
+                  ),
+                  Spacer(),
+                  InkWell(
+                    onTap: (){
+                      Get.toNamed(AppRoutes.totalUserScreen);
+                    },
+                    child: CustomText(
+                      text: AppStrings.seeAll.tr,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      textDecoration: TextDecoration.underline,
+                    ),
                   ),
                 ],
               ),
@@ -268,7 +279,7 @@ class CompletedOrderDetails extends StatelessWidget {
                               children: [
                                 CustomNetworkImage(
                                   imageUrl:
-                                      'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                  'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
                                   height: 54.h,
                                   width: 54.w,
                                   borderRadius: BorderRadius.circular(12.r),
@@ -306,19 +317,6 @@ class CompletedOrderDetails extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 24.h),
-                            //=====================> Reviews Section <=================
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: CustomButton(
-                                onTap: () {
-                                  _showReviewBottomSheet(context);
-                                },
-                                width: 84.w,
-                                height: 34.h,
-                                text: AppStrings.giveReview.tr,
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -331,80 +329,6 @@ class CompletedOrderDetails extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-  // Function to show the review bottom sheet
-  void _showReviewBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-      ),
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-             SvgPicture.asset(AppIcons.success),
-              SizedBox(height: 8),
-              CustomText(
-               text: AppStrings.givePersonRating.tr,
-               fontSize: 18, fontWeight: FontWeight.w600),
-              SizedBox(height: 16),
-              //====================> Rating section <==========================
-              RatingBar.builder(
-                initialRating: 0,
-                minRating: 1,
-                itemSize: 40,
-                direction: Axis.horizontal,
-                glowColor: Colors.red,
-                allowHalfRating: true,
-                itemCount: 5,
-                itemBuilder: (context, _) => Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ),
-                onRatingUpdate: (rating) {
-                  print(rating);
-                },
-              ),
-              SizedBox(height: 16),
-              // Text field for feedback
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Write Your Feedback',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                ),
-                maxLines: 3,
-              ),
-              SizedBox(height: 16.h),
-              //==============================> Buttons for Cancel and Submit <=========================
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CustomButton(
-                    width: 124.w,
-                      height: 46.h,
-                      color: Colors.white,
-                      textColor: Colors.black,
-                      onTap: (){},
-                      text: AppStrings.cancel.tr),
-                  CustomButton(
-                      width: 124.w,
-                      height: 46.h,
-                      onTap: (){},
-                      text: AppStrings.submit.tr),
-                ],
-              ),
-              SizedBox(height: 12.h)
-            ],
-          ),
-        );
-      },
     );
   }
 }

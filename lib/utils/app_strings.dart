@@ -160,7 +160,7 @@ class AppStrings {
   static String support  = 'Support';
   static String oldPassword  = 'Old Password';
   static String newPassword  = 'New Password';
-  static String useCurrentLocation    = 'Use current location  ';
+  static String useCurrentLocation    = 'Use current location';
   //=================================================================> User Role <===========================================================
   static String recentSearch  = 'Recent Search';
   static String seeAll  = 'See All';
@@ -178,4 +178,5 @@ class AppStrings {
   static String payNow  = 'Pay Now';
   static String language  = 'Language';
   static String chooseYourLanguage  = 'Choose Your Language';
+  static String totalUser  = 'Total User';
 }

@@ -6,9 +6,9 @@ class AppStrings {
   static String skip = 'Skip';
   static String joinAs = 'Join as';
   static String pleaseSelectAnOneOption = 'Please select an one option to start your journey with Ride-sharing service .';
-  static String user = 'User';
+  static String user = 'user';
   static String createYourAccountAsUser = 'Create your account as a user.';
-  static String driver = 'Driver';
+  static String driver = 'driver';
   static String createYourAccountAndBeginYourJourneyDriver = 'Create your account and begin your journey as a driver';
   static String continues = 'Continue';
   static String updateProfile = 'Update Profile';

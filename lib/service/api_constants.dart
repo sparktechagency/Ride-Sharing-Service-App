@@ -1,7 +1,12 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.10.160:8080/v1";
-  static const String imageBaseUrl = "http://192.168.10.160:8080";
+  static const String baseUrl = "faysal5500:sobhoy.com/api/v1";
+  static const String imageBaseUrl = "faysal5500:sobhoy.com";
   static const String signUpEndPoint = "/auth/register";
+  static const String otpEndPoint = "/auth/verify-email";
+  static const String signInEndPoint = "/auth/login";
+  static const String forgotPassEndPoint = "/auth/forgot-password";
+  static const String resetPassEndPoint = "/auth/reset-password";
+  static const String changePassEndPoint = "/auth/change-password";
   static const String setLocationEndPoint = "";
   static const String termsConditionEndPoint = "";
   static const String privacyPolicyEndPoint = "";

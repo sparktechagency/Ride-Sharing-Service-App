@@ -13,6 +13,7 @@ import '../utils/app_constants.dart';
 class AuthController extends GetxController {
   //================================> Sign Up <=================================
   final TextEditingController nameCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController numberCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
   final TextEditingController confirmCtrl = TextEditingController();
@@ -27,7 +28,7 @@ class AuthController extends GetxController {
   var signUpLoading = false.obs;
   var token = "";
 
-  /*handleSignUp() async {
+  handleSignUp() async {
     signUpLoading(true);
     var userRole = await PrefsHelper.getString(AppConstants.userRole);
     Map<String, dynamic> body = {
@@ -37,7 +38,6 @@ class AuthController extends GetxController {
       "division": selectDivision.value,
       "role": userRole,
       "fcmToken": "fcmToken..",
-
     };
 
     var headers = {'Content-Type': 'application/json'};
@@ -47,7 +47,7 @@ class AuthController extends GetxController {
         headers: headers);
     if (response.statusCode == 201 || response.statusCode == 200) {
       Get.toNamed(AppRoutes.otpScreen, parameters: {
-        "email": emailCtrl.text.trim(),
+       "email": emailCtrl.text.trim(),
         "screenType": "signup",
       });
       nameCtrl.clear();
@@ -62,8 +62,8 @@ class AuthController extends GetxController {
       signUpLoading(false);
       update();
     }
-  }*/
-  //==========================> Show Calender Function <=======================
+  }
+  //==========================> Show Calender Function <========================
   Future<void> pickBirthDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,

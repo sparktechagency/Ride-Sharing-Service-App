@@ -86,6 +86,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 hintText: AppStrings.userName.tr,
                 prefixIcon: SvgPicture.asset(AppIcons.profile),
               ),
+              //========================> email Text Field <==================
+              SizedBox(height: 32.h),
+              CustomText(
+                text: AppStrings.email.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                bottom: 14.h,
+              ),
+              CustomTextField(
+                controller: _authController.nameCtrl,
+                hintText: AppStrings.userName.tr,
+                prefixIcon: SvgPicture.asset(AppIcons.profile),
+              ),
               //=============================> Phone number Text Field <====================
               SizedBox(height: 16.h),
               CustomText(

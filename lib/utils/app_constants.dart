@@ -3,6 +3,7 @@ import '../models/language_model.dart';
 class AppConstants{
 
   static String APP_NAME = "Ride-Sharing";
+  static String userRole = "userRole";
   static String fcmToken = "fcmToken";
 
 

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/helpers/route.dart';
+import '../../../helpers/prefs_helpers.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_constants.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_text.dart';
@@ -15,7 +17,7 @@ class SelectRoleScreen extends StatefulWidget {
 }
 
 class _SelectRoleScreenState extends State<SelectRoleScreen> {
-  List<bool> selectedRole = [false, false];
+  String? selectedRole;
 
   final List<Map<String, String>> modeOptions = [
     {
@@ -29,10 +31,9 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
       'subtitle': AppStrings.createYourAccountAndBeginYourJourneyDriver.tr,
     },
   ];
-
   void onModeSelected(int index) {
     setState(() {
-      selectedRole = List.generate(modeOptions.length, (i) => i == index);
+      selectedRole = modeOptions[index]['title'];
     });
   }
 
@@ -84,16 +85,14 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 8.h),
                         decoration: BoxDecoration(
-                          color:
-                              selectedRole[index]
-                                  ? AppColors.primaryColor.withOpacity(0.1)
-                                  : const Color(0xFFE5F4F9),
+                          color: selectedRole == modeOptions[index]['title']
+                              ? AppColors.primaryColor.withOpacity(0.1)
+                              : const Color(0xFFE5F4F9),
                           borderRadius: BorderRadius.circular(14.r),
                           border: Border.all(
-                            color:
-                                selectedRole[index]
-                                    ? AppColors.primaryColor
-                                    : Colors.transparent,
+                            color: selectedRole == modeOptions[index]['title']
+                                ? AppColors.primaryColor
+                                : Colors.transparent,
                             width: 2.w,
                           ),
                         ),
@@ -101,7 +100,7 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                           children: [
                             Container(
                               width: 12.w,
-                              height: 99.h,
+                              height: 102.h,
                               decoration: BoxDecoration(
                                 color: AppColors.primaryColor,
                                 borderRadius: BorderRadius.only(
@@ -129,7 +128,7 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: modeOptions[index]['title']!,
+                                    text: '${modeOptions[index]['title']!.capitalize}',
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -145,7 +144,7 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                             ),
                             //====================> Custom Checkbox Design <=======================
                             Checkbox(
-                              value: selectedRole[index],
+                              value: selectedRole == modeOptions[index]['title'],
                               onChanged: (value) => onModeSelected(index),
                               activeColor: AppColors.primaryColor,
                               checkColor: Colors.white,
@@ -163,12 +162,9 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
               ),
               //=========================> Continue Button <====================
               CustomButton(onTap: () {
-                if(selectedRole.first){
-                  Get.offAllNamed(AppRoutes.userSearchScreen);
-                } else {
-                  Get.offAllNamed(AppRoutes.driverHomeScreen);
-                }
-                }, text: AppStrings.continues.tr),
+                print('Selected role: $selectedRole');
+              Get.toNamed(AppRoutes.signUpScreen, arguments: {selectedRole});
+              }, text: AppStrings.continues.tr),
               SizedBox(height: 58.h),
             ],
           ),

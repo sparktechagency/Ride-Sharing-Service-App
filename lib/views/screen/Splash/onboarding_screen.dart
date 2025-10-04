@@ -105,7 +105,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             //===========================> Logo And Text Section <===================================
-            SizedBox(height: 132.h),
+            SizedBox(height: 108.h),
             Image.asset(AppImages.onboard, width: 404.w, height: 228.h),
             SizedBox(height: 32.h),
             Padding(
@@ -121,10 +121,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   SizedBox(height: 12.h),
                   CustomText(
                     text: AppStrings.welcomeToRideSharingService.tr,
-                    maxLine: 5,
+                    maxLine: 10
                   ),
                   SizedBox(height: 32.h),
-                  CustomButton(onTap: () {Get.toNamed(AppRoutes.signUpScreen);}, text: AppStrings.getStarted.tr),
+                  CustomButton(onTap: () {Get.toNamed(AppRoutes.selectRoleScreen);}, text: AppStrings.getStarted.tr),
                 ],
               ),
             ),

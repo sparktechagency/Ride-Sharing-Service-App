@@ -306,13 +306,13 @@ class AuthController extends GetxController {
   }
 
   //======================> Change password <============================
-  var changeLoading = false.obs;
+  var changePassLoading = false.obs;
   TextEditingController oldPasswordCtrl = TextEditingController();
   TextEditingController newPasswordCtrl = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
 
   changePassword(String oldPassword, String newPassword) async {
-    changeLoading(true);
+    changePassLoading(true);
     var body = {"oldPassword": oldPassword, "newPassword": newPassword};
     var response = await ApiClient.postData(ApiConstants.changePassEndPoint, body);
     print("===============> ${response.body}");
@@ -328,7 +328,7 @@ class AuthController extends GetxController {
     } else {
       ApiChecker.checkApi(response);
     }
-    changeLoading(false);
+    changePassLoading(false);
   }
 
   //=============================> Set New password <===========================

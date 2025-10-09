@@ -280,11 +280,11 @@ class AuthController extends GetxController {
   }
 
 
-  //====================> Forgot pass word <=====================
+  //====================> Forgot password <=====================
   TextEditingController forgetEmailTextCtrl = TextEditingController();
   var forgotLoading = false.obs;
 
-  handleForget() async {
+  forgetPassword() async {
     forgotLoading(true);
     var body = {
       "email": forgetEmailTextCtrl.text.trim(),
@@ -305,7 +305,7 @@ class AuthController extends GetxController {
     forgotLoading(false);
   }
 
-  //======================> Handle Change password <============================
+  //======================> Change password <============================
   var changeLoading = false.obs;
   TextEditingController oldPasswordCtrl = TextEditingController();
   TextEditingController newPasswordCtrl = TextEditingController();

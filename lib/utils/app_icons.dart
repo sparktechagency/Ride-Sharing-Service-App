@@ -51,6 +51,7 @@ class AppIcons{
   static String searchHMIcon="$baseUrl/sh.svg";
   static String downArrow="$baseUrl/downArrow.svg";
   static String success="$baseUrl/success.svg";
+  static String email="$baseUrl/email.svg";
 
 
 }

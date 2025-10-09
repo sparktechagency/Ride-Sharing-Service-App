@@ -12,14 +12,14 @@ import '../../../base/custom_button.dart';
 import '../../../base/custom_text.dart';
 import '../../../base/dotted_border_container.dart';
 
-class SignUpThreeScreen extends StatefulWidget {
-  const SignUpThreeScreen({super.key});
+class DriverSignUpThreeScreen extends StatefulWidget {
+  const DriverSignUpThreeScreen({super.key});
 
   @override
-  State<SignUpThreeScreen> createState() => _SignUpThreeScreenState();
+  State<DriverSignUpThreeScreen> createState() => _DriverSignUpThreeScreenState();
 }
 
-class _SignUpThreeScreenState extends State<SignUpThreeScreen> {
+class _DriverSignUpThreeScreenState extends State<DriverSignUpThreeScreen> {
   final ProfileController _profileController = Get.put(ProfileController());
 
   Uint8List? frontSiteImage;

@@ -12,8 +12,8 @@ import '../../../../utils/app_strings.dart';
 import '../../../base/custom_text.dart';
 import '../../../base/custom_text_field.dart';
 
-class SignUpTwoScreen extends StatelessWidget {
-  SignUpTwoScreen({super.key});
+class DriverSignUpTwoScreen extends StatelessWidget {
+  DriverSignUpTwoScreen({super.key});
   final AuthController _authController = Get.put(AuthController());
 
   @override
@@ -109,7 +109,7 @@ class SignUpTwoScreen extends StatelessWidget {
                     textColor: AppColors.primaryColor,
                   ),
                   CustomButton(
-                    onTap: () {Get.toNamed(AppRoutes.signUpThreeScreen);},
+                    onTap: () {Get.toNamed(AppRoutes.driverSignUpThreeScreen);},
                     text: AppStrings.next.tr,
                     height: 48.h,
                     width: 158.w,

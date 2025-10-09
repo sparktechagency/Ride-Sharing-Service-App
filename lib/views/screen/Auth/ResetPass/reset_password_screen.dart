@@ -17,6 +17,7 @@ class ResetPasswordScreen extends StatelessWidget {
   final AuthController _authController = Get.put(AuthController());
   final TextEditingController passCTRL = TextEditingController();
   final TextEditingController confirmPassCTRL = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,68 +25,91 @@ class ResetPasswordScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            children: [
-              SizedBox(height: 164.h),
-              Center(child: Image.asset(AppImages.appLogo, width: 91.w, height: 94.h)),
-              SizedBox(height: 24.h),
-              //========================> Reset Password Title <==================
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        text: AppStrings.reset.tr,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      SizedBox(
-                        width: 56.w,
-                        height: 8.h,
-                        child: Divider(
-                          thickness: 5.5,
-                          color: AppColors.primaryColor,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                SizedBox(height: 164.h),
+                Center(child: Image.asset(AppImages.appLogo, width: 91.w, height: 94.h)),
+                SizedBox(height: 24.h),
+                //========================> Reset Password Title <==================
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          text: AppStrings.reset.tr,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ),
-                    ],
-                  ),
-                  CustomText(
-                    text: AppStrings.password.tr,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
-                    bottom: 6.h,
-                  ),
-                ],
-              ),
-              //========================> Reset Password Sub Title <==================
-              SizedBox(height: 14.h),
-              CustomText(text: AppStrings.enterNewPassword.tr, maxLine: 3),
-              //========================> Password Text Field <==================
-              SizedBox(height: 32.h),
-              CustomTextField(
-                isPassword: true,
-                controller: passCTRL,
-                hintText: AppStrings.password.tr,
-                prefixIcon: SvgPicture.asset(AppIcons.lock),
+                        SizedBox(
+                          width: 56.w,
+                          height: 8.h,
+                          child: Divider(
+                            thickness: 5.5,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    CustomText(
+                      text: AppStrings.password.tr,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                      bottom: 6.h,
+                    ),
+                  ],
+                ),
+                //========================> Reset Password Sub Title <==================
+                SizedBox(height: 14.h),
+                CustomText(text: AppStrings.enterNewPassword.tr, maxLine: 3),
+                //========================> Password Text Field <==================
+                SizedBox(height: 32.h),
+                CustomTextField(
+                  isPassword: true,
+                  controller: passCTRL,
+                  hintText: AppStrings.password.tr,
+                  prefixIcon: SvgPicture.asset(AppIcons.lock),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your password";
+                    }
+                    return null;
+                  },
 
-              ),
-              //========================> Confirm Password Text Field <==================
-              SizedBox(height: 16.h),
-              CustomTextField(
-                isPassword: true,
-                controller: confirmPassCTRL,
-                hintText: AppStrings.confirmPassword.tr,
-                prefixIcon: SvgPicture.asset(AppIcons.lock),
-              ),
-              SizedBox(height: 32.h),
-              //========================> Reset Password Button <==================
-              CustomButton(onTap: () {
-                _showCustomBottomSheet(context);
-              }, text: AppStrings.resetPassword.tr),
-            ],
+                ),
+                //========================> Confirm Password Text Field <==================
+                SizedBox(height: 16.h),
+                CustomTextField(
+                  isPassword: true,
+                  controller: confirmPassCTRL,
+                  hintText: AppStrings.confirmPassword.tr,
+                  prefixIcon: SvgPicture.asset(AppIcons.lock),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please confirm your password";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 32.h),
+                //========================> Reset Password Button <==================
+                Obx(()=> CustomButton(
+                  loading: _authController.resetPasswordLoading.value,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          _authController.resetPassword(
+                              '${Get.parameters['email']}',
+                              confirmPassCTRL.text
+                          );
+                        }
+                  }, text: AppStrings.resetPassword.tr),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -280,11 +280,11 @@ class AuthController extends GetxController {
   }
 
 
-  //====================> Forgot pass word <=====================
+  //====================> Forgot password <=====================
   TextEditingController forgetEmailTextCtrl = TextEditingController();
   var forgotLoading = false.obs;
 
-  handleForget() async {
+  forgetPassword() async {
     forgotLoading(true);
     var body = {
       "email": forgetEmailTextCtrl.text.trim(),
@@ -305,14 +305,14 @@ class AuthController extends GetxController {
     forgotLoading(false);
   }
 
-  //======================> Handle Change password <============================
-  var changeLoading = false.obs;
+  //======================> Change password <============================
+  var changePassLoading = false.obs;
   TextEditingController oldPasswordCtrl = TextEditingController();
   TextEditingController newPasswordCtrl = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
 
   changePassword(String oldPassword, String newPassword) async {
-    changeLoading(true);
+    changePassLoading(true);
     var body = {"oldPassword": oldPassword, "newPassword": newPassword};
     var response = await ApiClient.postData(ApiConstants.changePassEndPoint, body);
     print("===============> ${response.body}");
@@ -328,7 +328,7 @@ class AuthController extends GetxController {
     } else {
       ApiChecker.checkApi(response);
     }
-    changeLoading(false);
+    changePassLoading(false);
   }
 
   //=============================> Set New password <===========================

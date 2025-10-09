@@ -1,6 +1,6 @@
 class ApiConstants {
-  static const String baseUrl = "faysal5500:sobhoy.com/api/v1";
-  static const String imageBaseUrl = "faysal5500:sobhoy.com";
+  static const String baseUrl = "https://faysal5500.sobhoy.com/api/v1";
+  static const String imageBaseUrl = "https://faysal5500.sobhoy.com";
   static const String signUpEndPoint = "/auth/register";
   static const String otpEndPoint = "/auth/verify-email";
   static const String signInEndPoint = "/auth/login";

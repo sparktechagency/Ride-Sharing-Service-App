@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/helpers/route.dart';
 import '../../../helpers/prefs_helpers.dart';
@@ -17,7 +18,7 @@ class SelectRoleScreen extends StatefulWidget {
 }
 
 class _SelectRoleScreenState extends State<SelectRoleScreen> {
-  String? selectedRole;
+  String? selectedRole ='';
 
   final List<Map<String, String>> modeOptions = [
     {
@@ -161,9 +162,18 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                 ),
               ),
               //=========================> Continue Button <====================
-              CustomButton(onTap: () {
-                print('Selected role: $selectedRole');
-              Get.toNamed(AppRoutes.signUpScreen, arguments: {selectedRole});
+              CustomButton(onTap: () async {
+               await PrefsHelper.setString(AppConstants.userRole, selectedRole);
+               if(selectedRole == 'user'){
+                 Get.toNamed(AppRoutes.userSignUpScreen,arguments: selectedRole);
+                 print('=====================> $selectedRole');
+               }else if(selectedRole == 'driver') {
+                 Get.toNamed(AppRoutes.driverSignUpScreen,arguments: selectedRole);
+                 print('=====================> $selectedRole');
+               }else {
+                 Fluttertoast.showToast(
+                     msg: 'Please select your Role or Skip');
+               }
               }, text: AppStrings.continues.tr),
               SizedBox(height: 58.h),
             ],

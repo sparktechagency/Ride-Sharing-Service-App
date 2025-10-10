@@ -13,14 +13,14 @@ import '../../../base/custom_button.dart';
 import '../../../base/custom_text.dart';
 import '../../../base/dotted_border_container.dart';
 
-class DriverSignUpThreeScreen extends StatefulWidget {
-  const DriverSignUpThreeScreen({super.key});
+class DriverLicenceUploadScreen extends StatefulWidget {
+  const DriverLicenceUploadScreen({super.key});
 
   @override
-  State<DriverSignUpThreeScreen> createState() => _DriverSignUpThreeScreenState();
+  State<DriverLicenceUploadScreen> createState() => _DriverLicenceUploadScreenState();
 }
 
-class _DriverSignUpThreeScreenState extends State<DriverSignUpThreeScreen> {
+class _DriverLicenceUploadScreenState extends State<DriverLicenceUploadScreen> {
   final AuthController _authController = Get.put(AuthController());
 
   @override

@@ -3,7 +3,7 @@ import '../views/screen/AboutUs/about_us_screen.dart';
 import '../views/screen/ActiveOrderDetails/active_order_details.dart';
 import '../views/screen/Auth/ChangePass/change_password_screen.dart';
 import '../views/screen/Auth/DriverSignUp/driver_sign_up_screen.dart';
-import '../views/screen/Auth/DriverSignUp/driver_sign_up_three_screen.dart';
+import '../views/screen/Auth/DriverSignUp/driver_licence_upload_screen.dart';
 import '../views/screen/Auth/DriverSignUp/driver_sign_up_two_screen.dart';
 import '../views/screen/Auth/ForgotPass/forgot_password_screen.dart';
 import '../views/screen/Auth/OtpScreen/otp_screen.dart';
@@ -74,7 +74,7 @@ class AppRoutes{
   //===================================================> Driver Role <=============================================
   static String driverSignUpScreen="/driver_sign_up_screen";
   static String driverSignUpTwoScreen="/driver_sign_up_two_screen";
-  static String driverSignUpThreeScreen="/driver_sign_up_three_screen";
+  static String driverLicenceUploadScreen="/driver_licence_upload_screen";
   static String driverHomeScreen="/driver_home_screen";
   static String postRidesScreen="/post_rides_screen";
   static String driverInboxScreen="/driver_inbox_screen";
@@ -131,7 +131,7 @@ class AppRoutes{
    //===================================================> Driver Role <=============================================
    GetPage(name:driverSignUpScreen, page: ()=>const DriverSignUpScreen()),
    GetPage(name:driverSignUpTwoScreen, page: ()=> DriverSignUpTwoScreen()),
-   GetPage(name:driverSignUpThreeScreen, page: ()=> DriverSignUpThreeScreen()),
+   GetPage(name:driverLicenceUploadScreen, page: ()=> DriverLicenceUploadScreen()),
    GetPage(name:driverHomeScreen, page: ()=> DriverHomeScreen(),transition:Transition.noTransition),
    GetPage(name:postRidesScreen, page: ()=> PostRidesScreen(),transition:Transition.noTransition),
    GetPage(name:driverInboxScreen, page: ()=> DriverInboxScreen(),transition:Transition.noTransition),

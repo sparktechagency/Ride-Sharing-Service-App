@@ -90,21 +90,10 @@ class AuthController extends GetxController {
       "vehicleModel": vehiclesModelCtrl.text,
       "licensePlateNumber": licenseNumberCtrl.text,
       "type": userRole,
-      "licenseFrontUrl": frontSitePath.value,
-      "licenseBackUrl": backSitePaths.value,
     };
-    List<MultipartBody> multipartBody = [];
-    if (frontSitePath.value.isNotEmpty) {
-      multipartBody.add(MultipartBody('licenseFrontUrl', File(frontSitePath.value)));
-    }
-    if (backSitePaths.value.isNotEmpty) {
-      multipartBody.add(MultipartBody('licenseBackUrl', File(backSitePaths.value)));
-    }
 
-    Response response = await ApiClient.postMultipartData(
-      ApiConstants.signUpEndPoint, body,
-      multipartBody: multipartBody,
-       );
+    Response response = await ApiClient.postData(
+      ApiConstants.signUpEndPoint, body);
     if (response.statusCode == 201 || response.statusCode == 200) {
       Get.toNamed(AppRoutes.otpScreen, parameters: {
        "email": emailCtrl.text.trim(),
@@ -119,8 +108,6 @@ class AuthController extends GetxController {
       selectedVehiclesType= '';
       vehiclesModelCtrl.clear();
       licenseNumberCtrl.clear();
-      frontSitePath = ''.obs;
-      backSitePaths = ''.obs;
       driverSignUpLoading(false);
       update();
     } else {
@@ -291,7 +278,7 @@ class AuthController extends GetxController {
           response.body['data']['attributes']['tokens']['access']['token']);
       await PrefsHelper.setString(
           AppConstants.id, response.body['data']['attributes']['user']['id']);
-      String userRole = response.body['data']['attributes']['user']['role'];
+      String userRole = response.body['data']['attributes']['user']['type'];
       await PrefsHelper.setString(AppConstants.userRole, userRole);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       if (userRole == 'user') {

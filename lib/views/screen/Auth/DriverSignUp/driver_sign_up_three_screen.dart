@@ -1,10 +1,11 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ride_sharing/controllers/profile_controller.dart';
-import 'package:ride_sharing/helpers/route.dart';
+import '../../../../controllers/auth_controller.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_strings.dart';
 import '../../../base/custom_app_bar.dart';
@@ -20,10 +21,7 @@ class DriverSignUpThreeScreen extends StatefulWidget {
 }
 
 class _DriverSignUpThreeScreenState extends State<DriverSignUpThreeScreen> {
-  final ProfileController _profileController = Get.put(ProfileController());
-
-  Uint8List? frontSiteImage;
-  Uint8List? backSiteImage;
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +52,30 @@ class _DriverSignUpThreeScreenState extends State<DriverSignUpThreeScreen> {
                         fontWeight: FontWeight.w500,
                         bottom: 16.h,
                       ),
-                      DottedBorderContainer(
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child:
-                              frontSiteImage != null
-                                  ? Image.memory(
-                                    frontSiteImage!,
-                                    fit: BoxFit.cover,
-                                  )
-                                  : _addImageButton('frontSite'),
-                        ),
-                      ),
+                  DottedBorderContainer(
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: _authController.frontSiteImage != null
+                          ? FutureBuilder<Uint8List>(
+                        future: _authController.frontSiteImage!.readAsBytes(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            if (snapshot.hasData) {
+                              return Image.memory(
+                                snapshot.data!,
+                                fit: BoxFit.cover,
+                              );
+                            } else {
+                              return Center(child: Text('No image available'));
+                            }
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      )
+                          : _addImageButton('frontSite'),
+                    ),
+                  )
                     ],
                   ),
                 ),
@@ -93,13 +103,25 @@ class _DriverSignUpThreeScreenState extends State<DriverSignUpThreeScreen> {
                       DottedBorderContainer(
                         child: AspectRatio(
                           aspectRatio: 16 / 9,
-                          child:
-                              backSiteImage != null
-                                  ? Image.memory(
-                                    backSiteImage!,
+                          child: _authController.backSiteImage != null
+                              ? FutureBuilder<Uint8List>(
+                            future: _authController.backSiteImage!.readAsBytes(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.done) {
+                                if (snapshot.hasData) {
+                                  return Image.memory(
+                                    snapshot.data!,
                                     fit: BoxFit.cover,
-                                  )
-                                  : _addImageButton('backSite'),
+                                  );
+                                } else {
+                                  return Center(child: Text('No image available'));
+                                }
+                              } else {
+                                return Center(child: CircularProgressIndicator());
+                              }
+                            },
+                          )
+                              : _addImageButton('backSite'),
                         ),
                       ),
                     ],
@@ -108,27 +130,20 @@ class _DriverSignUpThreeScreenState extends State<DriverSignUpThreeScreen> {
               ),
               //========================> Back And Next Button <==================
               SizedBox(height: 24.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CustomButton(
-                    onTap: () {
-                      Get.back();
-                    },
-                    text: AppStrings.back.tr,
-                    height: 48.h,
-                    width: 158.w,
-                    color: Colors.white,
-                    textColor: AppColors.primaryColor,
+                  Obx(()=> CustomButton(
+                    loading: _authController.driverSignUpLoading.value,
+                      onTap: () {
+                        if (_authController.backSiteImage != null || _authController.backSiteImage != null ) {
+                          _authController.driverSignUp();
+                        }else {
+                          Fluttertoast.showToast(
+                              msg: 'Please pick your license front and back sides'.tr);
+                        }
+                      },
+                      text: AppStrings.next.tr,
+                    ),
                   ),
-                  CustomButton(
-                    onTap: () {Get.toNamed(AppRoutes.otpScreen);},
-                    text: AppStrings.next.tr,
-                    height: 48.h,
-                    width: 158.w,
-                  ),
-                ],
-              ),
+
               SizedBox(height: 16.h),
             ],
           ),
@@ -149,14 +164,15 @@ class _DriverSignUpThreeScreenState extends State<DriverSignUpThreeScreen> {
           ),
           CustomButton(
             onTap: () async {
-              final Uint8List? imageBytes = await _profileController
-                  .pickTypeImage(ImageSource.gallery, imageType);
-              if (imageBytes != null) {
+              final File? imageFile = await _authController.pickTypeImage(ImageSource.gallery, imageType);
+              if (imageFile != null) {
                 setState(() {
                   if (imageType == 'frontSite') {
-                    frontSiteImage = imageBytes;
+                    _authController.frontSiteImage = imageFile;
+                    _authController.frontSitePath.value = imageFile.path;
                   } else if (imageType == 'backSite') {
-                    backSiteImage = imageBytes;
+                    _authController.backSiteImage = imageFile;
+                    _authController.backSitePaths.value = imageFile.path;
                   }
                 });
               } else {

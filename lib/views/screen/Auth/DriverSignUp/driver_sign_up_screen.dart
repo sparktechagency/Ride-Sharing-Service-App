@@ -125,6 +125,7 @@ class _DriverSignUpScreenState extends State<DriverSignUpScreen> {
                   bottom: 14.h,
                 ),
                 IntlPhoneField(
+                  controller: _authController.numberCtrl,
                   decoration: InputDecoration(
                     hintText: "Phone number".tr,
                     contentPadding:EdgeInsets.symmetric(horizontal: 12.h, vertical: 16.h),
@@ -201,7 +202,7 @@ class _DriverSignUpScreenState extends State<DriverSignUpScreen> {
                 SizedBox(height: 16.h),
                 //========================> Sign Up Button <==================
                 Obx(()=> CustomButton(
-                  loading: _authController.signUpLoading.value,
+                  loading: _authController.driverSignUpLoading.value,
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
                         if (isChecked ) {

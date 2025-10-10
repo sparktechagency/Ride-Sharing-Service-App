@@ -48,11 +48,16 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
         ),
         title: Align(
           alignment: Alignment.centerRight,
-          child: CustomText(
-            text: AppStrings.skip.tr,
-            fontSize: 20.sp,
-            fontWeight: FontWeight.w600,
-            textDecoration: TextDecoration.underline,
+          child: InkWell(
+            onTap: (){
+              Get.toNamed(AppRoutes.signInScreen);
+            },
+            child: CustomText(
+              text: AppStrings.signIn.tr,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w600,
+              textDecoration: TextDecoration.underline,
+            ),
           ),
         ),
       ),

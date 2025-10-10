@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../helpers/prefs_helpers.dart';
 import '../helpers/route.dart';
 import '../service/api_checker.dart';
@@ -28,7 +31,6 @@ class AuthController extends GetxController {
       "email": userEmailCtrl.text.trim(),
       "phoneNumber": userNumberCtrl.text,
       "password": userPasswordCtrl.text,
-      "role": userRole,
       "type": userRole,
     };
 
@@ -64,34 +66,45 @@ class AuthController extends GetxController {
   final TextEditingController confirmCtrl = TextEditingController();
   final TextEditingController addressCtrl = TextEditingController();
   final TextEditingController dateOfBirthCtrl = TextEditingController();
-  final TextEditingController vehiclesTypeCtrl = TextEditingController();
   final TextEditingController vehiclesModelCtrl = TextEditingController();
   final TextEditingController licenseNumberCtrl = TextEditingController();
-
-  // RxBool isSelectedRole = true.obs;
-  var signUpLoading = false.obs;
+  File? frontSiteImage;
+  File? backSiteImage;
+  RxString frontSitePath=''.obs;
+  RxString backSitePaths=''.obs;
+  var driverSignUpLoading = false.obs;
   var token = "";
+  String? selectedVehiclesType;
 
   driverSignUp() async {
-    signUpLoading(true);
+    driverSignUpLoading(true);
     var userRole = await PrefsHelper.getString(AppConstants.userRole);
-    Map<String, dynamic> body = {
+    Map<String, String> body = {
       "userName": nameCtrl.text.trim(),
       "email": emailCtrl.text.trim(),
       "password": passwordCtrl.text,
       "address": addressCtrl.text,
+      "phoneNumber": numberCtrl.text,
       "dateOfBirth": dateOfBirthCtrl.text,
-      "vehicleType": vehiclesTypeCtrl.text,
+      "vehicleType": '$selectedVehiclesType',
       "vehicleModel": vehiclesModelCtrl.text,
       "licensePlateNumber": licenseNumberCtrl.text,
-      "role": userRole,
+      "type": userRole,
+      "licenseFrontUrl": frontSitePath.value,
+      "licenseBackUrl": backSitePaths.value,
     };
+    List<MultipartBody> multipartBody = [];
+    if (frontSitePath.value.isNotEmpty) {
+      multipartBody.add(MultipartBody('licenseFrontUrl', File(frontSitePath.value)));
+    }
+    if (backSitePaths.value.isNotEmpty) {
+      multipartBody.add(MultipartBody('licenseBackUrl', File(backSitePaths.value)));
+    }
 
-    var headers = {'Content-Type': 'application/json'};
-
-    Response response = await ApiClient.postData(
-        ApiConstants.signUpEndPoint, jsonEncode(body),
-        headers: headers);
+    Response response = await ApiClient.postMultipartData(
+      ApiConstants.signUpEndPoint, body,
+      multipartBody: multipartBody,
+       );
     if (response.statusCode == 201 || response.statusCode == 200) {
       Get.toNamed(AppRoutes.otpScreen, parameters: {
        "email": emailCtrl.text.trim(),
@@ -103,17 +116,36 @@ class AuthController extends GetxController {
       confirmCtrl.clear();
       addressCtrl.clear();
       dateOfBirthCtrl.clear();
-      vehiclesTypeCtrl.clear();
+      selectedVehiclesType= '';
       vehiclesModelCtrl.clear();
       licenseNumberCtrl.clear();
-      signUpLoading(false);
+      frontSitePath = ''.obs;
+      backSitePaths = ''.obs;
+      driverSignUpLoading(false);
       update();
     } else {
       ApiChecker.checkApi(response);
-      signUpLoading(false);
+      driverSignUpLoading(false);
       update();
     }
   }
+
+  //==========================> Pick Type Image <=======================
+  Future<File?> pickTypeImage(ImageSource source, String imageType) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      File imageFile = File(pickedFile.path);
+      if (imageType == 'frontSite') {
+        frontSitePath.value = pickedFile.path;
+      } else if (imageType == 'backSite') {
+        backSitePaths.value = pickedFile.path;
+      }
+      return imageFile;
+    }
+    return null;
+  }
+
 
   //===================> Otp very <=======================
   TextEditingController otpCtrl = TextEditingController();
@@ -123,7 +155,7 @@ class AuthController extends GetxController {
       required String otp,
       required String type}) async {
     try {
-      var body = {'oneTimeCode': otpCtrl.text, 'email': email};
+      var body = {'code': otpCtrl.text, 'email': email};
       var headers = {'Content-Type': 'application/json'};
       otpVerifyLoading(true);
       Response response = await ApiClient.postData(
@@ -133,10 +165,10 @@ class AuthController extends GetxController {
       if (response.statusCode == 200) {
         print('token===============>>>>${response.body["data"]['attributes']['tokens']['access']['token']}');
         await PrefsHelper.setString(AppConstants.userRole,
-            response.body["data"]['attributes']['user']['role']);
+            response.body["data"]['attributes']['user']['type']);
         await PrefsHelper.setString(AppConstants.bearerToken,
             response.body["data"]['attributes']['tokens']['access']['token']);
-        var role = response.body["data"]['attributes']['user']['role'];
+        var role = response.body["data"]['attributes']['user']['type'];
         print("===> role : $role");
         otpCtrl.clear();
         if (type == "forgetPasswordScreen") {
@@ -263,7 +295,7 @@ class AuthController extends GetxController {
       await PrefsHelper.setString(AppConstants.userRole, userRole);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       if (userRole == 'user') {
-        Get.offAllNamed(AppRoutes.userInboxScreen);
+        Get.offAllNamed(AppRoutes.userSearchScreen);
         await PrefsHelper.setBool(AppConstants.isLogged, true);
       } else if (userRole == 'driver') {
         Get.offAllNamed(AppRoutes.driverHomeScreen);

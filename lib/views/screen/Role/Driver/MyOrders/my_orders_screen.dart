@@ -8,8 +8,6 @@ import '../BottomNavBar/driver_bottom_menu..dart';
 import 'InnerWidget/canceled_tab.dart';
 import 'InnerWidget/completed_tab.dart';
 import 'InnerWidget/current_trips_tab.dart';
-import 'InnerWidget/my_ride_tab.dart';
-import 'InnerWidget/ride_request_tab.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   const MyOrdersScreen({super.key});
@@ -25,7 +23,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -42,7 +40,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 5,
+        length: 3,
         child: Scaffold(
             bottomNavigationBar: DriverBottomMenu(3),
             backgroundColor: Colors.white,
@@ -62,45 +60,12 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                 labelColor: Colors.black,
                 unselectedLabelColor: Colors.grey,
                 tabs: [
-                  //========================> My Ride Tab <====================
-                  Tab(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _tabController.index == 0
-                            ? const Color(0xFFebf9ff)
-                            : Colors.transparent,
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: CustomText(
-                          text: 'My Ride'.tr,
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ),
-                  ),
-                  //========================> Ride Request Tab <====================
-                  Tab(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _tabController.index == 1
-                            ? const Color(0xFFebf9ff)
-                            : Colors.transparent,
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: CustomText(
-                          text: 'Ride Request'.tr,
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ),
-                  ),
+
                   //========================> Current Trips Tab <====================
                   Tab(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _tabController.index == 2
+                        color: _tabController.index == 0
                             ? const Color(0xFFebf9ff)
                             : Colors.transparent,
                       ),
@@ -117,7 +82,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                   Tab(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _tabController.index == 3
+                        color: _tabController.index == 1
                             ? const Color(0xFFebf9ff)
                             : Colors.transparent,
                       ),
@@ -134,7 +99,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                   Tab(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: _tabController.index == 4
+                        color: _tabController.index == 2
                             ? const Color(0xFFebf9ff)
                             : Colors.transparent,
                       ),
@@ -153,8 +118,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
             body:TabBarView(
               controller: _tabController,
               children:  [
-                MyRideTab(),
-                RideRequestTab(),
                 CurrentTripsTab(),
                 CanceledTab(),
                 CompletedTab(),

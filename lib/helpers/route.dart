@@ -27,6 +27,7 @@ import '../views/screen/Role/Driver/Home/driver_home_screen.dart';
 import '../views/screen/Role/Driver/Inbox/MessageInbox/driver_message_screen.dart';
 import '../views/screen/Role/Driver/Inbox/driver_inbox_screen.dart';
 import '../views/screen/Role/Driver/MyOrders/my_orders_screen.dart';
+import '../views/screen/Role/Driver/MyRide/driver_my_ride_screen.dart';
 import '../views/screen/Role/Driver/MyWallet/my_wallet_screen.dart';
 import '../views/screen/Role/Driver/PassengersTake/passengers_take_screen.dart';
 import '../views/screen/Role/Driver/PickUp/pick_up_screen.dart';
@@ -94,6 +95,7 @@ class AppRoutes{
   static String addCityScreen="/add_city_screen";
   static String cityViewScreen="/city_view_screen";
   static String passengersTakeScreen="/passengers_take_screen";
+  static String driverMyRideScreen="/driver_my_ride_screen";
   //===================================================> User Role <=============================================
   static String userSignUpScreen="/user_sign_up_screen";
   static String userSearchScreen="/user_search_screen";
@@ -149,6 +151,7 @@ class AppRoutes{
     GetPage(name:addCityScreen, page: ()=> AddCityScreen()),
     GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
    GetPage(name:passengersTakeScreen, page: ()=> PassengersTakeScreen()),
+   GetPage(name:driverMyRideScreen, page: ()=> DriverMyRideScreen()),
    //===================================================> User Role <=============================================
    GetPage(name:userSignUpScreen, page: ()=> UserSignUpScreen()),
    GetPage(name:userSearchScreen, page: ()=> UserSearchScreen(),transition: Transition.noTransition),

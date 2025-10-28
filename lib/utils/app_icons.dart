@@ -18,6 +18,7 @@ class AppIcons{
   static String postRides="$baseUrl/postRides.svg";
   static String myOrder="$baseUrl/myOrder.svg";
   static String clock="$baseUrl/clock.svg";
+  static String add = "$baseUrl/add.svg";
   static String lock="$baseUrl/lock.svg";
   static String location="$baseUrl/location.svg";
   static String type="$baseUrl/type.svg";

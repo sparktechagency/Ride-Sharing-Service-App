@@ -95,6 +95,15 @@ class DriverProfileScreen extends StatelessWidget {
                       prefixIcon: SvgPicture.asset(AppIcons.myWallet),
                       suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
                     ),
+                    //===================> My Ride ListTile <=================
+                    CustomListTile(
+                      onTap: () {
+                       Get.toNamed(AppRoutes.driverMyRideScreen);
+                      },
+                      title: AppStrings.myRide.tr,
+                      prefixIcon: SvgPicture.asset(AppIcons.myRide),
+                      suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
+                    ),
                     //===================> Setting ListTile <=================
                     CustomListTile(
                       onTap: () {

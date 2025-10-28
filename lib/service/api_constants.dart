@@ -11,4 +11,6 @@ class ApiConstants {
   static const String termsConditionEndPoint = "";
   static const String privacyPolicyEndPoint = "";
   static const String aboutUsEndPoint = "";
+  //==========================================> Driver Role <=======================
+  static const String driverLicenseUploadEndPoint = "/users/self/post-image-liscense";
 }

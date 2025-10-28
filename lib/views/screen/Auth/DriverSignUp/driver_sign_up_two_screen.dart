@@ -174,33 +174,20 @@ class _DriverSignUpTwoScreenState extends State<DriverSignUpTwoScreen> {
                 ),
                 //========================> Back And Next Button <==================
                 SizedBox(height: 98.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CustomButton(
-                      onTap: () {
-                        Get.back();
-                      },
-                      text: AppStrings.back.tr,
-                      height: 48.h,
-                      width: 158.w,
-                      color: Colors.white,
-                      textColor: AppColors.primaryColor,
+                    Obx(()=> CustomButton(
+                      loading: _authController.driverSignUpLoading.value,
+                        onTap: () {
+                          if (_formKey2.currentState!.validate()) {
+                            _authController.driverSignUp();
+                          } else {
+                            return null;
+                          }
+                        },
+                        text: AppStrings.next.tr,
+                        height: 48.h,
+                        width: 158.w,
+                      ),
                     ),
-                    CustomButton(
-                      onTap: () {
-                        if (_formKey2.currentState!.validate()) {
-                          Get.toNamed(AppRoutes.driverSignUpThreeScreen);
-                        } else {
-                          return null;
-                        }
-                      },
-                      text: AppStrings.next.tr,
-                      height: 48.h,
-                      width: 158.w,
-                    ),
-                  ],
-                ),
                 SizedBox(height: 32.h),
               ],
             ),

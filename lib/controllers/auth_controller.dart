@@ -12,6 +12,8 @@ import '../service/api_client.dart';
 import '../service/api_constants.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_constants.dart';
+import 'package:http/http.dart' as http;
+
 
 class AuthController extends GetxController {
   //================================> User Sign Up <=================================
@@ -31,6 +33,7 @@ class AuthController extends GetxController {
       "email": userEmailCtrl.text.trim(),
       "phoneNumber": userNumberCtrl.text,
       "password": userPasswordCtrl.text,
+      "role": 'user',
       "type": userRole,
     };
 
@@ -68,10 +71,6 @@ class AuthController extends GetxController {
   final TextEditingController dateOfBirthCtrl = TextEditingController();
   final TextEditingController vehiclesModelCtrl = TextEditingController();
   final TextEditingController licenseNumberCtrl = TextEditingController();
-  File? frontSiteImage;
-  File? backSiteImage;
-  RxString frontSitePath=''.obs;
-  RxString backSitePaths=''.obs;
   var driverSignUpLoading = false.obs;
   var token = "";
   String? selectedVehiclesType;
@@ -89,22 +88,11 @@ class AuthController extends GetxController {
       "vehicleType": '$selectedVehiclesType',
       "vehicleModel": vehiclesModelCtrl.text,
       "licensePlateNumber": licenseNumberCtrl.text,
+      "role": 'user',
       "type": userRole,
-      "licenseFrontUrl": frontSitePath.value,
-      "licenseBackUrl": backSitePaths.value,
     };
-    List<MultipartBody> multipartBody = [];
-    if (frontSitePath.value.isNotEmpty) {
-      multipartBody.add(MultipartBody('licenseFrontUrl', File(frontSitePath.value)));
-    }
-    if (backSitePaths.value.isNotEmpty) {
-      multipartBody.add(MultipartBody('licenseBackUrl', File(backSitePaths.value)));
-    }
 
-    Response response = await ApiClient.postMultipartData(
-      ApiConstants.signUpEndPoint, body,
-      multipartBody: multipartBody,
-       );
+    Response response = await ApiClient.postData(ApiConstants.signUpEndPoint, body);
     if (response.statusCode == 201 || response.statusCode == 200) {
       Get.toNamed(AppRoutes.otpScreen, parameters: {
        "email": emailCtrl.text.trim(),
@@ -119,8 +107,6 @@ class AuthController extends GetxController {
       selectedVehiclesType= '';
       vehiclesModelCtrl.clear();
       licenseNumberCtrl.clear();
-      frontSitePath = ''.obs;
-      backSitePaths = ''.obs;
       driverSignUpLoading(false);
       update();
     } else {
@@ -131,7 +117,7 @@ class AuthController extends GetxController {
   }
 
   //==========================> Pick Type Image <=======================
-  Future<File?> pickTypeImage(ImageSource source, String imageType) async {
+/*  Future<File?> pickTypeImage(ImageSource source, String imageType) async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
@@ -144,7 +130,7 @@ class AuthController extends GetxController {
       return imageFile;
     }
     return null;
-  }
+  }*/
 
 
   //===================> Otp very <=======================
@@ -291,14 +277,14 @@ class AuthController extends GetxController {
           response.body['data']['attributes']['tokens']['access']['token']);
       await PrefsHelper.setString(
           AppConstants.id, response.body['data']['attributes']['user']['id']);
-      String userRole = response.body['data']['attributes']['user']['role'];
+      String userRole = response.body['data']['attributes']['user']['type'];
       await PrefsHelper.setString(AppConstants.userRole, userRole);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       if (userRole == 'user') {
         Get.offAllNamed(AppRoutes.userSearchScreen);
         await PrefsHelper.setBool(AppConstants.isLogged, true);
       } else if (userRole == 'driver') {
-        Get.offAllNamed(AppRoutes.driverHomeScreen);
+        Get.offAllNamed(AppRoutes.driverLicenceUploadScreen);
       }
       signInEmailCtrl.clear();
       signInPassCtrl.clear();

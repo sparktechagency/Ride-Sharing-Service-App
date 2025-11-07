@@ -55,31 +55,51 @@ class TotalUserScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 8.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomText(
-                                text: 'Mr. Imran',
-                                bottom: 4.h,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              CustomText(
-                                text: 'Location: Dhaka to Rangpur',
-                                right: 4.w,
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          //=====================> Review & Star Row <=================
-                          Row(
-                            children: [
-                              CustomText(
-                                text: '4.9',
-                                fontSize: 18.sp,
-                                right: 4.w,
-                              ),
-                              SvgPicture.asset(AppIcons.star),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: CustomText(
+                                        text: 'Mr. Imran',
+                                        bottom: 4.h,
+                                        fontWeight: FontWeight.w500,
+                                        textOverflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    //=====================> Review & Star Row <=================
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        CustomText(
+                                          text: '4.9',
+                                          fontSize: 18.sp,
+                                          right: 4.w,
+                                        ),
+                                        SvgPicture.asset(AppIcons.star),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    CustomText(
+                                      text: 'Location: '.tr,
+                                    ),
+                                    Flexible(
+                                      child: CustomText(
+                                        left: 4.w,
+                                        text: 'Dhaka to Rangpur',
+                                        textOverflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

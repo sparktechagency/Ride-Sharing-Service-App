@@ -3,7 +3,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:ride_sharing/helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
@@ -23,6 +22,7 @@ class CompletedOrderDetails extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //==================================> Ride Details <===================
               Container(
@@ -61,7 +61,7 @@ class CompletedOrderDetails extends StatelessWidget {
                             ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 12.h,
+                                horizontal: 12.w, // Fixed: was .h
                                 vertical: 4.h,
                               ),
                               child: CustomText(
@@ -84,78 +84,101 @@ class CompletedOrderDetails extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CustomText(
-                                text: AppStrings.pICKUP.tr,
-                                maxLine: 3,
-                                textAlign: TextAlign.start,
-                                bottom: 12.h,
+                              Flexible(
+                                child: CustomText(
+                                  text: AppStrings.pICKUP.tr,
+                                  maxLine: 3,
+                                  textAlign: TextAlign.start,
+                                  bottom: 12.h,
+                                ),
                               ),
                               SizedBox(
-                                width: 148.w,
+                                width: 16.w,
                                 child: Divider(
                                   thickness: 1.5,
                                   color: AppColors.borderColor,
                                 ),
                               ),
-                              CustomText(
-                                text: AppStrings.pICKUP.tr,
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
-                                bottom: 12.h,
+                              Flexible(
+                                child: CustomText(
+                                  text: AppStrings.dROPOFF.tr,
+                                  textAlign: TextAlign.start,
+                                  maxLine: 3,
+                                  bottom: 12.h,
+                                ),
                               ),
                             ],
                           ),
+                          SizedBox(height: 8.h),
                           //============================> Location Row <====================================
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CustomText(
-                                text: 'Dhaka',
-                                maxLine: 3,
-                                textAlign: TextAlign.start,
-                                bottom: 12.h,
+                              Flexible(
+                                child: CustomText(
+                                  text: 'Dhaka',
+                                  maxLine: 3,
+                                  textAlign: TextAlign.start,
+                                  bottom: 12.h,
+                                ),
                               ),
-                              CustomText(
-                                text: 'Rangpur',
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
-                                bottom: 12.h,
+                              Flexible(
+                                child: CustomText(
+                                  text: 'Rangpur',
+                                  textAlign: TextAlign.start,
+                                  maxLine: 3,
+                                  bottom: 12.h,
+                                ),
                               ),
                             ],
                           ),
+                          SizedBox(height: 8.h),
                           //============================> Total Passengers Row <====================================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CustomText(
-                                text: 'Total Passengers seat',
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
-                                bottom: 12.h,
+                              Flexible(
+                                child: CustomText(
+                                  text: 'Total Passengers Seat'.tr,
+                                  textAlign: TextAlign.start,
+                                  maxLine: 3,
+                                  bottom: 12.h,
+                                ),
                               ),
+                              Spacer(),
                               CustomText(
-                                text: '20 Passenger',
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
-                                bottom: 12.h,
-                              ),
+                                  text: '20',
+                                  textAlign: TextAlign.start,
+                                  right: 4.w,
+                                  maxLine: 3),
+                              CustomText(
+                                  text: 'Passenger'.tr,
+                                  textAlign: TextAlign.start,
+                                  maxLine: 3),
                             ],
                           ),
                           //============================> Booking Seat Row <====================================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CustomText(
-                                text: 'Booking Seat',
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
+                              Flexible(
+                                child: CustomText(
+                                  text: 'Booking Seat'.tr,
+                                  textAlign: TextAlign.start,
+                                  maxLine: 3,
+                                ),
                               ),
+                              Spacer(),
                               CustomText(
-                                text: '20 Passenger',
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
-                              ),
+                                  text: '20',
+                                  textAlign: TextAlign.start,
+                                  right: 4.w,
+                                  maxLine: 3),
+                              CustomText(
+                                  text: 'Passenger'.tr,
+                                  textAlign: TextAlign.start,
+                                  maxLine: 3),
                             ],
                           ),
                         ],
@@ -203,7 +226,7 @@ class CompletedOrderDetails extends StatelessWidget {
                     ),
                     //========================> Completed Trip Container <=================
                     Container(
-                      width: double.maxFinite,
+                      width: double.infinity, // Fixed: was double.maxFinite
                       decoration: BoxDecoration(
                         color: AppColors.primaryColor,
                         borderRadius: BorderRadius.only(
@@ -241,90 +264,101 @@ class CompletedOrderDetails extends StatelessWidget {
               ),
               SizedBox(height: 24.h),
               //==================================> Driver Details <===================
-              SizedBox(
-                height: 320.h,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(
-                        bottom: 12.h,
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: 5,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.only(
+                      bottom: 12.h,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.r),
+                      border: Border.all(
+                        width: 1.w,
+                        color: AppColors.borderColor,
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(
-                          width: 1.w,
-                          color: AppColors.borderColor,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(12.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            //=====================> Name & Image Row <=================
-                            Row(
-                              children: [
-                                CustomNetworkImage(
-                                  imageUrl:
-                                      'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                                  height: 54.h,
-                                  width: 54.w,
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  border: Border.all(
-                                    width: 1.w,
-                                    color: AppColors.primaryColor,
-                                  ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(12.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //=====================> Name & Image Row <=================
+                          Row(
+                            children: [
+                              CustomNetworkImage(
+                                imageUrl:
+                                'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                height: 54.h,
+                                width: 54.w,
+                                borderRadius: BorderRadius.circular(12.r),
+                                border: Border.all(
+                                  width: 1.w,
+                                  color: AppColors.primaryColor,
                                 ),
-                                SizedBox(width: 8.w),
-                                Column(
+                              ),
+                              SizedBox(width: 8.w),
+                              Flexible(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomText(
-                                      text: 'Mr. Imran',
-                                      bottom: 4.h,
-                                      fontWeight: FontWeight.w500,
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        CustomText(
+                                          text: 'Mr. Imran',
+                                          bottom: 4.h,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        //=====================> Review & Star Row <=================
+                                        Row(
+                                          children: [
+                                            CustomText(
+                                              text: '4.9',
+                                              fontSize: 18.sp,
+                                              right: 4.w,
+                                            ),
+                                            SvgPicture.asset(AppIcons.star),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    CustomText(
-                                      text: 'Location: Dhaka to Rangpur',
-                                      right: 4.w,
+                                    Row(
+                                      children: [
+                                        CustomText(
+                                          text: 'Location: '.tr,
+                                        ),
+                                        CustomText(
+                                          left: 4.w,
+                                          text: 'Dhaka to Rangpur',
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                Spacer(),
-                                //=====================> Review & Star Row <=================
-                                Row(
-                                  children: [
-                                    CustomText(
-                                      text: '4.9',
-                                      fontSize: 18.sp,
-                                      right: 4.w,
-                                    ),
-                                    SvgPicture.asset(AppIcons.star),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 24.h),
-                            //=====================> Reviews Section <=================
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: CustomButton(
-                                onTap: () {
-                                  _showReviewBottomSheet(context);
-                                },
-                                width: 84.w,
-                                height: 34.h,
-                                text: AppStrings.giveReview.tr,
                               ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> Reviews Section <=================
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: CustomButton(
+                              onTap: () {
+                                _showReviewBottomSheet(context);
+                              },
+                              width: 84.w,
+                              height: 34.h,
+                              text: AppStrings.giveReview.tr,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
               SizedBox(height: 32.h),
             ],
@@ -333,6 +367,7 @@ class CompletedOrderDetails extends StatelessWidget {
       ),
     );
   }
+
   // Function to show the review bottom sheet
   void _showReviewBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -344,15 +379,20 @@ class CompletedOrderDetails extends StatelessWidget {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: MediaQuery.of(context).viewInsets.bottom > 0 ? 8.0 : 16.0,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-             SvgPicture.asset(AppIcons.success),
+              SvgPicture.asset(AppIcons.success),
               SizedBox(height: 8),
               CustomText(
-               text: AppStrings.givePersonRating.tr,
-               fontSize: 18, fontWeight: FontWeight.w600),
+                text: AppStrings.givePersonRating.tr,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
               SizedBox(height: 16),
               //====================> Rating section <==========================
               RatingBar.builder(
@@ -375,7 +415,7 @@ class CompletedOrderDetails extends StatelessWidget {
               // Text field for feedback
               TextField(
                 decoration: InputDecoration(
-                  hintText: 'Write Your Feedback',
+                  hintText: 'Write your feedback'.tr,
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                 ),
@@ -384,20 +424,29 @@ class CompletedOrderDetails extends StatelessWidget {
               SizedBox(height: 16.h),
               //==============================> Buttons for Cancel and Submit <=========================
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CustomButton(
-                    width: 124.w,
+                  Expanded(
+                    child: CustomButton(
                       height: 46.h,
                       color: Colors.white,
                       textColor: Colors.black,
-                      onTap: (){},
-                      text: AppStrings.cancel.tr),
-                  CustomButton(
-                      width: 124.w,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      text: AppStrings.cancel.tr,
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: CustomButton(
                       height: 46.h,
-                      onTap: (){},
-                      text: AppStrings.submit.tr),
+                      onTap: () {
+                        // TODO: Submit review logic
+                        Navigator.pop(context);
+                      },
+                      text: AppStrings.submit.tr,
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 12.h)

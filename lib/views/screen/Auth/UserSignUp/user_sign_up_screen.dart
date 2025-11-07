@@ -156,6 +156,47 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                     print("Phone===============> ${phone.completeNumber}");
                   },
                 ),
+                //========================> Address Text Field <==================
+                CustomText(
+                  text: AppStrings.address.tr,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  bottom: 14.h,
+                ),
+                CustomTextField(
+                  controller: _authController.userAddressCtrl,
+                  hintText: AppStrings.enterYourAddress.tr,
+                  prefixIcon: SvgPicture.asset(AppIcons.location),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your address".tr;
+                    }
+                    return null;
+                  },
+                ),
+                //========================> Date Of Birth Day Text Field <==================
+                SizedBox(height: 16.h),
+                CustomText(
+                  text: AppStrings.dateOfBirth.tr,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  bottom: 14.h,
+                ),
+                CustomTextField(
+                  onTab: () {
+                    _authController.userPickBirthDate(context);
+                  },
+                  readOnly: true,
+                  controller: _authController.userDateOfBirthCtrl,
+                  hintText: AppStrings.dateOfBirth.tr,
+                  prefixIcon: SvgPicture.asset(AppIcons.calender),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please select your birth day".tr;
+                    }
+                    return null;
+                  },
+                ),
                 //========================> Password Text Field <==================
                 SizedBox(height: 16.h),
                 CustomText(

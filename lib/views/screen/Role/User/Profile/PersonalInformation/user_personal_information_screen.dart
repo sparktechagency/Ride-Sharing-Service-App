@@ -2,30 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import '../../../../../../controllers/profile_controller.dart';
 import '../../../../../../helpers/route.dart';
+import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
 import '../../../../../base/custom_app_bar.dart';
 import '../../../../../base/custom_network_image.dart';
+import '../../../../../base/custom_page_loading.dart';
 import '../../../../../base/custom_text.dart';
 
-class UserPersonalInformationScreen extends StatelessWidget {
+class UserPersonalInformationScreen extends StatefulWidget {
   const UserPersonalInformationScreen({super.key});
+
+  @override
+  State<UserPersonalInformationScreen> createState() => _UserPersonalInformationScreenState();
+}
+
+class _UserPersonalInformationScreenState extends State<UserPersonalInformationScreen> {
+  late ProfileController _profileController;
+
+  @override
+  void initState() {
+    super.initState();
+    _profileController = Get.put(ProfileController());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _profileController.getProfileData();
+    });
+  }
+
+  String _formatDate(String? dateString) {
+    if (dateString == null || dateString.isEmpty) {
+      return 'N/A';
+    }
+    try {
+      final DateTime dateTime = DateTime.parse(dateString);
+      return DateFormat('yyyy-MM-dd').format(dateTime);
+    } catch (e) {
+      return 'N/A';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.personalInformation.tr),
-      body: SingleChildScrollView(
+      body: Obx(()=>_profileController.profileLoading.value
+          ? const Center(child: CustomPageLoading())
+          :SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //==============================> Profile picture section <=======================
             Center(
               child: CustomNetworkImage(
-                imageUrl:
-                'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                imageUrl: '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.image ?? ''}',
                 height: 135.h,
                 width: 135.w,
                 borderRadius: BorderRadius.circular(24.r),
@@ -90,13 +123,43 @@ class UserPersonalInformationScreen extends StatelessWidget {
                                     SizedBox(width: 12.w),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         CustomText(
                                           text: AppStrings.name.tr,
                                         ),
                                         CustomText(
-                                          text: 'Bashar islam',
+                                          text: _profileController.profileModel.value.userName ?? 'N/A',
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                          maxLine: 3,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+                          //=====================> Phone Number Row <=================
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppIcons.mail),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                            text: AppStrings.email.tr
+                                        ),
+                                        CustomText(
+                                          text: _profileController.profileModel.value.email ?? 'N/A',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -126,7 +189,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
                                             text: AppStrings.phoneNumber.tr
                                         ),
                                         CustomText(
-                                          text: '(888) 4455-9999',
+                                          text: _profileController.profileModel.value.phoneNumber ?? 'N/A',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -156,7 +219,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
                                             text: AppStrings.location.tr
                                         ),
                                         CustomText(
-                                          text: 'Dhaka, Bangladesh',
+                                          text: _profileController.profileModel.value.address ?? 'N/A',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -186,7 +249,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
                                             text: AppStrings.dateOfBirth.tr
                                         ),
                                         CustomText(
-                                          text: '12/12/2000',
+                                          text: _formatDate('${_profileController.profileModel.value.dateOfBirth}'),
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -199,7 +262,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 24.h),
-                          //=====================> Vehicles Type Row <=================
+                          /*//=====================> Vehicles Type Row <=================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -216,7 +279,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
                                             text: AppStrings.vehiclesType.tr
                                         ),
                                         CustomText(
-                                          text: 'Car',
+                                          text: '${(_profileController.profileModel.value.vehicleType ?? 'N/A').capitalize}',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -246,7 +309,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
                                             text: AppStrings.vehiclesModel.tr
                                         ),
                                         CustomText(
-                                          text: 'BMW',
+                                          text: '${(_profileController.profileModel.value.vehicleModel ?? 'N/A').capitalize}',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -276,7 +339,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
                                             text: AppStrings.licensePlate.tr
                                         ),
                                         CustomText(
-                                          text: '1922 5588',
+                                          text: _profileController.profileModel.value.licensePlateNumber ?? 'N/A',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -287,16 +350,18 @@ class UserPersonalInformationScreen extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          ),
-                          SizedBox(height: 24.h),
+                          ),*/
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-            )],
+            ),
+            SizedBox(height: 32.h),
+          ],
         ),
+      ),
       ),
     );
   }

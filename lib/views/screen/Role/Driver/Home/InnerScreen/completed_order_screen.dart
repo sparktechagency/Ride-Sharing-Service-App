@@ -292,14 +292,13 @@ class CompletedOrderScreen extends StatelessWidget {
                             children: [
                               //============================> Pickup And Drop of Row <====================================
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomText(
                                       text: AppStrings.pICKUP.tr,
                                       maxLine: 3,
-                                      textAlign: TextAlign.start,
-                                      bottom: 12.h),
+                                      textAlign: TextAlign.start),
                                   SizedBox(
                                     width: 148.w,
                                     child: Divider(
@@ -310,13 +309,13 @@ class CompletedOrderScreen extends StatelessWidget {
                                   CustomText(
                                       text: AppStrings.pICKUP.tr,
                                       textAlign: TextAlign.start,
-                                      maxLine: 3,
-                                      bottom: 12.h),
+                                      maxLine: 3),
                                 ],
                               ),
+                              SizedBox(height: 8.h),
                               //============================> Location Row <====================================
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomText(
@@ -334,17 +333,25 @@ class CompletedOrderScreen extends StatelessWidget {
                               //============================> Total Passengers Row <====================================
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  Expanded(
+                                    child: CustomText(
+                                        text: 'Total Passengers Seat'.tr,
+                                        textAlign: TextAlign.start,
+                                        maxLine: 3,
+                                        bottom: 12.h),
+                                  ),
+                                  Spacer(),
                                   CustomText(
-                                      text: 'Total Passengers seat',
+                                      text: '20',
                                       textAlign: TextAlign.start,
-                                      maxLine: 3,
-                                      bottom: 12.h),
+                                      right: 4.w,
+                                      maxLine: 3),
                                   CustomText(
-                                      text: '20 Passenger',
+                                      text: 'Passenger'.tr,
                                       textAlign: TextAlign.start,
-                                      maxLine: 3,
-                                      bottom: 12.h),
+                                      maxLine: 3),
                                 ],
                               ),
                               //============================> Booking Seat Row <====================================
@@ -352,11 +359,17 @@ class CompletedOrderScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomText(
-                                      text: 'Booking Seat',
+                                      text: 'Booking Seat'.tr,
                                       textAlign: TextAlign.start,
                                       maxLine: 3),
+                                  Spacer(),
                                   CustomText(
-                                      text: '20 Passenger',
+                                      text: '20',
+                                      textAlign: TextAlign.start,
+                                      right: 4.w,
+                                      maxLine: 3),
+                                  CustomText(
+                                      text: 'Passenger'.tr,
                                       textAlign: TextAlign.start,
                                       maxLine: 3),
                                 ],

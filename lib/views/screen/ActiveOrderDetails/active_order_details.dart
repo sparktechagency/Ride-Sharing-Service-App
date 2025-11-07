@@ -127,18 +127,23 @@ class ActiveOrderDetails extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CustomText(
-                                text: 'Total Passengers seat',
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
-                                bottom: 12.h,
+                              Expanded(
+                                child: CustomText(
+                                    text: 'Total Passengers Seat'.tr,
+                                    textAlign: TextAlign.start,
+                                    maxLine: 3,
+                                    bottom: 12.h),
                               ),
+                              Spacer(),
                               CustomText(
-                                text: '20 Passenger',
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
-                                bottom: 12.h,
-                              ),
+                                  text: '20',
+                                  textAlign: TextAlign.start,
+                                  right: 4.w,
+                                  maxLine: 3),
+                              CustomText(
+                                  text: 'Passenger'.tr,
+                                  textAlign: TextAlign.start,
+                                  maxLine: 3),
                             ],
                           ),
                           //============================> Booking Seat Row <====================================
@@ -146,15 +151,20 @@ class ActiveOrderDetails extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               CustomText(
-                                text: 'Booking Seat',
+                                text: 'Booking Seat'.tr,
                                 textAlign: TextAlign.start,
                                 maxLine: 3,
                               ),
+                              Spacer(),
                               CustomText(
-                                text: '08 Passenger',
-                                textAlign: TextAlign.start,
-                                maxLine: 3,
-                              ),
+                                  text: '08',
+                                  textAlign: TextAlign.start,
+                                  right: 4.w,
+                                  maxLine: 3),
+                              CustomText(
+                                  text: 'Passenger'.tr,
+                                  textAlign: TextAlign.start,
+                                  maxLine: 3),
                             ],
                           ),
                         ],
@@ -173,8 +183,14 @@ class ActiveOrderDetails extends StatelessWidget {
                                 text: AppStrings.availableSeat.tr,
                                 fontWeight: FontWeight.w500,
                               ),
+                              Spacer(),
                               CustomText(
-                                text: '12 seat',
+                                text: '12 ',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20.sp,
+                              ),
+                              CustomText(
+                                text: 'seats'.tr,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20.sp,
                               ),
@@ -238,7 +254,7 @@ class ActiveOrderDetails extends StatelessWidget {
                   ),
                   Spacer(),
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       Get.toNamed(AppRoutes.totalUserScreen);
                     },
                     child: CustomText(
@@ -259,9 +275,7 @@ class ActiveOrderDetails extends StatelessWidget {
                   itemCount: 5,
                   itemBuilder: (context, index) {
                     return Container(
-                      margin: EdgeInsets.only(
-                        bottom: 12.h,
-                      ),
+                      margin: EdgeInsets.only(bottom: 12.h),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(
@@ -279,7 +293,7 @@ class ActiveOrderDetails extends StatelessWidget {
                               children: [
                                 CustomNetworkImage(
                                   imageUrl:
-                                  'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                      'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
                                   height: 54.h,
                                   width: 54.w,
                                   borderRadius: BorderRadius.circular(12.r),
@@ -297,21 +311,15 @@ class ActiveOrderDetails extends StatelessWidget {
                                       bottom: 4.h,
                                       fontWeight: FontWeight.w500,
                                     ),
-                                    CustomText(
-                                      text: 'Location: Dhaka to Rangpur',
-                                      right: 4.w,
-                                    ),
+                                    CustomText(text: 'Location: '.tr),
+                                    CustomText(text: 'Dhaka to Rangpur'),
                                   ],
                                 ),
                                 Spacer(),
                                 //=====================> Review & Star Row <=================
                                 Row(
                                   children: [
-                                    CustomText(
-                                      text: '4.9',
-                                      fontSize: 18.sp,
-                                      right: 4.w,
-                                    ),
+                                    CustomText(text: '4.9', fontSize: 18.sp),
                                     SvgPicture.asset(AppIcons.star),
                                   ],
                                 ),

@@ -80,10 +80,7 @@ class _UserEditProfileScreenState extends State<UserEditProfileScreen> {
                       CustomTextField(
                         controller: _controller.userNameCTRL,
                         hintText: AppStrings.userName.tr,
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: SvgPicture.asset(AppIcons.profile),
-                        ),
+                        prefixIcon: SvgPicture.asset(AppIcons.profile),
                       ),
                       SizedBox(height: 16.h),
                      /* //====================> Phone Number Text Field <================
@@ -150,7 +147,7 @@ class _UserEditProfileScreenState extends State<UserEditProfileScreen> {
                         prefixIcon: SvgPicture.asset(AppIcons.calender),
                       ),
                       //========================> Vehicles type Text Field <==================
-                      SizedBox(height: 16.h),
+                      /*SizedBox(height: 16.h),
                       CustomText(
                         text: AppStrings.vehiclesType.tr,
                         fontSize: 16.sp,
@@ -188,7 +185,7 @@ class _UserEditProfileScreenState extends State<UserEditProfileScreen> {
                         controller: _controller.licenseCTRL,
                         hintText: AppStrings.typeNumber.tr,
                         prefixIcon: SvgPicture.asset(AppIcons.licenseNum),
-                      ),
+                      ),*/
                       SizedBox(height: 16.h),
                     ],
                   ),

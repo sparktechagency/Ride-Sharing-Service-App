@@ -98,23 +98,39 @@ class CanceledTab extends StatelessWidget {
                           fontSize: 22.sp,
                           bottom: 8.h,
                         ),
-                        CustomText(
-                          text:
-                          'Booking Time : Sat 12 April 2025  8.30 PM',
-                          fontWeight: FontWeight.w500,
-                          bottom: 8.h,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: CustomText(
+                                text: 'Booking Time :'.tr,
+                                fontWeight: FontWeight.w500,
+                                maxLine: 2,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomText(
+                                text: 'Sat 12 April 2025  8.30 PM',
+                                fontWeight: FontWeight.w500,
+                                maxLine: 2,
+                                textAlign: TextAlign.start,
+                                left: 4.h,
+                              ),
+                            ),
+                          ],
                         ),
+                        SizedBox(height: 8.h),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 CustomText(
                                   text: AppStrings.pICKUP.tr,
                                   right: 4.w,
-                                  bottom: 12.h,
                                 ),
                                 CustomText(text: 'Dhaka', right: 4.w),
                               ],
@@ -132,7 +148,6 @@ class CanceledTab extends StatelessWidget {
                                 CustomText(
                                   text: AppStrings.dROPOFF.tr,
                                   left: 4.w,
-                                  bottom: 12.h,
                                 ),
                                 CustomText(text: 'Rangpur', left: 4.w),
                               ],

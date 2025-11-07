@@ -138,7 +138,7 @@ class AppRoutes{
    GetPage(name:postRidesScreen, page: ()=> PostRidesScreen(),transition:Transition.noTransition),
    GetPage(name:driverInboxScreen, page: ()=> DriverInboxScreen(),transition:Transition.noTransition),
    GetPage(name:myOrdersScreen, page: ()=> MyOrdersScreen(),transition:Transition.noTransition),
-    GetPage(name:driverProfileScreen, page: ()=>const DriverProfileScreen(),transition: Transition.noTransition),
+    GetPage(name:driverProfileScreen, page: ()=> DriverProfileScreen(),transition: Transition.noTransition),
     GetPage(name:driverMessageScreen, page: ()=>const DriverMessageScreen()),
     GetPage(name:driverPersonalInformationScreen, page: ()=>const DriverPersonalInformationScreen()),
     GetPage(name:driverEditProfileScreen, page: ()=>const DriverEditProfileScreen()),

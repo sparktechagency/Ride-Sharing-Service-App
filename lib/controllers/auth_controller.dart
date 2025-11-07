@@ -20,6 +20,8 @@ class AuthController extends GetxController {
   final TextEditingController userNameCtrl = TextEditingController();
   final TextEditingController userEmailCtrl = TextEditingController();
   final TextEditingController userNumberCtrl = TextEditingController();
+  final TextEditingController userAddressCtrl = TextEditingController();
+  final TextEditingController userDateOfBirthCtrl = TextEditingController();
   final TextEditingController userPasswordCtrl = TextEditingController();
   final TextEditingController userConfirmCtrl = TextEditingController();
   var userSignUpLoading = false.obs;
@@ -31,6 +33,8 @@ class AuthController extends GetxController {
     Map<String, dynamic> body = {
       "userName": userNameCtrl.text.trim(),
       "email": userEmailCtrl.text.trim(),
+      "address": userAddressCtrl.text.trim(),
+      "dateOfBirth": userDateOfBirthCtrl.text.trim(),
       "phoneNumber": userNumberCtrl.text,
       "password": userPasswordCtrl.text,
       "role": 'user',
@@ -59,6 +63,40 @@ class AuthController extends GetxController {
       userSignUpLoading(false);
       update();
     }
+  }
+
+  //==========================> User Show Calender Function <========================
+  Future<void> userPickBirthDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            dialogBackgroundColor: Colors.white,
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onSurface: Colors.black, // Text color
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      userDateOfBirthCtrl.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
+
+    }
+  }
+  // Helper function to convert month number to name
+  String _getMonthName(int month) {
+    const List<String> months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    return months[month - 1];
   }
 
   //================================> Driver Sign Up <=================================
@@ -196,7 +234,7 @@ class AuthController extends GetxController {
 
 
 
-  //==========================> Show Calender Function <========================
+  //==========================> Driver Show Calender Function <========================
   Future<void> pickBirthDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -218,12 +256,12 @@ class AuthController extends GetxController {
     );
 
     if (pickedDate != null) {
-      dateOfBirthCtrl.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
+      dateOfBirthCtrl.text = "${_getDriverMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
 
     }
   }
   // Helper function to convert month number to name
-  String _getMonthName(int month) {
+  String _getDriverMonthName(int month) {
     const List<String> months = [
       "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
@@ -284,7 +322,12 @@ class AuthController extends GetxController {
         Get.offAllNamed(AppRoutes.userSearchScreen);
         await PrefsHelper.setBool(AppConstants.isLogged, true);
       } else if (userRole == 'driver') {
-        Get.offAllNamed(AppRoutes.driverLicenceUploadScreen);
+        bool hasLicenseUploaded = response.body['data']['attributes']['user']['licenseVerified'] ?? false;
+        if (hasLicenseUploaded) {
+          Get.offAllNamed(AppRoutes.driverHomeScreen);
+        } else {
+          Get.offAllNamed(AppRoutes.driverLicenceUploadScreen);
+        }
       }
       signInEmailCtrl.clear();
       signInPassCtrl.clear();

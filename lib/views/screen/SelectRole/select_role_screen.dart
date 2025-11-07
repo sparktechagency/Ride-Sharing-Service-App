@@ -169,10 +169,10 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
               //=========================> Continue Button <====================
               CustomButton(onTap: () async {
                await PrefsHelper.setString(AppConstants.userRole, selectedRole);
-               if(selectedRole == 'user'){
+               if(selectedRole == 'user' || selectedRole == 'usuario'){
                  Get.toNamed(AppRoutes.userSignUpScreen,arguments: selectedRole);
                  print('=====================> $selectedRole');
-               }else if(selectedRole == 'driver') {
+               }else if(selectedRole == 'driver' || selectedRole == 'conductor') {
                  Get.toNamed(AppRoutes.driverSignUpScreen,arguments: selectedRole);
                  print('=====================> $selectedRole');
                }else {

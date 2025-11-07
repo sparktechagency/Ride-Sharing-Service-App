@@ -102,15 +102,24 @@ class PendingTab extends StatelessWidget {
                           bottom: 8.h,
                         ),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(
-                              text: 'Booking Time :'.tr,
-                              fontWeight: FontWeight.w500,
+                            Expanded(
+                              child: CustomText(
+                                text: 'Booking Time :'.tr,
+                                fontWeight: FontWeight.w500,
+                                maxLine: 2,
+                                textAlign: TextAlign.start,
+                              ),
                             ),
-                            CustomText(
-                              text: 'Sat 12 April 2025  8.30 PM',
-                              fontWeight: FontWeight.w500,
-                              left: 4.h,
+                            Expanded(
+                              child: CustomText(
+                                text: 'Sat 12 April 2025  8.30 PM',
+                                fontWeight: FontWeight.w500,
+                                maxLine: 2,
+                                textAlign: TextAlign.start,
+                                left: 4.h,
+                              ),
                             ),
                           ],
                         ),

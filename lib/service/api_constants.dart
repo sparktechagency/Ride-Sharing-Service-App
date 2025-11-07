@@ -7,10 +7,12 @@ class ApiConstants {
   static const String forgotPassEndPoint = "/auth/forgot-password";
   static const String resetPassEndPoint = "/auth/reset-password";
   static const String changePassEndPoint = "/auth/change-password";
+  static const String getPersonalInfoEndPoint = "/users/self/in";
   static const String setLocationEndPoint = "";
   static const String termsConditionEndPoint = "";
   static const String privacyPolicyEndPoint = "";
   static const String aboutUsEndPoint = "";
   //==========================================> Driver Role <=======================
   static const String driverLicenseUploadEndPoint = "/users/self/post-image-liscense";
+  static const String homePageStatisticsEndPoint = "/home/statistics";
 }

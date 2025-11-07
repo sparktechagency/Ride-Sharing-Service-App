@@ -18,15 +18,21 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
    @override
   void initState() {
-    Future.delayed(const Duration(seconds: 3), () {
-         /*var isLogged = await PrefsHelper.getBool(AppConstants.isLogged);
-      if (isLogged == true) {
-        Get.offAllNamed(AppRoutes.homeScreen);
-      } else {
-        Get.offAllNamed(AppRoutes.onboardingScreen);
-      }*/
-      Get.offAllNamed(AppRoutes.onboardingScreen);
-    });
+     Future.delayed(const Duration(seconds: 3), () async {
+       final isLogged = await PrefsHelper.getBool(AppConstants.isLogged) ?? false;
+       final userRole = await PrefsHelper.getString(AppConstants.userRole);
+       if (isLogged) {
+         if (userRole == 'driver') {
+           Get.offAllNamed(AppRoutes.driverHomeScreen);
+         } else if (userRole == 'user') {
+           Get.offAllNamed(AppRoutes.userSearchScreen);
+         } else {
+           Get.offAllNamed(AppRoutes.onboardingScreen);
+         }
+       } else {
+         Get.offAllNamed(AppRoutes.onboardingScreen);
+       }
+     });
     // TODO: implement initState
     super.initState();
   }

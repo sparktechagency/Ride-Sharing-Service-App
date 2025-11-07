@@ -100,6 +100,8 @@ class ActiveOrderScreen extends StatelessWidget {
                           CustomText(
                             text: 'Sat 12 April 2025  8.30 PM ',
                             fontWeight: FontWeight.w500,
+                            maxLine: 2,
+                            textAlign: TextAlign.start,
                             bottom: 8.h,
                           ),
                           Column(
@@ -123,7 +125,7 @@ class ActiveOrderScreen extends StatelessWidget {
                                     ),
                                   ),
                                   CustomText(
-                                    text: AppStrings.pICKUP.tr,
+                                    text: AppStrings.dROPOFF.tr,
                                     textAlign: TextAlign.start,
                                     maxLine: 3,
                                     bottom: 12.h,
@@ -153,18 +155,23 @@ class ActiveOrderScreen extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  CustomText(
-                                    text: 'Total Passengers seat',
-                                    textAlign: TextAlign.start,
-                                    maxLine: 3,
-                                    bottom: 12.h,
+                                  Expanded(
+                                    child: CustomText(
+                                        text: 'Total Passengers Seat'.tr,
+                                        textAlign: TextAlign.start,
+                                        maxLine: 3,
+                                        bottom: 12.h),
                                   ),
+                                  Spacer(),
                                   CustomText(
-                                    text: '20 Passenger',
-                                    textAlign: TextAlign.start,
-                                    maxLine: 3,
-                                    bottom: 12.h,
-                                  ),
+                                      text: '20',
+                                      textAlign: TextAlign.start,
+                                      right: 4.w,
+                                      maxLine: 3),
+                                  CustomText(
+                                      text: 'Passenger'.tr,
+                                      textAlign: TextAlign.start,
+                                      maxLine: 3),
                                 ],
                               ),
                               //============================> Booking Seat Row <====================================
@@ -172,15 +179,19 @@ class ActiveOrderScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomText(
-                                    text: 'Booking Seat',
-                                    textAlign: TextAlign.start,
-                                    maxLine: 3,
-                                  ),
+                                      text: 'Booking Seat'.tr,
+                                      textAlign: TextAlign.start,
+                                      maxLine: 3),
+                                  Spacer(),
                                   CustomText(
-                                    text: '20 Passenger',
-                                    textAlign: TextAlign.start,
-                                    maxLine: 3,
-                                  ),
+                                      text: '20',
+                                      textAlign: TextAlign.start,
+                                      right: 4.w,
+                                      maxLine: 3),
+                                  CustomText(
+                                      text: 'Passenger'.tr,
+                                      textAlign: TextAlign.start,
+                                      maxLine: 3),
                                 ],
                               ),
                             ],

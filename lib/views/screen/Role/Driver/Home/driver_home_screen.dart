@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/controllers/home_controller.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
 import 'package:ride_sharing/utils/app_strings.dart';
 import 'package:ride_sharing/views/base/custom_network_image.dart';
@@ -14,14 +15,18 @@ import '../BottomNavBar/driver_bottom_menu..dart';
 class DriverHomeScreen extends StatelessWidget {
   DriverHomeScreen({super.key});
 
+  final HomeController _homeController = Get.put(HomeController());
+
   List<Map<String, String>> orderData = [
     {'title': 'Recent Orders'.tr},
     {'title': 'Active Orders'.tr},
     {'title': 'Completed Orders'.tr},
   ];
 
+
   @override
   Widget build(BuildContext context) {
+    _homeController.fetchStatistics();
     return Scaffold(
       bottomNavigationBar: DriverBottomMenu(0),
       appBar: AppBar(
@@ -43,7 +48,8 @@ class DriverHomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            //================================> Top Order <=======================
+           /* SizedBox(
               height: 191.h,
               child: ListView.builder(
                 shrinkWrap: true,
@@ -60,7 +66,7 @@ class DriverHomeScreen extends StatelessWidget {
                           Get.toNamed(AppRoutes.activeOrderScreen);
                         } else {
                           Get.toNamed(AppRoutes.completedOrderScreen);
-                        }                      },
+                        }},
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16.r),
@@ -82,7 +88,7 @@ class DriverHomeScreen extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12.h),
                               child: CustomText(
-                                text: orderData[index]['title'] ?? '',
+                                 text: statsData[index]['title'] ?? '',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18.sp,
                               ),
@@ -102,7 +108,7 @@ class DriverHomeScreen extends StatelessWidget {
                                 ),
                                 CustomText(
                                   left: 4.w,
-                                  text: '(12)',
+                                  text: ': ${statsData[index]['count']}',
                                   fontWeight: FontWeight.w500,
                                   fontSize: 18.sp,
                                 ),
@@ -115,6 +121,111 @@ class DriverHomeScreen extends StatelessWidget {
                   );
                 },
               ),
+            ),*/
+            SizedBox(
+              height: 191.h,
+              child: Obx(() {
+                if (_homeController.isLoading.value) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                final stats = _homeController.statisticsData.value;
+                final attributes = stats['data']?['attributes'] ?? {};
+
+                final statsData = [
+                  {
+                    'title': 'Recent Orders'.tr,
+                    'count': attributes['recentOrders'] ?? 0,
+                    'route': AppRoutes.recentOrderScreen,
+                  },
+                  {
+                    'title': 'Active Orders'.tr,
+                    'count': attributes['activeOrders'] ?? 0,
+                    'route': AppRoutes.activeOrderScreen,
+                  },
+                  {
+                    'title': 'Completed Orders'.tr,
+                    'count': attributes['completeOrders'] ?? 0,
+                    'route': AppRoutes.completedOrderScreen,
+                  },
+                ];
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: statsData.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(right: 8.w),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.toNamed(statsData[index]['route']);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.r),
+                            border: Border.all(
+                              width: 1.w,
+                              color: AppColors.borderColor,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            //mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.h,
+                                  vertical: 16.h,
+                                ),
+                                child: SvgPicture.asset(AppIcons.orderTR),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12.h),
+                                child: CustomText(
+                                  text: statsData[index]['title'] ?? '',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.sp,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: 6.h),
+                              Divider(
+                                thickness: 1.5,
+                                color: AppColors.borderColor,
+                              ),
+                              SizedBox(height: 6.h),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomText(
+                                      text: 'Total'.tr,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.sp,
+                                    ),
+                                    CustomText(
+                                      left: 4.w,
+                                      text: ': ${statsData[index]['count']}',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.sp,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 6.h),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }),
             ),
             SizedBox(height: 24.h),
             //================================> Recently accepted order <=======================
@@ -210,15 +321,23 @@ class DriverHomeScreen extends StatelessWidget {
                                   bottom: 8.h,
                                 ),
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomText(
-                                      text: 'Booking Time :'.tr,
-                                      fontWeight: FontWeight.w500,
+                                    Expanded(
+                                      child: CustomText(
+                                        text: 'Booking Time :'.tr,
+                                        fontWeight: FontWeight.w500,
+                                        maxLine: 2,
+                                        textAlign: TextAlign.start,
+                                      ),
                                     ),
-                                    CustomText(
-                                      text: 'Sat 12 April 2025  8.30 PM',
-                                      fontWeight: FontWeight.w500,
-                                      left: 4.h,
+                                    Expanded(
+                                      child: CustomText(
+                                        text: 'Sat 12 April 2025  8.30 PM',
+                                        fontWeight: FontWeight.w500,
+                                        maxLine: 2,
+                                        textAlign: TextAlign.start,
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -6,7 +6,7 @@ import '../../../../utils/app_colors.dart';
 class DottedBorderContainer extends StatelessWidget {
   final Widget child;
 
-  const DottedBorderContainer({required this.child});
+  const DottedBorderContainer({super.key, required this.child});
   @override
   Widget build(BuildContext context) {
     return DottedBorder(

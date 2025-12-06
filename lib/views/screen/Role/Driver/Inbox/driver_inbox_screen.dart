@@ -26,6 +26,7 @@ class DriverInboxScreen extends StatelessWidget {
           children: [
             //==========================> Search Bar <==========================
             CustomTextField(
+              
               controller: _searchCTRL,
               hintText: AppStrings.search.tr,
               prefixIcon: Padding(

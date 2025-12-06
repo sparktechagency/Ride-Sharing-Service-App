@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:get/get.dart';
 import '../views/screen/AboutUs/about_us_screen.dart';
 import '../views/screen/ActiveOrderDetails/active_order_details.dart';
@@ -128,8 +130,9 @@ class AppRoutes{
     GetPage(name:canceledOrderDetails, page: ()=> CanceledOrderDetails()),
     GetPage(name:ratingScreen, page: ()=> RatingScreen()),
     GetPage(name:totalUserScreen, page: ()=> TotalUserScreen()),
-   // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
-   // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
+    //----------------------------------------//
+   GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
+   GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
    //===================================================> Driver Role <=============================================
    GetPage(name:driverSignUpScreen, page: ()=>const DriverSignUpScreen()),
    GetPage(name:driverSignUpTwoScreen, page: ()=> DriverSignUpTwoScreen()),

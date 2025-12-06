@@ -86,7 +86,9 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       text: AppStrings.passenger.tr,
                                       bottom: 12.h,
                                     ),
-                                    CustomText(text: AppStrings.vehiclesType.tr),
+                                    CustomText(
+                                      text: AppStrings.vehiclesType.tr,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -563,8 +565,8 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                 groupValue: groupValue,
                 onChanged: onChanged,
                 activeColor: Colors.blue,
-                fillColor: MaterialStateProperty.resolveWith<Color>((states) {
-                  if (states.contains(MaterialState.selected)) {
+                fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(WidgetState.selected)) {
                     return AppColors.primaryColor;
                   }
                   return Colors.grey;

@@ -18,15 +18,15 @@ ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
   unselectedWidgetColor: Colors.red,
 
   inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: AppColors.fillColor,
-      hintStyle: TextStyle(color: AppColors.hintColor, fontSize: 16.sp),
-      isDense: true,
-      contentPadding:
-      EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
-      enabledBorder: enableBorder(),
-      focusedBorder: focusedBorder(),
-      errorBorder: errorBorder()),
+    filled: true,
+    fillColor: AppColors.fillColor,
+    hintStyle: TextStyle(color: AppColors.hintColor, fontSize: 16.sp),
+    isDense: true,
+    contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+    enabledBorder: enableBorder(),
+    focusedBorder: focusedBorder(),
+    errorBorder: errorBorder(),
+  ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: AppColors.backgroundColor,
     unselectedItemColor: AppColors.backgroundColor,
@@ -35,13 +35,15 @@ ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
   ),
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.white,
-      centerTitle: true,
-      titleTextStyle: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 16.sp,
-          fontFamily: 'Outfit',
-          color: AppColors.textColor),
-      iconTheme: IconThemeData(color: AppColors.blackColor)),
+    centerTitle: true,
+    titleTextStyle: TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 16.sp,
+      fontFamily: 'Outfit',
+      color: AppColors.textColor,
+    ),
+    iconTheme: IconThemeData(color: AppColors.blackColor),
+  ),
   iconTheme: IconThemeData(color: AppColors.blackColor),
   checkboxTheme: CheckboxThemeData(
     shape: RoundedRectangleBorder(
@@ -53,39 +55,33 @@ ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
     bodySmall: TextStyle(color: AppColors.textColor),
     bodyLarge: TextStyle(color: AppColors.textColor),
     bodyMedium: TextStyle(color: AppColors.textColor),
-  ).apply(
-    bodyColor: AppColors.textColor,
-    displayColor: AppColors.subTextColor,
-  ), textButtonTheme: TextButtonThemeData(
-    style: TextButton.styleFrom(foregroundColor: color)),
-  colorScheme: ColorScheme.dark(primary: color, secondary: color)
-      .copyWith(background: Color(0xFF343636))
-      .copyWith(error: Color(0xFFdd3135)),
+  ).apply(bodyColor: AppColors.textColor, displayColor: AppColors.subTextColor),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(foregroundColor: color),
+  ),
+  colorScheme: ColorScheme.dark(
+    primary: color,
+    secondary: color,
+  ).copyWith(surface: Color(0xFF343636)).copyWith(error: Color(0xFFdd3135)),
 );
 
 OutlineInputBorder enableBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(16.r),
-    borderSide: BorderSide(
-      color: AppColors.primaryColor,
-    ),
+    borderSide: BorderSide(color: AppColors.primaryColor),
   );
 }
 
 OutlineInputBorder focusedBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(16.r),
-    borderSide: BorderSide(
-      color: AppColors.primaryColor,
-    ),
+    borderSide: BorderSide(color: AppColors.primaryColor),
   );
 }
 
 OutlineInputBorder errorBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(16.r),
-    borderSide: const BorderSide(
-      color: Colors.red,
-    ),
+    borderSide: const BorderSide(color: Colors.red),
   );
 }

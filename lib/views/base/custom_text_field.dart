@@ -44,7 +44,7 @@ class CustomTextField extends StatefulWidget {
     this.labelText,
     this.isPassword = false,
     this.readOnly = false,
-    this.onTab,
+    this.onTab, contentPadding,
   });
 
   @override

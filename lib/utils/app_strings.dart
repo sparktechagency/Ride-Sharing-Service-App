@@ -1,15 +1,19 @@
 class AppStrings {
   //============================> Onboarding Screen <===========================
   static String getStarted = 'Get Started';
-  static String rideEasyArriveFastYour = 'Ride Easy-Arrive Fast Your Journey Begins Here.';
-  static String welcomeToRideSharingService = 'Welcome to Ride-sharing service, experience safe and efficient taxi service across Albania. From historic sites to stunning beach landscapes, and timely airport transfers.';
+  static String rideEasyArriveFastYour =
+      'Ride Easy-Arrive Fast Your Journey Begins Here.';
+  static String welcomeToRideSharingService =
+      'Welcome to Ride-sharing service, experience safe and efficient taxi service across Albania. From historic sites to stunning beach landscapes, and timely airport transfers.';
   static String skip = 'Skip';
   static String joinAs = 'Join as';
-  static String pleaseSelectAnOneOption = 'Please select an one option to start your journey with Ride-sharing service .';
+  static String pleaseSelectAnOneOption =
+      'Please select an one option to start your journey with Ride-sharing service .';
   static String user = 'user';
   static String createYourAccountAsUser = 'Create your account as a user.';
   static String driver = 'driver';
-  static String createYourAccountAndBeginYourJourneyDriver = 'Create your account and begin your journey as a driver';
+  static String createYourAccountAndBeginYourJourneyDriver =
+      'Create your account and begin your journey as a driver';
   static String continues = 'Continue';
   static String updateProfile = 'Update Profile';
   static String ridePrice = 'Ride Price';
@@ -17,7 +21,8 @@ class AppStrings {
   //=============================> Sign in Screen <=============================
   static String signIn = 'Sign In';
   static String toYourAccount = 'To Your Account';
-  static String welcomeSignInToYourAccount = 'Welcome! Sign in to your account to continue.';
+  static String welcomeSignInToYourAccount =
+      'Welcome! Sign in to your account to continue.';
   static String yourEmail = 'Your Email';
   static String enterEmail = 'Enter email';
   static String password = 'Password';
@@ -30,12 +35,14 @@ class AppStrings {
   //=============================> Sign up Screen <=============================
   static String signUp = 'Sign Up';
   static String withEmail = ' With Email';
-  static String welcomeBackPleaseEnter = 'Welcome Back! Please enter your details.';
+  static String welcomeBackPleaseEnter =
+      'Welcome Back! Please enter your details.';
   static String userName = 'User Name';
   static String enterUsername = 'Enter username';
   static String phoneNumber = 'Phone number';
   static String confirmPassword = 'Confirm password';
-  static String byCreatingAnAccountIAccept = 'By creating an account, I accept the\n';
+  static String byCreatingAnAccountIAccept =
+      'By creating an account, I accept the\n';
   static String termsConditions = 'Terms & Conditions';
   static String privacyPolicy = 'Privacy Policy';
   static String alreadyHaveAnAccount = 'Already have an account?';
@@ -50,15 +57,19 @@ class AppStrings {
   static String back = 'Back';
   static String next = 'Next';
   static String submit = 'Submit';
-  static String greenCardDrivingLicenseFrontSide = 'Green card /Driving license (front side)';
-  static String greenCardDrivingLicenseBackSide = 'Green card /Driving license (back side)';
+  static String greenCardDrivingLicenseFrontSide =
+      'Green card /Driving license (front side)';
+  static String greenCardDrivingLicenseBackSide =
+      'Green card /Driving license (back side)';
   //==========================> Forgot Password Screen <========================
   static String forgot = 'Forgot ';
-  static String pleaseEnterYourPhoneNumber = 'Please enter your phone number to reset password.';
+  static String pleaseEnterYourPhoneNumber =
+      'Please enter your phone number to reset password.';
   static String sendOTP = 'Send OTP';
   static String verify = 'Verify ';
   static String email = 'Email';
-  static String pleaseCheckYourPhoneNumberAndEnterTheCode = 'Please check your phone number and enter the code';
+  static String pleaseCheckYourPhoneNumberAndEnterTheCode =
+      'Please check your phone number and enter the code';
   static String didNotReceiveCode = 'Didn’t receive code?';
   static String resendCode = 'Resend Code';
   static String verifyEmail = 'Verify Email';
@@ -67,7 +78,8 @@ class AppStrings {
   static String enterNewPassword = 'Enter a new password';
   static String resetPassword = 'Reset Password';
   static String passwordChanged = 'Password Changed!';
-  static String returnToTheLoginPage = 'Return to the login page to enter your account with your new password.';
+  static String returnToTheLoginPage =
+      'Return to the login page to enter your account with your new password.';
   static String backToSignIn = 'Back to sign in';
   //=====================================================================> Driver Role <=============================================================
   static String recentOrder = 'Recent Order';
@@ -89,20 +101,26 @@ class AppStrings {
   static String createRide = 'Create Ride';
   static String enterTheFullAddress = 'Enter the full address';
   static String location = 'Location';
-  static String whatIsYourRoute  = 'What is your route ?';
-  static String addStopoversToGetMorePassengers  = 'Add stopovers to get more passengers';
-  static String addCity  = 'Add City';
-  static String whenAreYouGoing  = 'When are you going?';
-  static String theseAreTheBestPlaces  = 'These are the best places to stop ok for you?';
-  static String atWhatTimeWillYouPick  = 'At what time will you pick passengers up?';
-  static String howManyPassengers  = 'How many passengers can you take?';
-  static String setYourPricePerSeat  = 'Set your price per seat';
-  static String recommendedPrice  = 'Recommended price :';
-  static String perfectPriceForThisRide  = 'Perfect price for this ride! you’ll get passengers in on time.';
-  static String comingBackAsWell  = 'Coming  back as well? Publish tour ride now.';
-  static String chats   = 'Chats';
-  static String deleteMessage    = 'Delete message';
-  static String areYouSureYouWantDeleteConversation = 'Are you sure you want to delete this conversation?';
+  static String whatIsYourRoute = 'What is your route ?';
+  static String addStopoversToGetMorePassengers =
+      'Add stopovers to get more passengers';
+  static String addCity = 'Add City';
+  static String whenAreYouGoing = 'When are you going?';
+  static String theseAreTheBestPlaces =
+      'These are the best places to stop ok for you?';
+  static String atWhatTimeWillYouPick =
+      'At what time will you pick passengers up?';
+  static String howManyPassengers = 'How many passengers can you take?';
+  static String setYourPricePerSeat = 'Set your price per seat';
+  static String recommendedPrice = 'Recommended price :';
+  static String perfectPriceForThisRide =
+      'Perfect price for this ride! you’ll get passengers in on time.';
+  static String comingBackAsWell =
+      'Coming  back as well? Publish tour ride now.';
+  static String chats = 'Chats';
+  static String deleteMessage = 'Delete message';
+  static String areYouSureYouWantDeleteConversation =
+      'Are you sure you want to delete this conversation?';
   static String myRide = 'My Ride';
   static String rideRequest = 'Ride Request';
   static String currentTrips = 'Current Trips';
@@ -115,7 +133,8 @@ class AppStrings {
   static String editRide = 'Edit Ride';
   static String delete = 'Delete';
   static String deleteRide = 'Delete Ride';
-  static String areYouSureYouWantToDeleteThisRide = 'Are you sure you want to delete this ride?';
+  static String areYouSureYouWantToDeleteThisRide =
+      'Are you sure you want to delete this ride?';
   static String no = 'No';
   static String yes = 'Yes';
   static String editYourRide = 'Edit your ride';
@@ -146,37 +165,42 @@ class AppStrings {
   static String withdrawBalance = 'Withdraw Balance';
   static String transactionsHistory = 'Transactions History';
   static String withdrawal = 'Withdrawal';
-  static String totalAmount  = 'Total Amount :';
-  static String date  = 'Date :';
-  static String pending  = 'Pending';
-  static String makePayment  = 'Make Payment';
-  static String pleaseInformationForTheWithdrawal  = 'Please information for the withdrawal';
-  static String accountNumber  = 'Account number';
-  static String bankName  = 'Bank name';
-  static String accountType  = 'Account type';
-  static String withdrawalAmount  = 'Withdrawal amount';
-  static String changePassword  = 'Change password';
-  static String aboutUs  = 'About Us';
-  static String support  = 'Support';
-  static String oldPassword  = 'Old Password';
-  static String newPassword  = 'New Password';
-  static String useCurrentLocation    = 'Use current location';
+  static String totalAmount = 'Total Amount :';
+  static String date = 'Date :';
+  static String pending = 'Pending';
+  static String makePayment = 'Make Payment';
+  static String pleaseInformationForTheWithdrawal =
+      'Please information for the withdrawal';
+  static String accountNumber = 'Account number';
+  static String bankName = 'Bank name';
+  static String accountType = 'Account type';
+  static String withdrawalAmount = 'Withdrawal amount';
+  static String changePassword = 'Change password';
+  static String aboutUs = 'About Us';
+  static String support = 'Support';
+  static String oldPassword = 'Old Password';
+  static String newPassword = 'New Password';
+  static String useCurrentLocation = 'Use current location';
+  //post rides page ... text
+  static const String enterTheFullLocation = "Enter the Full location";
+
   //=================================================================> User Role <===========================================================
-  static String recentSearch  = 'Recent Search';
-  static String seeAll  = 'See All';
-  static String planYourRide  = 'Plan Your Ride';
-  static String search  = 'Search';
-  static String rideDetails  = 'Ride Details';
-  static String bookNow  = 'Book Now';
-  static String paymentSystem  = 'Payment System';
-  static String addOneMorePassenger  = 'Add one more passenger';
-  static String contactDetails  = 'Contact Details';
-  static String weWillSendYourTicketsOnThisEmail  = 'We will send your tickets on this email';
-  static String paymentMethod  = 'Payment Method';
-  static String bookingDetails  = 'Booking Details';
-  static String iAcceptThe  = 'I Accept The';
-  static String payNow  = 'Pay Now';
-  static String language  = 'Language';
-  static String chooseYourLanguage  = 'Choose Your Language';
-  static String totalUser  = 'Total User';
+  static String recentSearch = 'Recent Search';
+  static String seeAll = 'See All';
+  static String planYourRide = 'Plan Your Ride';
+  static String search = 'Search';
+  static String rideDetails = 'Ride Details';
+  static String bookNow = 'Book Now';
+  static String paymentSystem = 'Payment System';
+  static String addOneMorePassenger = 'Add one more passenger';
+  static String contactDetails = 'Contact Details';
+  static String weWillSendYourTicketsOnThisEmail =
+      'We will send your tickets on this email';
+  static String paymentMethod = 'Payment Method';
+  static String bookingDetails = 'Booking Details';
+  static String iAcceptThe = 'I Accept The';
+  static String payNow = 'Pay Now';
+  static String language = 'Language';
+  static String chooseYourLanguage = 'Choose Your Language';
+  static String totalUser = 'Total User';
 }

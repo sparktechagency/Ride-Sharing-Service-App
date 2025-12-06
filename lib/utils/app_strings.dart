@@ -183,6 +183,7 @@ class AppStrings {
   static String useCurrentLocation = 'Use current location';
   //post rides page ... text
   static const String enterTheFullLocation = "Enter the Full location";
+  static const String riderPostSubmit = "coming  back as well? publish tour ride now";
 
   //=================================================================> User Role <===========================================================
   static String recentSearch = 'Recent Search';

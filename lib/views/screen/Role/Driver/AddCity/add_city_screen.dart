@@ -453,7 +453,7 @@ class _AddCityScreenState extends State<AddCityScreen> {
                   CustomButton(
                     onTap: () {
                       Get.back();
-                      Get.toNamed(AppRoutes.cityViewScreen);
+                      Get.toNamed(AppRoutes.passengersTakeScreen);
                     },
                     text: "Next",
                   ),

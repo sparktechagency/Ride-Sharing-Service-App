@@ -1,4 +1,6 @@
-/*
+
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
@@ -149,4 +151,4 @@ class _LocationScreenState extends State<LocationScreen> {
     }
   }
 }
-*/
+

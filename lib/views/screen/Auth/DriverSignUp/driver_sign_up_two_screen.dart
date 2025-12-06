@@ -14,7 +14,7 @@ import '../../../base/custom_text.dart';
 import '../../../base/custom_text_field.dart';
 
 class DriverSignUpTwoScreen extends StatefulWidget {
-  DriverSignUpTwoScreen({super.key});
+  const DriverSignUpTwoScreen({super.key});
 
   @override
   State<DriverSignUpTwoScreen> createState() => _DriverSignUpTwoScreenState();
@@ -25,13 +25,7 @@ class _DriverSignUpTwoScreenState extends State<DriverSignUpTwoScreen> {
 
   final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
 
-  List<String> vehiclesType = [
-    'Car',
-    'Bike',
-    'Combi',
-    'Moto',
-  ];
-
+  List<String> vehiclesType = ['car', 'bike', 'combi', 'moto'];
 
   @override
   Widget build(BuildContext context) {
@@ -96,20 +90,20 @@ class _DriverSignUpTwoScreenState extends State<DriverSignUpTwoScreen> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1.w,
-                    ),
+                    border: Border.all(color: Colors.grey, width: 1.w),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: DropdownButton<String>(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 6.h,
+                    ),
                     isExpanded: true,
 
                     dropdownColor: Colors.white,
                     value: _authController.selectedVehiclesType,
                     borderRadius: BorderRadius.circular(12.r),
-                    hint:  CustomText(
+                    hint: CustomText(
                       left: 10.w,
                       text: 'Select Vehicles Type'.tr,
                       color: Colors.black,
@@ -121,16 +115,19 @@ class _DriverSignUpTwoScreenState extends State<DriverSignUpTwoScreen> {
                       });
                     },
                     underline: SizedBox(),
-                    items: vehiclesType.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child:CustomText(
-                          left: 10.w,
-                          text: value,
-                          color: Colors.black,
-                        ),
-                      );
-                    }).toList(),
+                    items:
+                        vehiclesType.map<DropdownMenuItem<String>>((
+                          String value,
+                        ) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: CustomText(
+                              left: 10.w,
+                              text: value,
+                              color: Colors.black,
+                            ),
+                          );
+                        }).toList(),
                   ),
                 ),
                 //========================> Vehicles model Text Field <==================
@@ -174,20 +171,21 @@ class _DriverSignUpTwoScreenState extends State<DriverSignUpTwoScreen> {
                 ),
                 //========================> Back And Next Button <==================
                 SizedBox(height: 98.h),
-                    Obx(()=> CustomButton(
-                      loading: _authController.driverSignUpLoading.value,
-                        onTap: () {
-                          if (_formKey2.currentState!.validate()) {
-                            _authController.driverSignUp();
-                          } else {
-                            return null;
-                          }
-                        },
-                        text: AppStrings.next.tr,
-                        height: 48.h,
-                        width: 158.w,
-                      ),
-                    ),
+                Obx(
+                  () => CustomButton(
+                    loading: _authController.driverSignUpLoading.value,
+                    onTap: () {
+                      if (_formKey2.currentState!.validate()) {
+                        _authController.driverSignUp();
+                      } else {
+                        return null;
+                      }
+                    },
+                    text: AppStrings.next.tr,
+                    height: 48.h,
+                    width: 158.w,
+                  ),
+                ),
                 SizedBox(height: 32.h),
               ],
             ),

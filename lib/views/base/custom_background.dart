@@ -3,10 +3,7 @@ import 'package:get/get.dart';
 
 class CustomBackground extends StatelessWidget {
   final Widget child;
-  const CustomBackground({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+  const CustomBackground({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +15,7 @@ class CustomBackground extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0xff00AFF5),
-            Color(0xffB4E8FD),
-          ],
+          colors: [Color(0xff00AFF5), Color(0xffB4E8FD)],
           stops: const [0.2266, 0.9998],
         ),
       ),

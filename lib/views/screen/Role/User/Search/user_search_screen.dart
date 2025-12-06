@@ -75,7 +75,7 @@ class UserSearchScreen extends StatelessWidget {
                       SizedBox(height: 8.h),
                       //================================> Date TextField <=======================
                       CustomTextField(
-                        onTab: ()=> pickDate(context),
+                        onTab: () => pickDate(context),
                         readOnly: true,
                         controller: dateCTRL,
                         hintText: 'Select Date'.tr,
@@ -120,7 +120,9 @@ class UserSearchScreen extends StatelessWidget {
                   ),
                   //================================> See All Button <=======================
                   InkWell(
-                    onTap: () {Get.toNamed(AppRoutes.seeAllScreen);},
+                    onTap: () {
+                      Get.toNamed(AppRoutes.seeAllScreen);
+                    },
                     child: CustomText(
                       text: AppStrings.seeAll.tr,
                       fontWeight: FontWeight.w500,
@@ -163,7 +165,7 @@ class UserSearchScreen extends StatelessWidget {
                                     SizedBox(width: 8.w),
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
@@ -218,11 +220,11 @@ class UserSearchScreen extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            dialogBackgroundColor: Colors.white,
             colorScheme: ColorScheme.light(
               primary: AppColors.primaryColor,
               onSurface: Colors.black, // Text color
             ),
+            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -230,7 +232,7 @@ class UserSearchScreen extends StatelessWidget {
     );
     if (pickedDate != null) {
       dateCTRL.text =
-      "${pickedDate.month}-${pickedDate.day}-${pickedDate.year}";
+          "${pickedDate.month}-${pickedDate.day}-${pickedDate.year}";
     }
   }
 }

@@ -14,8 +14,8 @@ class ProfileController extends GetxController {
   File? selectedImage;
   RxString imagesPath = ''.obs;
   String title = "Profile Screen";
-  RxString frontSitePath=''.obs;
-  RxString backSitePaths=''.obs;
+  RxString frontSitePath = ''.obs;
+  RxString backSitePaths = ''.obs;
 
   @override
   void onInit() {
@@ -29,7 +29,8 @@ class ProfileController extends GetxController {
     debugPrint("On onReady  $title");
     super.onReady();
   }
-//=============================> Get Account Data <===============================
+
+  //=============================> Get Account Data <===============================
   Rx<ProfileModel> profileModel = ProfileModel().obs;
   RxBool profileLoading = false.obs;
   getProfileData() async {
@@ -50,6 +51,7 @@ class ProfileController extends GetxController {
       update();
     }
   }
+
   //===============================> Edit Profile Screen <=============================
   final TextEditingController userNameCTRL = TextEditingController();
   final TextEditingController phoneCTRL = TextEditingController();
@@ -81,11 +83,11 @@ class ProfileController extends GetxController {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            dialogBackgroundColor: Colors.white,
             colorScheme: ColorScheme.light(
               primary: AppColors.primaryColor,
               onSurface: Colors.black, // Text color
             ),
+            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -113,6 +115,4 @@ class ProfileController extends GetxController {
     }
     return null;
   }
-
-
 }

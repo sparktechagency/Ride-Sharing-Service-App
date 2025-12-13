@@ -15,4 +15,12 @@ class ApiConstants {
   //==========================================> Driver Role <=======================
   static const String driverLicenseUploadEndPoint = "/users/self/post-image-liscense";
   static const String homePageStatisticsEndPoint = "/home/statistics";
+
+
+
+//==========================================> User Role <=======================
+  static const String getBookingUserDetails = "/booking/get-user-details/";
+  static const String getBookingByStatus = "/booking/get/";
+
+
 }

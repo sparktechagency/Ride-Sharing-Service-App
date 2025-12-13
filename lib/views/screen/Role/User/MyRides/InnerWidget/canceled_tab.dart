@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import '../../../../../../controllers/booking_controller.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -13,156 +15,172 @@ class CanceledTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final BookingController controller = Get.find();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: 8.h),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(
-                  width: 1.w,
-                  color: AppColors.borderColor,
+      child: Obx(() {
+        if (controller.isLoadingBooking.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.bookings.isEmpty) {
+          return const Center(child: Text('No bookings found'));
+        }
+
+        return ListView.builder(
+          itemCount: controller.bookings.length,
+          itemBuilder: (context, index) {
+            final statusBooking = controller.bookings[index];
+            final userDetails = controller.userDetails.value;
+
+            final formattedDate = DateFormat('EEE dd MMMM yyyy h.mm a')
+                .format(DateTime.parse(statusBooking.rideDate))
+                .toLowerCase();
+
+            return Padding(
+              padding: EdgeInsets.only(bottom: 8.h),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.r),
+                  border: Border.all(
+                    width: 1.w,
+                    color: AppColors.borderColor,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    /// TOP
+                    Padding(
+                      padding: EdgeInsets.all(10.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              CustomNetworkImage(
+                                imageUrl:
+                                'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                height: 38.h,
+                                width: 38.w,
+                                boxShape: BoxShape.circle,
+                              ),
+                              SizedBox(width: 8.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(
+                                    text: userDetails?.userName ?? '',
+                                    bottom: 4.h,
+                                  ),
+                                  Row(
+                                    children: [
+                                      CustomText(
+                                        text: userDetails?.averageRating
+                                            .toString() ??
+                                            '0',
+                                        right: 4.w,
+                                      ),
+                                      SvgPicture.asset(AppIcons.star),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+
+                          /// STATUS
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xffFF5050),
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.h,
+                                vertical: 4.h,
+                              ),
+                              child: CustomText(
+                                text: statusBooking.status.toUpperCase(),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Divider(
+                      thickness: 1.5,
+                      color: AppColors.borderColor,
+                    ),
+
+                    /// DETAILS
+                    Padding(
+                      padding: EdgeInsets.all(12.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: '\$${statusBooking.price}',
+                            fontSize: 22.sp,
+                            bottom: 8.h,
+                          ),
+
+                          Row(
+                            children: [
+                              CustomText(text: 'Booking Time :'),
+                              Expanded(
+                                child: CustomText(
+                                  text: formattedDate,
+                                  left: 4.h,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 8.h),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(text: AppStrings.pICKUP.tr),
+                                  CustomText(
+                                      text: statusBooking.pickUp.address ?? ''),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 102.w,
+                                child: Divider(
+                                  thickness: 1.5,
+                                  color: AppColors.borderColor,
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(text: AppStrings.dROPOFF.tr),
+                                  CustomText(
+                                      text: statusBooking.dropOff.address ?? ''),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+
+
+                  ],
                 ),
               ),
-              child: Column(
-                children: [
-                  //========================> Top Container <=================
-                  Padding(
-                    padding: EdgeInsets.all(10.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            CustomNetworkImage(
-                              imageUrl:
-                              'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                              height: 38.h,
-                              width: 38.w,
-                              boxShape: BoxShape.circle,
-                            ),
-                            SizedBox(width: 8.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  text: 'Mr. Imran',
-                                  bottom: 4.h,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                Row(
-                                  children: [
-                                    CustomText(text: '4.9', right: 4.w),
-                                    SvgPicture.asset(AppIcons.star),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        //========================> Status Container <=================
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xffFF5050),
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12.h,
-                              vertical: 4.h,
-                            ),
-                            child: CustomText(
-                              text: AppStrings.canceled.tr,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(thickness: 1.5, color: AppColors.borderColor),
-                  //========================> Details Container <=================
-                  Padding(
-                    padding: EdgeInsets.all(12.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          text: '\$15.99',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22.sp,
-                          bottom: 8.h,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: CustomText(
-                                text: 'Booking Time :'.tr,
-                                fontWeight: FontWeight.w500,
-                                maxLine: 2,
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                            Expanded(
-                              child: CustomText(
-                                text: 'Sat 12 April 2025  8.30 PM',
-                                fontWeight: FontWeight.w500,
-                                maxLine: 2,
-                                textAlign: TextAlign.start,
-                                left: 4.h,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8.h),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CustomText(
-                                  text: AppStrings.pICKUP.tr,
-                                  right: 4.w,
-                                ),
-                                CustomText(text: 'Dhaka', right: 4.w),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 102.w,
-                              child: Divider(
-                                thickness: 1.5,
-                                color: AppColors.borderColor,
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                CustomText(
-                                  text: AppStrings.dROPOFF.tr,
-                                  left: 4.w,
-                                ),
-                                CustomText(text: 'Rangpur', left: 4.w),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+            );
+          },
+        );
+      }),
     );
   }
 }

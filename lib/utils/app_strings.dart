@@ -179,4 +179,12 @@ class AppStrings {
   static String language  = 'Language';
   static String chooseYourLanguage  = 'Choose Your Language';
   static String totalUser  = 'Total User';
+
+  // Nurujjaman add
+
+  static const cashPayment = 'Cash Payment';
+  static const onlinePayment = 'Online Payment';
+  static const cancelRide = 'Cancel Ride';
+  static const confirmRideCancelConfirmation = 'Are You Sure You Want To Cancel ?';
+  static const confirmRideCancelAlert = 'If you cancel this ride within 24 hours If you want to cancel 10% balance will be deducted from your current balance.';
 }

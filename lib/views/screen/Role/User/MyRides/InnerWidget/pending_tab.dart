@@ -196,14 +196,14 @@ class PendingTab extends StatelessWidget {
                               height: 34.h,
                               text: AppStrings.view.tr),
                           SizedBox(width: 8.w),
-                          CustomButton(
-                            onTap: () {},
-                            width: 100.w,
-                            height: 34.h,
-                            text: AppStrings.chats.tr,
-                            color: Colors.white,
-                            textColor: Colors.black,
-                          ),
+                          // CustomButton(
+                          //   onTap: () {},
+                          //   width: 100.w,
+                          //   height: 34.h,
+                          //   text: AppStrings.chats.tr,
+                          //   color: Colors.white,
+                          //   textColor: Colors.black,
+                          // ),
                         ],
                       ),
                     )

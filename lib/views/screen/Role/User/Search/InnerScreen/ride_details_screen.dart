@@ -209,20 +209,50 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                       ),
                     ),
                     //==================================> Book Now Button <===================
+                    //==================================> Action Buttons <===================
                     Padding(
                       padding: EdgeInsets.only(right: 16.w, bottom: 6.h),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: CustomButton(
-                          onTap: () {
-                            _showPaymentBottomSheet(context);
-                          },
-                          text: AppStrings.bookNow.tr,
-                          width: 100.w,
-                          height: 34.h,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // -------- Cancel Button --------
+                          OutlinedButton(
+                            onPressed: () {
+                              _showCancelBottomSheet(context);
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: AppColors.primaryColor),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              minimumSize: Size(90.w, 34.h),
+                            ),
+                            child: Text(
+                              AppStrings.cancel.tr,
+                              style: TextStyle(
+                                color: AppColors.primaryColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+
+
+                          SizedBox(width: 8.w),
+
+                          // -------- Book Now Button --------
+                          CustomButton(
+                            onTap: () {
+                              _showPaymentBottomSheet(context);
+                            },
+                            text: AppStrings.bookNow.tr,
+                            width: 100.w,
+                            height: 34.h,
+                          ),
+                        ],
                       ),
                     ),
+
                   ],
                 ),
               ),
@@ -408,34 +438,26 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           (userDetails!.reviews.isNotEmpty)
                               ? Column(
                             children: userDetails!.reviews.map((review) {
-                              // Format review date
-                              final reviewFormattedDate = review.date == null
+                              final reviewFormattedDate = review['date'] == null
                                   ? ''
-                                  : DateFormat(
-                                  'EEE dd MMMM yyyy h.mm a')
-                                  .format(
-                                  DateTime.parse(review.date!))
+                                  : DateFormat('EEE dd MMMM yyyy h.mm a')
+                                  .format(DateTime.parse(review['date']))
                                   .toLowerCase();
 
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 8.h),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(16.r),
-                                    border: Border.all(
-                                      width: 1.w,
-                                      color: AppColors.borderColor,
-                                    ),
+                                    borderRadius: BorderRadius.circular(16.r),
+                                    border: Border.all(width: 1.w, color: AppColors.borderColor),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.all(12.w),
                                     child: Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         CustomNetworkImage(
-                                          imageUrl: review.userImage ??
+                                          imageUrl: review['userImage'] ??
                                               'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
                                           height: 38.h,
                                           width: 38.w,
@@ -444,22 +466,20 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                         SizedBox(width: 8.w),
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               CustomText(
-                                                text: review.userName ?? '',
+                                                text: review['userName'] ?? '',
                                                 bottom: 4.h,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                               CustomText(
                                                 text: reviewFormattedDate,
-                                                fontWeight: FontWeight.w300,
                                                 fontSize: 9.sp,
                                               ),
                                               Row(
                                                 children: List.generate(
-                                                  review.rating ?? 0,
+                                                  review['rating'] ?? 0,
                                                       (index) => const Icon(
                                                     Icons.star,
                                                     color: Colors.orange,
@@ -468,9 +488,8 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                                 ),
                                               ),
                                               CustomText(
-                                                text: review.comment ?? '',
+                                                text: review['comment'] ?? '',
                                                 maxLine: 10,
-                                                textAlign: TextAlign.start,
                                               ),
                                             ],
                                           ),
@@ -483,6 +502,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             }).toList(),
                           )
                               : const SizedBox.shrink(),
+
                         ],
                       ),
                     ),
@@ -538,14 +558,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                     ),
                   ),
                   _paymentOption(
-                    'Cash Payment'.tr,
+                    AppStrings.cashPayment.tr,
                     statusBooking!.price.toDouble() , // Use actual price
                     'cash',
                     selectedPaymentOption,
                         (val) => setState(() => selectedPaymentOption = val),
                   ),
                   _paymentOption(
-                    'Online Payment'.tr,
+                    AppStrings.onlinePayment.tr,
                     statusBooking!.price.toDouble(), // Use actual price
                     'online',
                     selectedPaymentOption,
@@ -574,6 +594,129 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
       },
     );
   }
+
+  void _showCancelBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle
+              Container(
+                width: 40.w,
+                height: 4.h,
+                margin: EdgeInsets.only(bottom: 16.h),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400,
+                  borderRadius: BorderRadius.circular(4.r),
+                ),
+              ),
+
+              CustomText(
+                text: AppStrings.cancelRide.tr,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+                bottom: 8.h,
+              ),
+
+              CustomText(
+                text: AppStrings.confirmRideCancelConfirmation.tr,
+                fontSize: 14.sp,
+                bottom: 12.h,
+              ),
+
+              CustomText(
+                text:
+                 AppStrings.confirmRideCancelAlert.tr,
+                fontSize: 12.sp,
+                color: Colors.red,
+                textAlign: TextAlign.center,
+                bottom: 20.h,
+                maxLine: 5,
+              ),
+
+              Row(
+                children: [
+                  // -------- Cancel Button --------
+                  Expanded(
+                    child: SizedBox(
+                      height: 44.h,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: AppColors.primaryColor, width: 1.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.r),
+                          ),
+                          backgroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          AppStrings.cancel.tr,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(width: 12.w),
+
+                  // -------- Yes Button --------
+                  Expanded(
+                    child: SizedBox(
+                      height: 44.h,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          // 🔥 Call cancel API here
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.r),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          AppStrings.yes.tr,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+
+              SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   //===========================================> Payment Option <==================================
   _paymentOption(

@@ -21,6 +21,7 @@ class ApiConstants {
 //==========================================> User Role <=======================
   static const String getBookingUserDetails = "/booking/get-user-details/";
   static const String getBookingByStatus = "/booking/get/";
+  static const String createRating = "/rating/create";
 
 
 }

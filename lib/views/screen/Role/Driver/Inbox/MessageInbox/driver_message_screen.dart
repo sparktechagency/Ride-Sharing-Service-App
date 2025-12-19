@@ -262,7 +262,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
                 width: 295.w,
                 child: CustomTextField(
                   controller: messageController,
-                  hintText: "Write your message...",
+                  hintText: "Write your message...", 
                 ),
               ),
               SizedBox(width: 10.w),

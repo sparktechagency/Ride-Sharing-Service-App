@@ -12,14 +12,13 @@ import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
 
 class CityViewScreen extends StatefulWidget {
-  CityViewScreen({super.key});
+  const CityViewScreen({super.key});
 
   @override
   State<CityViewScreen> createState() => _CityViewScreenState();
 }
 
 class _CityViewScreenState extends State<CityViewScreen> {
-
   RxString date = 'Wed,Feb 12'.obs;
   RxString time = '5.23 PM'.obs;
 
@@ -116,7 +115,10 @@ class _CityViewScreenState extends State<CityViewScreen> {
                 },
               ),
             ),
-            CustomButton(onTap: () => _showPopup(context), text: AppStrings.next.tr),
+            CustomButton(
+              onTap: () => _showPopup(context),
+              text: AppStrings.next.tr,
+            ),
             SizedBox(height: 32.h),
           ],
         ),
@@ -134,7 +136,8 @@ class _CityViewScreenState extends State<CityViewScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24.r),
           ),
-          child: Obx(()=> Container(
+          child: Obx(
+            () => Container(
               padding: EdgeInsets.all(20.w),
               width: double.infinity,
               child: Column(
@@ -163,7 +166,9 @@ class _CityViewScreenState extends State<CityViewScreen> {
                   //=================================> Timing <=========================
                   Center(
                     child: GestureDetector(
-                      onTap: (){_pickDate(context);},
+                      onTap: () {
+                        _pickDate(context);
+                      },
                       child: CustomText(
                         text: date.value ?? 'Wed, Feb 12',
                         fontWeight: FontWeight.w600,
@@ -176,7 +181,9 @@ class _CityViewScreenState extends State<CityViewScreen> {
                   SizedBox(height: 12.h),
                   Center(
                     child: GestureDetector(
-                      onTap: (){selectTime(context);},
+                      onTap: () {
+                        selectTime(context);
+                      },
                       child: CustomText(
                         text: time.value ?? '5.23 PM',
                         fontWeight: FontWeight.w600,
@@ -200,6 +207,7 @@ class _CityViewScreenState extends State<CityViewScreen> {
       },
     );
   }
+
   //==========================> Show Calender Function <=======================
   Future<void> _pickDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -210,11 +218,11 @@ class _CityViewScreenState extends State<CityViewScreen> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            dialogBackgroundColor: Colors.white,
             colorScheme: ColorScheme.light(
               primary: AppColors.primaryColor,
               onSurface: Colors.black, // Text color
             ),
+            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -223,19 +231,30 @@ class _CityViewScreenState extends State<CityViewScreen> {
 
     if (pickedDate != null) {
       setState(() {
-        date.value = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
+        date.value =
+            "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
       });
     }
   }
+
   // Helper function to convert month number to name
   String _getMonthName(int month) {
     const List<String> months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
     return months[month - 1];
   }
-
-
 
   //===============================> Show Clock Function <=======================
   Future<void> selectTime(BuildContext context) async {
@@ -245,14 +264,15 @@ class _CityViewScreenState extends State<CityViewScreen> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(
-                primary: AppColors.primaryColor,
-                onSurface: Colors.black,
-              ),
-              buttonTheme: ButtonThemeData(
-                buttonColor: Colors.black,
-              ),
-              dialogBackgroundColor: AppColors.borderColor),
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onSurface: Colors.black,
+            ),
+            buttonTheme: ButtonThemeData(buttonColor: Colors.black),
+            dialogTheme: DialogThemeData(
+              backgroundColor: AppColors.borderColor,
+            ),
+          ),
           child: child!,
         );
       },

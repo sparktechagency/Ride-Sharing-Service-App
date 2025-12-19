@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -13,7 +15,6 @@ import '../service/api_constants.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_constants.dart';
 import 'package:http/http.dart' as http;
-
 
 class AuthController extends GetxController {
   //================================> User Sign Up <=================================
@@ -44,13 +45,18 @@ class AuthController extends GetxController {
     var headers = {'Content-Type': 'application/json'};
 
     Response response = await ApiClient.postData(
-        ApiConstants.signUpEndPoint, jsonEncode(body),
-        headers: headers);
+      ApiConstants.signUpEndPoint,
+      jsonEncode(body),
+      headers: headers,
+    );
     if (response.statusCode == 201 || response.statusCode == 200) {
-      Get.toNamed(AppRoutes.otpScreen, parameters: {
-        "email": userEmailCtrl.text.trim(),
-        "screenType": "signup",
-      });
+      Get.toNamed(
+        AppRoutes.otpScreen,
+        parameters: {
+          "email": userEmailCtrl.text.trim(),
+          "screenType": "signup",
+        },
+      );
       userNameCtrl.clear();
       userEmailCtrl.clear();
       userNumberCtrl.clear();
@@ -75,11 +81,11 @@ class AuthController extends GetxController {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            dialogBackgroundColor: Colors.white,
             colorScheme: ColorScheme.light(
               primary: AppColors.primaryColor,
               onSurface: Colors.black, // Text color
             ),
+            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -87,14 +93,26 @@ class AuthController extends GetxController {
     );
 
     if (pickedDate != null) {
-      userDateOfBirthCtrl.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
-
+      userDateOfBirthCtrl.text =
+          "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
     }
   }
+
   // Helper function to convert month number to name
   String _getMonthName(int month) {
     const List<String> months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
     return months[month - 1];
   }
@@ -130,19 +148,22 @@ class AuthController extends GetxController {
       "type": userRole,
     };
 
-    Response response = await ApiClient.postData(ApiConstants.signUpEndPoint, body);
+    Response response = await ApiClient.postData(
+      ApiConstants.signUpEndPoint,
+      body,
+    );
     if (response.statusCode == 201 || response.statusCode == 200) {
-      Get.toNamed(AppRoutes.otpScreen, parameters: {
-       "email": emailCtrl.text.trim(),
-        "screenType": "signup",
-      });
+      Get.toNamed(
+        AppRoutes.otpScreen,
+        parameters: {"email": emailCtrl.text.trim(), "screenType": "signup"},
+      );
       nameCtrl.clear();
       emailCtrl.clear();
       passwordCtrl.clear();
       confirmCtrl.clear();
       addressCtrl.clear();
       dateOfBirthCtrl.clear();
-      selectedVehiclesType= '';
+      selectedVehiclesType = '';
       vehiclesModelCtrl.clear();
       licenseNumberCtrl.clear();
       driverSignUpLoading(false);
@@ -155,7 +176,7 @@ class AuthController extends GetxController {
   }
 
   //==========================> Pick Type Image <=======================
-/*  Future<File?> pickTypeImage(ImageSource source, String imageType) async {
+  /*  Future<File?> pickTypeImage(ImageSource source, String imageType) async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
@@ -170,34 +191,44 @@ class AuthController extends GetxController {
     return null;
   }*/
 
-
   //===================> Otp very <=======================
   TextEditingController otpCtrl = TextEditingController();
   var otpVerifyLoading = false.obs;
-  otpVery(
-      {required String email,
-      required String otp,
-      required String type}) async {
+  otpVery({
+    required String email,
+    required String otp,
+    required String type,
+  }) async {
     try {
       var body = {'code': otpCtrl.text, 'email': email};
       var headers = {'Content-Type': 'application/json'};
       otpVerifyLoading(true);
       Response response = await ApiClient.postData(
-          ApiConstants.otpEndPoint, jsonEncode(body),
-          headers: headers);
+        ApiConstants.otpEndPoint,
+        jsonEncode(body),
+        headers: headers,
+      );
       print("============${response.body} and ${response.statusCode}");
       if (response.statusCode == 200) {
-        print('token===============>>>>${response.body["data"]['attributes']['tokens']['access']['token']}');
-        await PrefsHelper.setString(AppConstants.userRole,
-            response.body["data"]['attributes']['user']['type']);
-        await PrefsHelper.setString(AppConstants.bearerToken,
-            response.body["data"]['attributes']['tokens']['access']['token']);
+        print(
+          'token===============>>>>${response.body["data"]['attributes']['tokens']['access']['token']}',
+        );
+        await PrefsHelper.setString(
+          AppConstants.userRole,
+          response.body["data"]['attributes']['user']['type'],
+        );
+        await PrefsHelper.setString(
+          AppConstants.bearerToken,
+          response.body["data"]['attributes']['tokens']['access']['token'],
+        );
         var role = response.body["data"]['attributes']['user']['type'];
         print("===> role : $role");
         otpCtrl.clear();
         if (type == "forgetPasswordScreen") {
-          Get.toNamed(AppRoutes.resetPasswordScreen,
-              parameters: {"email": email});
+          Get.toNamed(
+            AppRoutes.resetPasswordScreen,
+            parameters: {"email": email},
+          );
         } else {
           Get.toNamed(AppRoutes.signInScreen);
         }
@@ -211,28 +242,29 @@ class AuthController extends GetxController {
     otpVerifyLoading(false);
   }
 
-//=================> Resend otp <=====================
+  //=================> Resend otp <=====================
   var resendOtpLoading = false.obs;
   resendOtp(String email) async {
     resendOtpLoading(true);
     var body = {"email": email};
     Map<String, String> header = {'Content-Type': 'application/json'};
     var response = await ApiClient.postData(
-        ApiConstants.forgotPassEndPoint, json.encode(body),
-        headers: header);
+      ApiConstants.forgotPassEndPoint,
+      json.encode(body),
+      headers: header,
+    );
     print("===> ${response.body}");
     if (response.statusCode == 200) {
     } else {
       Fluttertoast.showToast(
-          msg: response.statusText ?? "",
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          gravity: ToastGravity.CENTER);
+        msg: response.statusText ?? "",
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        gravity: ToastGravity.CENTER,
+      );
     }
     resendOtpLoading(false);
   }
-
-
 
   //==========================> Driver Show Calender Function <========================
   Future<void> pickBirthDate(BuildContext context) async {
@@ -244,11 +276,11 @@ class AuthController extends GetxController {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            dialogBackgroundColor: Colors.white,
             colorScheme: ColorScheme.light(
               primary: AppColors.primaryColor,
               onSurface: Colors.black, // Text color
             ),
+            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -256,14 +288,26 @@ class AuthController extends GetxController {
     );
 
     if (pickedDate != null) {
-      dateOfBirthCtrl.text = "${_getDriverMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
-
+      dateOfBirthCtrl.text =
+          "${_getDriverMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
     }
   }
+
   // Helper function to convert month number to name
   String _getDriverMonthName(int month) {
     const List<String> months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
     return months[month - 1];
   }
@@ -307,14 +351,20 @@ class AuthController extends GetxController {
       "fcmToken": "fcmToken..",
     };
     Response response = await ApiClient.postData(
-        ApiConstants.signInEndPoint, json.encode(body),
-        headers: headers);
+      ApiConstants.signInEndPoint,
+      json.encode(body),
+      headers: headers,
+    );
     print("====> ${response.body}");
     if (response.statusCode == 200) {
-      await PrefsHelper.setString(AppConstants.bearerToken,
-          response.body['data']['attributes']['tokens']['access']['token']);
       await PrefsHelper.setString(
-          AppConstants.id, response.body['data']['attributes']['user']['id']);
+        AppConstants.bearerToken,
+        response.body['data']['attributes']['tokens']['access']['token'],
+      );
+      await PrefsHelper.setString(
+        AppConstants.id,
+        response.body['data']['attributes']['user']['id'],
+      );
       String userRole = response.body['data']['attributes']['user']['type'];
       await PrefsHelper.setString(AppConstants.userRole, userRole);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
@@ -322,7 +372,9 @@ class AuthController extends GetxController {
         Get.offAllNamed(AppRoutes.userSearchScreen);
         await PrefsHelper.setBool(AppConstants.isLogged, true);
       } else if (userRole == 'driver') {
-        bool hasLicenseUploaded = response.body['data']['attributes']['user']['licenseVerified'] ?? false;
+        bool hasLicenseUploaded =
+            response.body['data']['attributes']['user']['licenseVerified'] ??
+            false;
         if (hasLicenseUploaded) {
           Get.offAllNamed(AppRoutes.driverHomeScreen);
         } else {
@@ -340,25 +392,27 @@ class AuthController extends GetxController {
     signInLoading(false);
   }
 
-
   //====================> Forgot password <=====================
   TextEditingController forgetEmailTextCtrl = TextEditingController();
   var forgotLoading = false.obs;
 
   forgetPassword() async {
     forgotLoading(true);
-    var body = {
-      "email": forgetEmailTextCtrl.text.trim(),
-    };
+    var body = {"email": forgetEmailTextCtrl.text.trim()};
     var headers = {'Content-Type': 'application/json'};
     var response = await ApiClient.postData(
-        ApiConstants.forgotPassEndPoint, json.encode(body),
-        headers: headers);
+      ApiConstants.forgotPassEndPoint,
+      json.encode(body),
+      headers: headers,
+    );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.toNamed(AppRoutes.otpScreen, parameters: {
-        "email": forgetEmailTextCtrl.text.trim(),
-        "screenType": "forgetPasswordScreen",
-      });
+      Get.toNamed(
+        AppRoutes.otpScreen,
+        parameters: {
+          "email": forgetEmailTextCtrl.text.trim(),
+          "screenType": "forgetPasswordScreen",
+        },
+      );
       forgetEmailTextCtrl.clear();
     } else {
       ApiChecker.checkApi(response);
@@ -375,15 +429,19 @@ class AuthController extends GetxController {
   changePassword(String oldPassword, String newPassword) async {
     changePassLoading(true);
     var body = {"oldPassword": oldPassword, "newPassword": newPassword};
-    var response = await ApiClient.postData(ApiConstants.changePassEndPoint, body);
+    var response = await ApiClient.postData(
+      ApiConstants.changePassEndPoint,
+      body,
+    );
     print("===============> ${response.body}");
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
-          msg: response.body['message'],
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          backgroundColor: AppColors.cardLightColor,
-          textColor: Colors.white);
+        msg: response.body['message'],
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: AppColors.cardLightColor,
+        textColor: Colors.white,
+      );
       Get.back();
       Get.back();
     } else {
@@ -400,33 +458,35 @@ class AuthController extends GetxController {
     var body = {"email": email, "password": password};
     Map<String, String> header = {'Content-Type': 'application/json'};
     var response = await ApiClient.postData(
-        ApiConstants.resetPassEndPoint, json.encode(body),
-        headers: header);
+      ApiConstants.resetPassEndPoint,
+      json.encode(body),
+      headers: header,
+    );
     if (response.statusCode == 200) {
       showDialog(
-          context: Get.context!,
-          barrierDismissible: false,
-          builder: (_) => AlertDialog(
-                backgroundColor: AppColors.cardLightColor,
-                title: const Text("Password reset!"),
-                content:
-                    const Text("Your password has been reset successfully."),
-                actions: [
-                  TextButton(
-                      style: const ButtonStyle(
-                          backgroundColor:
-                              WidgetStatePropertyAll(Colors.white)),
-                      onPressed: () {
-                        Get.toNamed(AppRoutes.signInScreen);
-                      },
-                      child: const Text("Ok"))
-                ],
-              ));
+        context: Get.context!,
+        barrierDismissible: false,
+        builder:
+            (_) => AlertDialog(
+              backgroundColor: AppColors.cardLightColor,
+              title: const Text("Password reset!"),
+              content: const Text("Your password has been reset successfully."),
+              actions: [
+                TextButton(
+                  style: const ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.white),
+                  ),
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.signInScreen);
+                  },
+                  child: const Text("Ok"),
+                ),
+              ],
+            ),
+      );
     } else {
       debugPrint("error set password ${response.statusText}");
-      Fluttertoast.showToast(
-        msg: "${response.statusText}",
-      );
+      Fluttertoast.showToast(msg: "${response.statusText}");
     }
     resetPasswordLoading(false);
   }

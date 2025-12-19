@@ -53,6 +53,6 @@ class AppIcons{
   static String downArrow="$baseUrl/downArrow.svg";
   static String success="$baseUrl/success.svg";
   static String email="$baseUrl/email.svg";
-
-
+  static String pickUp="$baseUrl/pickUp.svg";
+  static String dropOff="$baseUrl/dropOff.svg";
 }

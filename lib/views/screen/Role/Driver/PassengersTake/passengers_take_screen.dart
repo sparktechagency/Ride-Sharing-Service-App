@@ -5,6 +5,7 @@ import 'package:ride_sharing/utils/app_colors.dart';
 import 'package:ride_sharing/utils/app_strings.dart';
 import 'package:ride_sharing/views/base/custom_app_bar.dart';
 import 'package:ride_sharing/views/base/custom_button.dart';
+import 'package:ride_sharing/views/screen/Role/Driver/rider_post_submit/rider_post_submit.dart';
 
 import '../../../../base/custom_text.dart';
 
@@ -161,7 +162,10 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
             ),
             //===================> Submit button <==================
             Spacer(),
-            CustomButton(onTap: () {}, text: AppStrings.submit.tr),
+            CustomButton(onTap: () {
+             //Get.toNamed()
+             Get.to(()=>RiderPostSubmit());
+            }, text: AppStrings.submit.tr),
             SizedBox(height: 48.h),
           ],
         ),

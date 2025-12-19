@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -32,11 +33,6 @@ class HomeController extends GetxController implements GetxService {
     isLoading.value = true;
 
     final token = await PrefsHelper.getString(AppConstants.bearerToken);
-    if (token == null) {
-      Get.snackbar('Error', 'No auth token found');
-      isLoading.value = false;
-      return;
-    }
 
     var headers = {
       'Content-Type': 'application/json',

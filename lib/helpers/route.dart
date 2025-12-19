@@ -1,4 +1,7 @@
+// ignore_for_file: unused_import
+
 import 'package:get/get.dart';
+import 'package:ride_sharing/views/screen/Role/Driver/rider_post_submit/rider_post_submit.dart';
 import '../views/screen/AboutUs/about_us_screen.dart';
 import '../views/screen/ActiveOrderDetails/active_order_details.dart';
 import '../views/screen/Auth/ChangePass/change_password_screen.dart';
@@ -96,6 +99,7 @@ class AppRoutes{
   static String cityViewScreen="/city_view_screen";
   static String passengersTakeScreen="/passengers_take_screen";
   static String driverMyRideScreen="/driver_my_ride_screen";
+  static String riderPostSubmit="/rider_post_submit";
   //===================================================> User Role <=============================================
   static String userSignUpScreen="/user_sign_up_screen";
   static String userSearchScreen="/user_search_screen";
@@ -128,8 +132,9 @@ class AppRoutes{
     GetPage(name:canceledOrderDetails, page: ()=> CanceledOrderDetails()),
     GetPage(name:ratingScreen, page: ()=> RatingScreen()),
     GetPage(name:totalUserScreen, page: ()=> TotalUserScreen()),
-   // GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
-   // GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
+    //----------------------------------------//
+   GetPage(name:locationScreen, page: ()=>const LocationScreen(),transition: Transition.noTransition),
+   GetPage(name:locationPickerScreen, page: ()=>const LocationPickerScreen(),transition: Transition.noTransition),
    //===================================================> Driver Role <=============================================
    GetPage(name:driverSignUpScreen, page: ()=>const DriverSignUpScreen()),
    GetPage(name:driverSignUpTwoScreen, page: ()=> DriverSignUpTwoScreen()),
@@ -152,6 +157,7 @@ class AppRoutes{
     GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
    GetPage(name:passengersTakeScreen, page: ()=> PassengersTakeScreen()),
    GetPage(name:driverMyRideScreen, page: ()=> DriverMyRideScreen()),
+   GetPage(name: riderPostSubmit, page: ()=> RiderPostSubmit()),
    //===================================================> User Role <=============================================
    GetPage(name:userSignUpScreen, page: ()=> UserSignUpScreen()),
    GetPage(name:userSearchScreen, page: ()=> UserSearchScreen(),transition: Transition.noTransition),

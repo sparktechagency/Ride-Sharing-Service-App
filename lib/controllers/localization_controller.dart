@@ -13,8 +13,11 @@ class LocalizationController extends GetxController {
     loadCurrentLanguage();
   }
 
-  Locale _locale = Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode);
-  bool _isLtr = true;
+  Locale _locale = Locale(
+    AppConstants.languages[0].languageCode,
+    AppConstants.languages[0].countryCode,
+  );
+  final bool _isLtr = true;
   List<LanguageModel> _languages = [];
   int _selectedIndex = 0;
   Locale get locale => _locale;
@@ -22,7 +25,9 @@ class LocalizationController extends GetxController {
   List<LanguageModel> get languages => _languages;
   int get selectedIndex => _selectedIndex;
   void setLanguage(Locale locale) {
-    int index = AppConstants.languages.indexWhere((lang) => lang.languageCode == locale.languageCode);
+    int index = AppConstants.languages.indexWhere(
+      (lang) => lang.languageCode == locale.languageCode,
+    );
 
     if (index != -1) {
       _selectedIndex = index;
@@ -30,30 +35,46 @@ class LocalizationController extends GetxController {
 
     _locale = locale;
     Get.updateLocale(locale);
-    sharedPreferences.setString(AppConstants.LANGUAGE_CODE, locale.languageCode);
-    sharedPreferences.setString(AppConstants.COUNTRY_CODE, locale.countryCode ?? "");
+    sharedPreferences.setString(
+      AppConstants.LANGUAGE_CODE,
+      locale.languageCode,
+    );
+    sharedPreferences.setString(
+      AppConstants.COUNTRY_CODE,
+      locale.countryCode ?? "",
+    );
     update();
   }
 
   void loadCurrentLanguage() {
-    String languageCode = sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ??
+    String languageCode =
+        sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ??
         AppConstants.languages[0].languageCode;
-    String countryCode = sharedPreferences.getString(AppConstants.COUNTRY_CODE) ??
+    String countryCode =
+        sharedPreferences.getString(AppConstants.COUNTRY_CODE) ??
         AppConstants.languages[0].countryCode;
 
     _locale = Locale(languageCode, countryCode);
 
-    int index = AppConstants.languages.indexWhere((lang) => lang.languageCode == languageCode);
+    int index = AppConstants.languages.indexWhere(
+      (lang) => lang.languageCode == languageCode,
+    );
     _selectedIndex = (index != -1) ? index : 0;
     Get.updateLocale(_locale);
     update();
   }
 
-
   void saveLanguage(Locale locale) async {
-    await sharedPreferences.setString(AppConstants.LANGUAGE_CODE, locale.languageCode);
-    await sharedPreferences.setString(AppConstants.COUNTRY_CODE, locale.countryCode ?? '');
+    await sharedPreferences.setString(
+      AppConstants.LANGUAGE_CODE,
+      locale.languageCode,
+    );
+    await sharedPreferences.setString(
+      AppConstants.COUNTRY_CODE,
+      locale.countryCode ?? '',
+    );
   }
+
   void setSelectIndex(int index) {
     _selectedIndex = index;
     update();
@@ -64,9 +85,12 @@ class LocalizationController extends GetxController {
       _languages = AppConstants.languages;
     } else {
       _selectedIndex = -1;
-      _languages = AppConstants.languages.where((language) {
-        return language.languageName.toLowerCase().contains(query.toLowerCase());
-      }).toList();
+      _languages =
+          AppConstants.languages.where((language) {
+            return language.languageName.toLowerCase().contains(
+              query.toLowerCase(),
+            );
+          }).toList();
     }
     update();
   }

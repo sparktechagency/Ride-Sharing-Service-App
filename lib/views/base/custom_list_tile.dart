@@ -9,7 +9,7 @@ class CustomListTile extends StatelessWidget {
   final Widget? suffixIcon;
   final Color? borderColor;
   final VoidCallback? onTap;
-  CustomListTile({
+  const CustomListTile({
     super.key,
     required this.title,
     this.onTap,
@@ -27,9 +27,12 @@ class CustomListTile extends StatelessWidget {
         child: Container(
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(
-                  width: 1.w, color: borderColor ?? AppColors.borderColor)),
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(
+              width: 1.w,
+              color: borderColor ?? AppColors.borderColor,
+            ),
+          ),
           child: ListTile(
             leading: prefixIcon,
             trailing: suffixIcon,

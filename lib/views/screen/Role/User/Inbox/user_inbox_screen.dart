@@ -1,30 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
+import '../../../../../controllers/message_room_controller.dart';
 import '../../../../../helpers/route.dart';
 import '../../../../../utils/app_strings.dart';
 import '../../../../base/custom_network_image.dart';
 import '../../../../base/custom_text.dart';
 import '../../../../base/custom_text_field.dart';
 import '../BottomNavBar/user_bottom_menu..dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 
-class UserInboxScreen extends StatelessWidget {
-  UserInboxScreen({super.key});
+class UserInboxScreen extends StatefulWidget {
+  const UserInboxScreen({super.key});
+
+  @override
+  State<UserInboxScreen> createState() => _UserInboxScreenState();
+}
+
+class _UserInboxScreenState extends State<UserInboxScreen> {
   final TextEditingController _searchCTRL = TextEditingController();
+  final MessageRoomController controller = Get.put(MessageRoomController());
+
+  @override
+  void initState() {
+    super.initState();
+    // Explicitly set loading true first, then call API
+    controller.isLoading(true);
+    controller.getMessageRooms();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: UserBottomMenu(2),
-      appBar: AppBar(title: Text('Chats'.tr)),
+      appBar: AppBar(
+        title: CustomText(
+          text: AppStrings.inbox.tr,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //==========================> Search Bar <==========================
             CustomTextField(
               controller: _searchCTRL,
               hintText: AppStrings.search.tr,
@@ -34,88 +55,93 @@ class UserInboxScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-            //=============================> Chats List <====================================
+
+            //=============================> Chats List <========================
             Expanded(
-              flex: 5,
-              child: ListView.builder(
-                shrinkWrap: true,
-                addAutomaticKeepAlives: false,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 8.h),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.userMessageScreen);
-                      },
-                      child: Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
-                        child: Row(
-                          children: [
-                            CustomNetworkImage(
-                              imageUrl:
-                              'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                              height: 56.h,
-                              width: 56.w,
-                              boxShape: BoxShape.circle,
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //=====================> Name <=======================
-                                  CustomText(
-                                    text: 'Rida Anam',
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                    bottom: 6.h,
-                                    maxLine: 2,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  //=====================> Last Message <=======================
-                                  CustomText(
-                                    text: 'Hello, are you here?',
-                                    fontWeight: FontWeight.w500,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ],
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (controller.errorMessage.isNotEmpty) {
+                  return Center(child: Text(controller.errorMessage.value));
+                }
+
+                if (controller.messageRooms.isEmpty) {
+                  return Center(child: Text("No messages found".tr));
+                }
+
+                return ListView.builder(
+                  itemCount: controller.messageRooms.length,
+                  itemBuilder: (context, index) {
+                    final room = controller.messageRooms[index];
+                    final participant = room.participants.first;
+                    final imageUrl =
+                        'https://faysal5500.sobhoy.com/${participant.image}';
+
+                    DateTime updatedAt;
+                    try {
+                      updatedAt = DateTime.parse(room.updatedAt);
+                    } catch (_) {
+                      updatedAt = DateTime.now();
+                    }
+                    final messageTime = timeago.format(updatedAt);
+
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 8.h),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.toNamed(
+                            AppRoutes.userMessageScreen,
+                            arguments: room,
+                          );
+                        },
+                        child: Padding(
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+                          child: Row(
+                            children: [
+                              CustomNetworkImage(
+                                imageUrl: imageUrl,
+                                height: 56.h,
+                                width: 56.w,
+                                boxShape: BoxShape.circle,
                               ),
-                            ),
-                            Spacer(),
-                            //==========================> Time and Unread Count Column <========================
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                CustomText(
-                                  text: '7:09 PM',
-                                  fontSize: 12.sp,
-                                  color: Colors.grey,
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text: participant.userName,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w700,
+                                      bottom: 6.h,
+                                      maxLine: 2,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    CustomText(
+                                      text: room.lastMessage,
+                                      fontWeight: FontWeight.w500,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 8.h),
-                                Container(
-                                  padding: EdgeInsets.all(6.w),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: CustomText(
-                                    text: '99+',
-                                    fontSize: 12.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              Spacer(),
+                              CustomText(
+                                text: messageTime,
+                                fontSize: 12.sp,
+                                color: Colors.grey,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),

@@ -15,6 +15,8 @@ class ApiConstants {
   //==========================================> Driver Role <=======================
   static const String driverLicenseUploadEndPoint = "/users/self/post-image-liscense";
   static const String homePageStatisticsEndPoint = "/home/statistics";
+  static const String getMessageRoomEndPoint = "/rooms/get";
+
 
 
 

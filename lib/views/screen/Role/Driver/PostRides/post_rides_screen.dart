@@ -6,13 +6,13 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ride_sharing/controllers/post_rider_controller.dart';
 import 'package:ride_sharing/helpers/route.dart';
+import 'package:ride_sharing/utils/app_colors.dart';
 import 'package:ride_sharing/utils/app_strings.dart';
 import 'package:ride_sharing/views/base/custom_text_field.dart';
 import 'package:ride_sharing/views/screen/Role/Driver/BottomNavBar/driver_bottom_menu..dart';
 
 class PostRidesScreen extends StatelessWidget {
   const PostRidesScreen({super.key});
-
   void _showRouteSheet() {
     Get.bottomSheet(
       const _RouteSelectionBottomSheet(),
@@ -22,20 +22,14 @@ class PostRidesScreen extends StatelessWidget {
       isDismissible: true,
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(PostRideController());
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.primaryColor,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Get.back(),
-        ),
         title: Text(
           AppStrings.createRide.tr,
           style: TextStyle(
@@ -50,7 +44,6 @@ class PostRidesScreen extends StatelessWidget {
         final p = controller.pickupLatLng.value;
         final d = controller.destinationLatLng.value;
         final points = controller.polylinePoints;
-
         final markers = <Marker>{};
         if (p != null) {
           markers.add(
@@ -74,7 +67,6 @@ class PostRidesScreen extends StatelessWidget {
             ),
           );
         }
-
         final polylines =
             points.isNotEmpty
                 ? {
@@ -115,7 +107,6 @@ class PostRidesScreen extends StatelessWidget {
                 }
               },
             ),
-
             if (controller.isLoadingRoute.value)
               Container(
                 color: Colors.black54,
@@ -131,7 +122,7 @@ class PostRidesScreen extends StatelessWidget {
                   children: [
                     _field(
                       controller.pickupController,
-                      "AppStrings.whereFrom.tr",
+                      AppStrings.pICKUP.tr,
                       Icons.location_on,
                       Colors.green.shade700,
                       () => Get.toNamed(
@@ -141,7 +132,7 @@ class PostRidesScreen extends StatelessWidget {
                     ),
                     _field(
                       controller.destinationController,
-                      "AppStrings.whereTo.tr",
+                      AppStrings.dROPOFF.tr,
                       Icons.flag,
                       Colors.red.shade700,
                       () => Get.toNamed(
@@ -159,13 +150,13 @@ class PostRidesScreen extends StatelessWidget {
                                 ? _showRouteSheet
                                 : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigo.shade600,
+                          backgroundColor: AppColors.primaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.r),
                           ),
                         ),
                         child: Text(
-                          "Next",
+                          AppStrings.next.tr,
                           style: TextStyle(
                             fontSize: 18.sp,
                             color: Colors.white,
@@ -213,20 +204,17 @@ class PostRidesScreen extends StatelessWidget {
   }
 }
 
-// EXACTLY LIKE YOUR IMAGE — BOTTOM SHEET
+// BOTTOM SHEET
 class _RouteSelectionBottomSheet extends StatefulWidget {
   const _RouteSelectionBottomSheet();
-
   @override
   State<_RouteSelectionBottomSheet> createState() =>
       _RouteSelectionBottomSheetState();
 }
-
 class _RouteSelectionBottomSheetState
     extends State<_RouteSelectionBottomSheet> {
   int selected = 0;
   final c = Get.find<PostRideController>();
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -251,7 +239,6 @@ class _RouteSelectionBottomSheetState
             style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 24.h),
-
           // Real Route (from Google)
           _routeCard(
             distance: c.distanceText.value,
@@ -261,9 +248,7 @@ class _RouteSelectionBottomSheetState
             selected: selected == 0,
             onTap: () => setState(() => selected = 0),
           ),
-
           SizedBox(height: 16.h),
-
           // Alternative Route (fake for now)
           _routeCard(
             distance:
@@ -275,9 +260,7 @@ class _RouteSelectionBottomSheetState
             selected: selected == 1,
             onTap: () => setState(() => selected = 1),
           ),
-
           SizedBox(height: 32.h),
-
           SizedBox(
             width: double.infinity,
             height: 58.h,

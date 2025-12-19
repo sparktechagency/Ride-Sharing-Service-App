@@ -54,11 +54,17 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
     _initChat();
   }
 
+
   Future<void> _initChat() async {
     currentUserId = await PrefsHelper.getString(AppConstants.id) ?? '';
     await controller.getMessage(roomId);
+
+    // Initialize socket for this conversation
+    controller.initSocket(roomId);
+
     _scrollToBottom();
   }
+
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -71,6 +77,9 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       }
     });
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {

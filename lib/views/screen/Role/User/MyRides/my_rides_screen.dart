@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
+import '../../../../../controllers/booking_controller.dart';
+import '../../../../../helpers/prefs_helpers.dart';
+import '../../../../../utils/app_constants.dart';
 import '../../../../base/custom_text.dart';
 import '../BottomNavBar/user_bottom_menu..dart';
 import 'InnerWidget/canceled_tab.dart';
@@ -18,24 +21,50 @@ class MyRidesScreen extends StatefulWidget {
 
 class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final BookingController bookingController = Get.put(BookingController());
 
+
+  final statuses = ['pending', 'ongoing', 'cancelled', 'completed'];
 
   @override
   void initState() {
     super.initState();
+
     _tabController = TabController(length: 4, vsync: this);
+
+    _initData(); // first load
+
     _tabController.addListener(() {
-      setState(() {});
+      if (!_tabController.indexIsChanging) {
+        _loadBookingsByStatus(_tabController.index);
+      }
     });
   }
 
+  Future<void> _initData() async {
+    final userId = await PrefsHelper.getString(AppConstants.id);
+
+    /// USER DETAILS (ONLY ONCE)
+    bookingController.getBookingUserDetails(userId);
+
+    /// FIRST TAB BOOKINGS
+    _loadBookingsByStatus(0);
+  }
+
+  Future<void> _loadBookingsByStatus(int index) async {
+    bookingController.clearBookings();
+
+    bookingController.getBookingsByStatus(
+      statuses[index],
+    );
+  }
+
+
   @override
   void dispose() {
-    _tabController.removeListener(() {});
     _tabController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {

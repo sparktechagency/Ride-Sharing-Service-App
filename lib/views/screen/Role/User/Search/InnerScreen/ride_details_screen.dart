@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import '../../../../../../models/booking_user_details_model.dart';
+import '../../../../../../models/booking_with_status_model.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -9,6 +12,10 @@ import '../../../../../base/custom_app_bar.dart';
 import '../../../../../base/custom_button.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+
+
 
 class RideDetailsScreen extends StatefulWidget {
   const RideDetailsScreen({super.key});
@@ -20,6 +27,12 @@ class RideDetailsScreen extends StatefulWidget {
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   String? selectedPayment;
 
+  // Variables to hold the data received via Get.arguments
+  // Note: These are defined late and initialized in the build method.
+  late BookingAttribute? statusBooking;
+  late BookingUserAttributes? userDetails;
+  late String formattedDate;
+
   void _onSubmit() {
     if (selectedPayment != null) {
       print('Payment method selected: $selectedPayment');
@@ -29,6 +42,27 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // --- 1. RECEIVE AND EXTRACT ARGUMENTS ---
+    final arguments = Get.arguments as Map<String, dynamic>?;
+
+    // Safely extract the passed data
+    statusBooking = arguments?['booking'] as BookingAttribute?;
+    userDetails = arguments?['user'] as BookingUserAttributes?;
+
+    // Handle null case (should not happen if navigation from PendingTab is correct)
+    if (statusBooking == null || userDetails == null) {
+      return Scaffold(
+        appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
+        body: const Center(child: Text('Error: Ride or User details missing.')),
+      );
+    }
+
+    // Format the date using the retrieved booking data
+    formattedDate = DateFormat('EEE dd MMMM yyyy h.mm a')
+        .format(DateTime.parse(statusBooking!.rideDate))
+        .toLowerCase();
+    // -----------------------------------------
+
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
       body: SingleChildScrollView(
@@ -44,7 +78,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                 ),
                 child: Column(
                   children: [
-                    //========================> Top Container <=================
+                    //========================> Top Container (Date) <=================
                     Padding(
                       padding: EdgeInsets.all(10.w),
                       child: Row(
@@ -53,7 +87,8 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           SizedBox(width: 8.w),
                           Flexible(
                             child: CustomText(
-                              text: 'Sat 12 April 2025 8.30 PM',
+                              // Use the formatted date from the booking
+                              text: formattedDate,
                               maxLine: 3,
                               fontWeight: FontWeight.w600,
                               textAlign: TextAlign.start,
@@ -63,7 +98,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                       ),
                     ),
                     Divider(thickness: 1.5, color: AppColors.borderColor),
-                    //========================> Details Container <=================
+                    //========================> Details Container (Locations) <=================
                     Padding(
                       padding: EdgeInsets.all(12.w),
                       child: Column(
@@ -81,7 +116,10 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       text: AppStrings.pICKUP.tr,
                                       bottom: 12.h,
                                     ),
-                                    CustomText(text: 'Dhaka', bottom: 12.h),
+                                    CustomText(
+                                      // Use pickup address
+                                        text: statusBooking?.pickUp.address ?? 'N/A',
+                                        bottom: 12.h),
                                     CustomText(
                                       text: AppStrings.passenger.tr,
                                       bottom: 12.h,
@@ -107,16 +145,21 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       text: AppStrings.dROPOFF.tr,
                                       bottom: 12.h,
                                     ),
-                                    CustomText(text: 'Rangpur', bottom: 12.h),
+                                    CustomText(
+                                      // Use dropoff address
+                                        text: statusBooking?.dropOff.address ?? 'N/A',
+                                        bottom: 12.h),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        CustomText(text: '1  '),
+                                        // Use passenger count from booking
+                                        CustomText(text: '${statusBooking?.numberOfPeople ?? 0}  '),
                                         CustomText(text: 'Passenger'.tr),
                                       ],
                                     ),
                                     SizedBox(height: 12.h),
-                                    CustomText(text: 'Car'),
+                                    // Use vehicle type from booking
+                                    CustomText(text: statusBooking?.vehicleType ?? 'Car'),
                                   ],
                                 ),
                               ),
@@ -140,7 +183,8 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               CustomText(
-                                text: '1',
+                                // Use passenger count
+                                text: '${statusBooking?.numberOfPeople ?? 0}',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20.sp,
                               ),
@@ -154,7 +198,8 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               CustomText(
-                                text: '\$ 15.99',
+                                // Use ride price
+                                text: '\$ ${statusBooking!.price.toStringAsFixed(2)}',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20.sp,
                                 color: AppColors.primaryColor,
@@ -166,20 +211,50 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                       ),
                     ),
                     //==================================> Book Now Button <===================
+                    //==================================> Action Buttons <===================
                     Padding(
                       padding: EdgeInsets.only(right: 16.w, bottom: 6.h),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: CustomButton(
-                          onTap: () {
-                            _showPaymentBottomSheet(context);
-                          },
-                          text: AppStrings.bookNow.tr,
-                          width: 100.w,
-                          height: 34.h,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // -------- Cancel Button --------
+                          OutlinedButton(
+                            onPressed: () {
+                              _showCancelBottomSheet(context);
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: AppColors.primaryColor),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              minimumSize: Size(90.w, 34.h),
+                            ),
+                            child: Text(
+                              AppStrings.cancel.tr,
+                              style: TextStyle(
+                                color: AppColors.primaryColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+
+
+                          SizedBox(width: 8.w),
+
+                          // -------- Book Now Button --------
+                          CustomButton(
+                            onTap: () {
+                              _showPaymentBottomSheet(context);
+                            },
+                            text: AppStrings.bookNow.tr,
+                            width: 100.w,
+                            height: 34.h,
+                          ),
+                        ],
                       ),
                     ),
+
                   ],
                 ),
               ),
@@ -225,25 +300,32 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           //=====================> Name & Image Row <=================
                           Row(
                             children: [
-                              CustomNetworkImage(
-                                imageUrl:
-                                    'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                                height: 38.h,
-                                width: 38.w,
-                                boxShape: BoxShape.circle,
-                              ),
+                              // CustomNetworkImage(
+                              //   // Use user image
+                              //   imageUrl: userDetails!.profilePic ??
+                              //       'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                              //   height: 38.h,
+                              //   width: 38.w,
+                              //   boxShape: BoxShape.circle,
+                              // ),
                               SizedBox(width: 8.w),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    text: 'Mr. Imran',
+                                    // Use user name
+                                    text: userDetails!.userName ?? '',
                                     bottom: 4.h,
                                     fontWeight: FontWeight.w500,
                                   ),
                                   Row(
                                     children: [
-                                      CustomText(text: '4.9', right: 4.w),
+                                      CustomText(
+                                        // Use rating
+                                          text: userDetails!.averageRating
+                                              .toString() ??
+                                              '0',
+                                          right: 4.w),
                                       SvgPicture.asset(AppIcons.star),
                                     ],
                                   ),
@@ -252,36 +334,6 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             ],
                           ),
                           SizedBox(height: 24.h),
-                          /*//=====================> Phone Number Row <=================
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(AppIcons.call),
-                                    SizedBox(width: 12.w),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          text: AppStrings.phoneNumber.tr,
-                                        ),
-                                        CustomText(
-                                          text: '(888) 4455-9999',
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w500,
-                                          maxLine: 3,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 24.h),*/
                           //=====================> Date of Birth Row <=================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -293,13 +345,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                     SizedBox(width: 12.w),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         CustomText(
                                           text: AppStrings.dateOfBirth.tr,
                                         ),
                                         CustomText(
-                                          text: '12/12/2000',
+                                          // Use date of birth
+                                          text: userDetails!.dateOfBirth ?? 'N/A',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -323,13 +376,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                     SizedBox(width: 12.w),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         CustomText(
                                           text: AppStrings.location.tr,
                                         ),
                                         CustomText(
-                                          text: 'Dhaka, Bangladesh',
+                                          // Use address
+                                          text: userDetails!.address ?? 'N/A',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -353,13 +407,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                     SizedBox(width: 12.w),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         CustomText(
                                           text: AppStrings.vehiclesType.tr,
                                         ),
                                         CustomText(
-                                          text: 'Car',
+                                          // Use vehicle type
+                                          text: userDetails!.vehicleType ?? 'N/A',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,
@@ -373,72 +428,83 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           ),
                           SizedBox(height: 24.h),
                           //=====================> Reviews Section <=================
-                          CustomText(
+                          (userDetails!.reviews.isNotEmpty)
+                              ? CustomText(
                             text: AppStrings.reviews.tr,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                             bottom: 16.h,
-                          ),
+                          )
+                              : const SizedBox(),
 
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.r),
-                              border: Border.all(
-                                width: 1.w,
-                                color: AppColors.borderColor,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(12.w),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomNetworkImage(
-                                    imageUrl:
-                                        'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                                    height: 38.h,
-                                    width: 38.w,
-                                    boxShape: BoxShape.circle,
+                          (userDetails!.reviews.isNotEmpty)
+                              ? Column(
+                            children: userDetails!.reviews.map((review) {
+                              final reviewFormattedDate = review['date'] == null
+                                  ? ''
+                                  : DateFormat('EEE dd MMMM yyyy h.mm a')
+                                  .format(DateTime.parse(review['date']))
+                                  .toLowerCase();
+
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 8.h),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                    border: Border.all(width: 1.w, color: AppColors.borderColor),
                                   ),
-                                  SizedBox(width: 8.w),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(12.w),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        CustomText(
-                                          text: 'Mr. Imran',
-                                          bottom: 4.h,
-                                          fontWeight: FontWeight.w500,
+                                        CustomNetworkImage(
+                                          imageUrl: review['userImage'] ??
+                                              'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                          height: 38.h,
+                                          width: 38.w,
+                                          boxShape: BoxShape.circle,
                                         ),
-                                        CustomText(
-                                          text: '12 jan 2025  8.45',
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 9.sp,
-                                        ),
-                                        Row(
-                                          children: List.generate(
-                                            5,
-                                            (index) => const Icon(
-                                              Icons.star,
-                                              color: Colors.orange,
-                                              size: 20,
-                                            ),
+                                        SizedBox(width: 8.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              CustomText(
+                                                text: review['userName'] ?? '',
+                                                bottom: 4.h,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              CustomText(
+                                                text: reviewFormattedDate,
+                                                fontSize: 9.sp,
+                                              ),
+                                              Row(
+                                                children: List.generate(
+                                                  review['rating'] ?? 0,
+                                                      (index) => const Icon(
+                                                    Icons.star,
+                                                    color: Colors.orange,
+                                                    size: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                              CustomText(
+                                                text: review['comment'] ?? '',
+                                                maxLine: 10,
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        CustomText(
-                                          text:
-                                              'very helpful man and cool guy. very helpful man and cool guy. very helpful man and cool guy...',
-                                          maxLine: 10,
-                                          textAlign: TextAlign.start,
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                ),
+                              );
+                            }).toList(),
+                          )
+                              : const SizedBox.shrink(),
+
                         ],
                       ),
                     ),
@@ -455,7 +521,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 
   //===============================> Payment Bottom Sheet <===============================
   _showPaymentBottomSheet(BuildContext context) {
-    String? selectedPayment;
+    String? selectedPaymentOption;
 
     showModalBottomSheet(
       context: context,
@@ -494,24 +560,29 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                     ),
                   ),
                   _paymentOption(
-                    'Cash Payment'.tr,
-                    15.99,
+                    AppStrings.cashPayment.tr,
+                    statusBooking!.price.toDouble() , // Use actual price
                     'cash',
-                    selectedPayment,
-                    (val) => setState(() => selectedPayment = val),
+                    selectedPaymentOption,
+                        (val) => setState(() => selectedPaymentOption = val),
                   ),
                   _paymentOption(
-                    'Online Payment'.tr,
-                    15.99,
+                    AppStrings.onlinePayment.tr,
+                    statusBooking!.price.toDouble(), // Use actual price
                     'online',
-                    selectedPayment,
-                    (val) => setState(() => selectedPayment = val),
+                    selectedPaymentOption,
+                        (val) => setState(() => selectedPaymentOption = val),
                   ),
                   SizedBox(height: 16.h),
                   CustomButton(
                     width: 288.w,
                     onTap: () {
-                      if (selectedPayment != null) {
+                      if (selectedPaymentOption != null) {
+                        // Update the screen's state and close bottom sheet
+                        setState(() {
+                          selectedPayment = selectedPaymentOption;
+                        });
+                        Navigator.of(context).pop();
                         _onSubmit();
                       }
                     },
@@ -526,14 +597,137 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
     );
   }
 
+  void _showCancelBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle
+              Container(
+                width: 40.w,
+                height: 4.h,
+                margin: EdgeInsets.only(bottom: 16.h),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400,
+                  borderRadius: BorderRadius.circular(4.r),
+                ),
+              ),
+
+              CustomText(
+                text: AppStrings.cancelRide.tr,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+                bottom: 8.h,
+              ),
+
+              CustomText(
+                text: AppStrings.confirmRideCancelConfirmation.tr,
+                fontSize: 14.sp,
+                bottom: 12.h,
+              ),
+
+              CustomText(
+                text:
+                 AppStrings.confirmRideCancelAlert.tr,
+                fontSize: 12.sp,
+                color: Colors.red,
+                textAlign: TextAlign.center,
+                bottom: 20.h,
+                maxLine: 5,
+              ),
+
+              Row(
+                children: [
+                  // -------- Cancel Button --------
+                  Expanded(
+                    child: SizedBox(
+                      height: 44.h,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: AppColors.primaryColor, width: 1.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.r),
+                          ),
+                          backgroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          AppStrings.cancel.tr,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(width: 12.w),
+
+                  // -------- Yes Button --------
+                  Expanded(
+                    child: SizedBox(
+                      height: 44.h,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          // 🔥 Call cancel API here
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.r),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          AppStrings.yes.tr,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+
+              SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
   //===========================================> Payment Option <==================================
   _paymentOption(
-    String label,
-    double price,
-    String value,
-    String? groupValue,
-    ValueChanged<String?> onChanged,
-  ) {
+      String label,
+      double price,
+      String value,
+      String? groupValue,
+      ValueChanged<String?> onChanged,
+      ) {
     final isSelected = value == groupValue;
     return InkWell(
       onTap: () => onChanged(value),

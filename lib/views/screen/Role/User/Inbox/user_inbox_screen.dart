@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/views/base/custom_page_loading.dart';
 import '../../../../../controllers/message_room_controller.dart';
+import '../../../../../helpers/prefs_helpers.dart';
 import '../../../../../helpers/route.dart';
+import '../../../../../utils/app_constants.dart';
 import '../../../../../utils/app_strings.dart';
 import '../../../../base/custom_network_image.dart';
 import '../../../../base/custom_text.dart';
@@ -21,13 +24,21 @@ class UserInboxScreen extends StatefulWidget {
 class _UserInboxScreenState extends State<UserInboxScreen> {
   final TextEditingController _searchCTRL = TextEditingController();
   final MessageRoomController controller = Get.put(MessageRoomController());
+  String currentUserId = '';
 
   @override
   void initState() {
     super.initState();
-    // Explicitly set loading true first, then call API
-    controller.isLoading(true);
-    controller.getMessageRooms();
+    _loadUserId();
+  }
+
+  Future<void> _loadUserId() async {
+    final id = await PrefsHelper.getString(AppConstants.id);
+    setState(() {
+      currentUserId = id?.trim() ?? '';
+    });
+    debugPrint('🟢 CURRENT USER ID: $currentUserId');
+    await controller.getMessageRooms();
   }
 
   @override
@@ -44,40 +55,50 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextField(
               controller: _searchCTRL,
               hintText: AppStrings.search.tr,
-              prefixIcon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Icon(Icons.search, color: Colors.grey),
-              ),
+              prefixIcon: const Icon(Icons.search, color: Colors.grey),
             ),
             SizedBox(height: 16.h),
-
-            //=============================> Chats List <========================
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomPageLoading());
                 }
 
-                if (controller.errorMessage.isNotEmpty) {
-                  return Center(child: Text(controller.errorMessage.value));
-                }
+                final rooms = controller.messageRooms;
 
-                if (controller.messageRooms.isEmpty) {
+                if (rooms.isEmpty) {
                   return Center(child: Text("No messages found".tr));
                 }
 
                 return ListView.builder(
-                  itemCount: controller.messageRooms.length,
+                  itemCount: rooms.length,
                   itemBuilder: (context, index) {
-                    final room = controller.messageRooms[index];
-                    final participant = room.participants.first;
-                    final imageUrl =
-                        'https://faysal5500.sobhoy.com/${participant.image}';
+                    final room = rooms[index];
+
+
+                    final otherParticipants = room.participants.where((p) {
+                      final pId = p.id.toString().trim();
+                      final currentId = currentUserId.trim();
+                      return pId != currentId && pId.isNotEmpty;
+                    }).toList();
+
+                  final participant = otherParticipants.isNotEmpty
+                        ? otherParticipants.first
+                        : room.participants.first;
+
+
+                    if (otherParticipants.isEmpty && room.participants.length == 1) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final String otherUserName = participant.userName;
+                    final String otherUserImage = 'https://faysal5500.sobhoy.com/${participant.image}';
+                    final String roomId = room.id; // This is the _id from your JSON
+
 
                     DateTime updatedAt;
                     try {
@@ -91,20 +112,35 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                       padding: EdgeInsets.only(bottom: 8.h),
                       child: GestureDetector(
                         onTap: () {
+                          // 2. Pass multiple arguments using a Map or List
                           Get.toNamed(
                             AppRoutes.userMessageScreen,
-                            arguments: room,
+                            arguments: [
+                              roomId,          // index 0
+                              otherUserName,   // index 1
+                              otherUserImage,  // index 2
+                            ],
                           );
                         },
-                        child: Padding(
-                          padding:
-                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+                        child: Container(
+                          padding: EdgeInsets.all(12.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              )
+                            ],
+                          ),
                           child: Row(
                             children: [
                               CustomNetworkImage(
-                                imageUrl: imageUrl,
-                                height: 56.h,
-                                width: 56.w,
+                                imageUrl: otherUserImage,
+                                height: 50.h,
+                                width: 50.w,
                                 boxShape: BoxShape.circle,
                               ),
                               SizedBox(width: 12.w),
@@ -113,25 +149,25 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      text: participant.userName,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w700,
-                                      bottom: 6.h,
-                                      maxLine: 2,
-                                      textAlign: TextAlign.start,
+                                      text: otherUserName.capitalize ?? 'User',
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.bold,
+                                      bottom: 4.h,
                                     ),
                                     CustomText(
                                       text: room.lastMessage,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13.sp,
+                                      maxLine: 1,
+                                      color: Colors.grey,
                                       textAlign: TextAlign.start,
                                     ),
                                   ],
                                 ),
                               ),
-                              Spacer(),
+                              SizedBox(width: 8.w),
                               CustomText(
                                 text: messageTime,
-                                fontSize: 12.sp,
+                                fontSize: 11.sp,
                                 color: Colors.grey,
                               ),
                             ],

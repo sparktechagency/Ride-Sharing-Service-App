@@ -82,7 +82,8 @@ class Participant {
 
   factory Participant.fromJson(Map<String, dynamic> json) {
     return Participant(
-      id: json['_id'] ?? '',
+      // FIXED: Use 'id' instead of '_id' to match your JSON response
+      id: json['id']?.toString() ?? '',
       userName: json['userName'] ?? '',
       email: json['email'] ?? '',
       image: json['image'] ?? '',

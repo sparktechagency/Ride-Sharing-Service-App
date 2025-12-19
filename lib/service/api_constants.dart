@@ -15,7 +15,6 @@ class ApiConstants {
   //==========================================> Driver Role <=======================
   static const String driverLicenseUploadEndPoint = "/users/self/post-image-liscense";
   static const String homePageStatisticsEndPoint = "/home/statistics";
-  static const String getMessageRoomEndPoint = "/rooms/get";
 
 
 
@@ -24,6 +23,8 @@ class ApiConstants {
   static const String getBookingUserDetails = "/booking/get-user-details/";
   static const String getBookingByStatus = "/booking/get/";
   static const String createRating = "/rating/create";
+  static const String getMessageRoomEndPoint = "/rooms/get";
+  static const String getMessage = "/message/get/";
 
 
 }

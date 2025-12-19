@@ -186,132 +186,164 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
   }
 
   void _sendMessage() {
-    if (messageController.text.trim().isEmpty) return;
+    final text = messageController.text.trim();
+    if (text.isEmpty) return;
 
-    // Local UI Update: Creating an object that matches GetMessageAttributes
-    controller.messageGet.add(
-      GetMessageAttributes(
-        id: DateTime.now().millisecondsSinceEpoch.toString(), // Temp ID
-        message: messageController.text,
-        sender_id: currentUserId,
-        isSeen: false,
-        conversation_id: roomId,
-        createdAt: DateTime.now().toIso8601String(),
-        updatedAt: DateTime.now().toIso8601String(),
-        version: 0,
-      ),
+    // 1️⃣ Add locally for instant UI update
+    final tempMessage = GetMessageAttributes(
+      id: DateTime.now().millisecondsSinceEpoch.toString(), // Temporary ID
+      message: text,
+      sender_id: currentUserId,
+      isSeen: false,
+      conversation_id: roomId,
+      createdAt: DateTime.now().toIso8601String(),
+      updatedAt: DateTime.now().toIso8601String(),
+
     );
+    controller.messageGet.add(tempMessage);
 
+    // Clear input and scroll
     messageController.clear();
     _scrollToBottom();
+
+    // 2️⃣ Send message to server
+    controller.createMessage(
+      conversation_id: roomId,
+      message: text,
+    ).then((_) {
+      final created = controller.createMessageData.value;
+      if (created != null) {
+        // Replace temp message with server data (optional)
+        final index = controller.messageGet.indexOf(tempMessage);
+        if (index != -1) {
+          controller.messageGet[index] = GetMessageAttributes(
+            id: created.sId ?? tempMessage.id,
+            message: created.message ?? tempMessage.message,
+            sender_id: created.senderId ?? tempMessage.sender_id,
+            isSeen: created.isSeen ?? false,
+            conversation_id: created.conversationId ?? tempMessage.conversation_id,
+            createdAt: created.createdAt ?? tempMessage.createdAt,
+            updatedAt: created.updatedAt ?? tempMessage.updatedAt,
+            // version: created.version ?? tempMessage.version,
+          );
+        }
+      }
+    }).catchError((e) {
+      debugPrint('Error sending message: $e');
+      // Optionally, mark temp message as failed or remove it
+    });
   }
 
-  //=============================================> Receiver Bubble <=================================
+
   Widget receiverBubble(GetMessageAttributes msg) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Avatar
-          CustomNetworkImage(
-            imageUrl: partnerImage,
-            height: 38.h,
-            width: 38.w,
-            boxShape: BoxShape.circle,
-          ),
-          SizedBox(width: 8.w),
-          // Bubble
-          Flexible(
-            child: ChatBubble(
-              clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
-              backGroundColor: AppColors.cardColor, // Light grey/card color
-              margin: EdgeInsets.only(bottom: 8.h),
-              child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.65,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end, // Aligns time to right inside bubble
-                  children: [
-                    Text(
-                      msg.message,
-                      style: TextStyle(color: Colors.black, fontSize: 14.sp),
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      timeago.format(DateTime.parse(msg.createdAt)),
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 12.sp,
+    return GestureDetector(
+      onTap: () => _showDeleteMessageBottomSheet(msg.id),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Avatar
+            CustomNetworkImage(
+              imageUrl: partnerImage,
+              height: 38.h,
+              width: 38.w,
+              boxShape: BoxShape.circle,
+            ),
+            SizedBox(width: 8.w),
+            // Bubble
+            Flexible(
+              child: ChatBubble(
+                clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
+                backGroundColor: AppColors.cardColor,
+                margin: EdgeInsets.only(bottom: 8.h),
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.65,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        msg.message,
+                        style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                        textAlign: TextAlign.start,
                       ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ],
+                      SizedBox(height: 4.h),
+                      Text(
+                        timeago.format(DateTime.parse(msg.createdAt)),
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 12.sp,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  //=============================================> Sender Bubble <========================================
   Widget senderBubble(GetMessageAttributes msg) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // Bubble
-          Flexible(
-            child: ChatBubble(
-              clipper: ChatBubbleClipper5(type: BubbleType.sendBubble),
-              alignment: Alignment.topRight,
-              backGroundColor: AppColors.primaryColor,
-              child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.65,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Aligns text start
-                  children: [
-                    Text(
-                      msg.message,
-                      style: const TextStyle(color: Colors.white),
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(height: 4.h),
-                    Align(
-                      alignment: Alignment.centerRight, // Aligns time to right inside bubble
-                      child: Text(
-                        timeago.format(DateTime.parse(msg.createdAt)),
-                        textAlign: TextAlign.end,
-                        style: TextStyle(color: Colors.white70, fontSize: 12.sp),
+    return GestureDetector(
+      onTap: () => _showDeleteMessageBottomSheet(msg.id),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Flexible(
+              child: ChatBubble(
+                clipper: ChatBubbleClipper5(type: BubbleType.sendBubble),
+                alignment: Alignment.topRight,
+                backGroundColor: AppColors.primaryColor,
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.65,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        msg.message,
+                        style: const TextStyle(color: Colors.white),
+                        textAlign: TextAlign.start,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 4.h),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          timeago.format(DateTime.parse(msg.createdAt)),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.white70, fontSize: 12.sp),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          SizedBox(width: 8.w),
-          // User Avatar (Shown on the right like your reference)
-          Container(
-            height: 38.h,
-            width: 38.w,
-            decoration: const BoxDecoration(shape: BoxShape.circle),
-            clipBehavior: Clip.antiAlias,
-            child: Image.asset(AppImages.user, fit: BoxFit.cover),
-          ),
-        ],
+            SizedBox(width: 8.w),
+            Container(
+              height: 38.h,
+              width: 38.w,
+              decoration: const BoxDecoration(shape: BoxShape.circle),
+              clipBehavior: Clip.antiAlias,
+              child: Image.asset(AppImages.user, fit: BoxFit.cover),
+            ),
+          ],
+        ),
       ),
     );
   }
+
 
   PopupMenuButton<int> _popupMenuButton() {
     return PopupMenuButton<int>(
@@ -321,4 +353,79 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       ],
     );
   }
+
+
+  void _showDeleteMessageBottomSheet(String messageId) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
+            ),
+            border: Border(
+              top: BorderSide(width: 2.w, color: AppColors.primaryColor),
+            ),
+            color: AppColors.cardColor,
+          ),
+          height: 265.h,
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 48.w,
+                child: Divider(color: AppColors.greyColor, thickness: 5.5),
+              ),
+              SizedBox(height: 12.h),
+              CustomText(
+                text: AppStrings.deleteMessage.tr,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+              ),
+              SizedBox(
+                width: 190.w,
+                child: Divider(color: AppColors.primaryColor),
+              ),
+              SizedBox(height: 16.h),
+              CustomText(
+                text: 'Are you sure you want to delete this message?'.tr,
+                maxLine: 5,
+              ),
+              SizedBox(height: 48.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () => Get.back(),
+                    text: "No".tr,
+                    color: Colors.white,
+                    textColor: AppColors.primaryColor,
+                  ),
+                  SizedBox(width: 16.w),
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () async {
+                      Get.back();
+                      await controller.deleteMessage(messageId);
+                    },
+                    text: "Yes".tr,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
 }

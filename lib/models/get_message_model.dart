@@ -40,7 +40,7 @@ class GetMessageAttributes {
   final String conversation_id;
   final String createdAt;
   final String updatedAt;
-  final int version;
+
 
   GetMessageAttributes({
     required this.id,
@@ -50,7 +50,7 @@ class GetMessageAttributes {
     required this.conversation_id,
     required this.createdAt,
     required this.updatedAt,
-    required this.version,
+
   });
 
   factory GetMessageAttributes.fromJson(Map<String, dynamic> json) {
@@ -62,7 +62,7 @@ class GetMessageAttributes {
       conversation_id: json['conversation_id'] ?? '',
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
-      version: json['__v'] ?? 0,
+
     );
   }
 }

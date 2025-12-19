@@ -25,6 +25,8 @@ class ApiConstants {
   static const String createRating = "/rating/create";
   static const String getMessageRoomEndPoint = "/rooms/get";
   static const String getMessage = "/message/get/";
+  static const String createMessage = "/message/create";
+  static const String deleteMessage = "/message/delete/";
 
 
 }

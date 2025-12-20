@@ -86,7 +86,7 @@ class MessageRoomController extends GetxController {
     required String message,
   }) async {
     try {
-      isLoading(true);
+      // REMOVED: isLoading(true); <- This was causing the full-screen spinner
       errorMessage('');
 
       final body = {
@@ -94,19 +94,19 @@ class MessageRoomController extends GetxController {
         'message': message,
       };
 
-      final response =
-      await ApiClient.postData(ApiConstants.createMessage, body);
+      final response = await ApiClient.postData(ApiConstants.createMessage, body);
 
       if (response.statusCode == 201) {
         final model = CreateMessageModel.fromJson(response.body);
         createMessageData.value = model.data?.attributes;
       } else {
-        errorMessage(response.statusText ?? 'Failed to create message');
+        // You can handle error silently or show a toast
+        debugPrint('Failed to send message: ${response.statusText}');
       }
     } catch (e) {
-      errorMessage(e.toString());
+      debugPrint('Create Message Error: $e');
     } finally {
-      isLoading(false);
+      // REMOVED: isLoading(false);
     }
   }
 

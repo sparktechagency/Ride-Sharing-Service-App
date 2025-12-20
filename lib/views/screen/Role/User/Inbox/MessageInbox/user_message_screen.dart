@@ -210,11 +210,12 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       updatedAt: DateTime.now().toIso8601String(),
     );
 
-    // Add locally and scroll
+    // 1. ADD IMMEDIATELY (UI feels instant)
     controller.messageGet.add(tempMessage);
     messageController.clear();
     _scrollToBottom();
 
+    // 2. BACKGROUND API CALL (No full-screen loading)
     controller.createMessage(
       conversation_id: roomId,
       message: text,
@@ -222,14 +223,12 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       final created = controller.createMessageData.value;
       if (created != null) {
         int index = controller.messageGet.indexWhere((m) => m.id == tempId);
-
-        // If the socket ALREADY added the real message, remove our temp one
         bool alreadyAddedBySocket = controller.messageGet.any((m) => m.id == created.sId);
 
         if (alreadyAddedBySocket && index != -1) {
           controller.messageGet.removeAt(index);
         } else if (index != -1) {
-          // Otherwise, update the temp one to real
+          // REPLACE TEMP WITH REAL DATA
           controller.messageGet[index] = GetMessageAttributes(
             id: created.sId ?? tempId,
             message: created.message ?? text,
@@ -241,10 +240,10 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
           );
           controller.messageGet.refresh();
         }
-        _scrollToBottom(); // Scroll again after API update
       }
     });
   }
+
 
   Widget receiverBubble(GetMessageAttributes msg) {
     return GestureDetector(
@@ -302,6 +301,9 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
   }
 
   Widget senderBubble(GetMessageAttributes msg) {
+    // Check if this is a temporary local message
+    final bool isSending = msg.id.startsWith('temp_');
+
     return GestureDetector(
       onTap: () => _showDeleteMessageBottomSheet(msg.id),
       child: Padding(
@@ -324,17 +326,29 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     children: [
                       Text(
                         msg.message,
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 14.sp),
                         textAlign: TextAlign.start,
                       ),
                       SizedBox(height: 4.h),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          timeago.format(DateTime.parse(msg.createdAt)),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(color: Colors.white70, fontSize: 12.sp),
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // Expanded to push the status to the right
+                          const Spacer(),
+                          Text(
+                            timeago.format(DateTime.parse(msg.createdAt)),
+                            textAlign: TextAlign.end,
+                            style: TextStyle(color: Colors.white70, fontSize: 10.sp),
+                          ),
+                          SizedBox(width: 4.w),
+                          // Status Icon: Show clock for sending, checkmark for delivered
+                          Icon(
+                            isSending ? Icons.access_time_rounded : Icons.done_all,
+                            size: 14.sp,
+                            color: isSending ? Colors.white60 : Colors.white,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -342,6 +356,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
               ),
             ),
             SizedBox(width: 8.w),
+            // User Avatar
             Container(
               height: 38.h,
               width: 38.w,
@@ -354,7 +369,6 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       ),
     );
   }
-
 
   PopupMenuButton<int> _popupMenuButton() {
     return PopupMenuButton<int>(

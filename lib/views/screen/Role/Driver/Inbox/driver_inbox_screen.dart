@@ -1,122 +1,199 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../../controllers/message_room_controller.dart';
+import '../../../../../helpers/prefs_helpers.dart';
 import '../../../../../helpers/route.dart';
+import '../../../../../utils/app_constants.dart';
 import '../../../../../utils/app_strings.dart';
 import '../../../../base/custom_network_image.dart';
+import '../../../../base/custom_page_loading.dart';
 import '../../../../base/custom_text.dart';
 import '../../../../base/custom_text_field.dart';
+import '../../User/BottomNavBar/user_bottom_menu..dart';
 import '../BottomNavBar/driver_bottom_menu..dart';
 
 
-class DriverInboxScreen extends StatelessWidget {
-  DriverInboxScreen({super.key});
+class DriverInboxScreen extends StatefulWidget {
+  const DriverInboxScreen({super.key});
+
+  @override
+  State<DriverInboxScreen> createState() => _DriverInboxScreenState();
+}
+
+class _DriverInboxScreenState extends State<DriverInboxScreen> {
   final TextEditingController _searchCTRL = TextEditingController();
+  final MessageRoomController controller = Get.put(MessageRoomController());
+  String currentUserId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserId();
+  }
+
+  Future<void> _loadUserId() async {
+    final id = await PrefsHelper.getString(AppConstants.id);
+    String cleanId = id.trim() ?? '';
+
+    setState(() {
+      currentUserId = cleanId;
+    });
+
+    debugPrint('🟢 CURRENT USER ID: $currentUserId');
+
+    // 1. Fetch existing rooms via API
+    await controller.getMessageRooms();
+
+    // 2. Initialize Inbox Socket to listen for real-time updates
+    controller.initInboxSocket(cleanId);
+  }
+
+  @override
+  void dispose() {
+    controller.disposeSocket();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: DriverBottomMenu(2),
-      appBar: AppBar(title: Text('Chats'.tr)),
+      bottomNavigationBar: UserBottomMenu(2),
+      appBar: AppBar(
+        title: CustomText(
+          text: AppStrings.inbox.tr,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //==========================> Search Bar <==========================
             CustomTextField(
-              
               controller: _searchCTRL,
               hintText: AppStrings.search.tr,
-              prefixIcon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Icon(Icons.search, color: Colors.grey),
-              ),
+              prefixIcon: const Icon(Icons.search, color: Colors.grey),
             ),
             SizedBox(height: 16.h),
-            //=============================> Chats List <====================================
             Expanded(
-              flex: 5,
-              child: ListView.builder(
-                shrinkWrap: true,
-                addAutomaticKeepAlives: false,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 8.h),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.driverMessageScreen);
-                      },
-                      child: Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
-                        child: Row(
-                          children: [
-                            CustomNetworkImage(
-                              imageUrl:
-                              'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                              height: 56.h,
-                              width: 56.w,
-                              boxShape: BoxShape.circle,
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //=====================> Name <=======================
-                                  CustomText(
-                                    text: 'Rida Anam',
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                    bottom: 6.h,
-                                    maxLine: 2,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  //=====================> Last Message <=======================
-                                  CustomText(
-                                    text: 'Hello, are you here?',
-                                    fontWeight: FontWeight.w500,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ],
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CustomPageLoading());
+                }
+
+                final rooms = controller.messageRooms;
+
+                if (rooms.isEmpty) {
+                  return Center(child: Text("No messages found".tr));
+                }
+
+                return ListView.builder(
+                  itemCount: rooms.length,
+                  itemBuilder: (context, index) {
+                    final room = rooms[index];
+
+
+                    final otherParticipants = room.participants.where((p) {
+                      final pId = p.id.toString().trim();
+                      final currentId = currentUserId.trim();
+                      return pId != currentId && pId.isNotEmpty;
+                    }).toList();
+
+                    final participant = otherParticipants.isNotEmpty
+                        ? otherParticipants.first
+                        : room.participants.first;
+
+
+                    if (otherParticipants.isEmpty && room.participants.length == 1) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final String otherUserName = participant.userName;
+                    final String otherUserImage = 'https://faysal5500.sobhoy.com/${participant.image}';
+                    final String roomId = room.id; // This is the _id from your JSON
+
+
+                    DateTime updatedAt;
+                    try {
+                      updatedAt = DateTime.parse(room.updatedAt);
+                    } catch (_) {
+                      updatedAt = DateTime.now();
+                    }
+                    final messageTime = timeago.format(updatedAt);
+
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 8.h),
+                      child: GestureDetector(
+                        onTap: () {
+                          // 2. Pass multiple arguments using a Map or List
+                          Get.toNamed(
+                            AppRoutes.userMessageScreen,
+                            arguments: [
+                              roomId,          // index 0
+                              otherUserName,   // index 1
+                              otherUserImage,  // index 2
+                            ],
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(12.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              )
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              CustomNetworkImage(
+                                imageUrl: otherUserImage,
+                                height: 50.h,
+                                width: 50.w,
+                                boxShape: BoxShape.circle,
                               ),
-                            ),
-                            Spacer(),
-                            //==========================> Time and Unread Count Column <========================
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                CustomText(
-                                  text: '7:09 PM',
-                                  fontSize: 12.sp,
-                                  color: Colors.grey,
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text: otherUserName.capitalize ?? 'User',
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.bold,
+                                      bottom: 4.h,
+                                    ),
+                                    CustomText(
+                                      text: room.lastMessage,
+                                      fontSize: 13.sp,
+                                      maxLine: 1,
+                                      color: Colors.grey,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 8.h),
-                                Container(
-                                  padding: EdgeInsets.all(6.w),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: CustomText(
-                                    text: '99+',
-                                    fontSize: 12.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              SizedBox(width: 8.w),
+                              CustomText(
+                                text: messageTime,
+                                fontSize: 11.sp,
+                                color: Colors.grey,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),

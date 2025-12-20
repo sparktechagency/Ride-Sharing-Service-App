@@ -190,6 +190,7 @@ class PendingTab extends StatelessWidget {
                                   arguments: {
                                     'booking': statusBooking,
                                     'user': userDetails,
+                                    'from': 'pending'
                                   },
                                 );
                               },

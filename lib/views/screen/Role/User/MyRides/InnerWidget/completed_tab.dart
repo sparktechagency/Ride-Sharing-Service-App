@@ -190,6 +190,7 @@ class CompletedTab extends StatelessWidget {
                                   arguments: {
                                     'booking': statusBooking,
                                     'user': userDetails,
+                                    'from': 'completed'
                                   },
                                 );
                               },

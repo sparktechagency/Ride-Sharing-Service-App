@@ -26,6 +26,7 @@ class RideDetailsScreen extends StatefulWidget {
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   String? selectedPayment;
 
+
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.
   late BookingAttribute? statusBooking;
@@ -43,6 +44,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   Widget build(BuildContext context) {
     // --- 1. RECEIVE AND EXTRACT ARGUMENTS ---
     final arguments = Get.arguments as Map<String, dynamic>?;
+    final String fromScreen = arguments?['from'] ?? '';
 
     // Safely extract the passed data
     statusBooking = arguments?['booking'] as BookingAttribute?;
@@ -209,48 +211,69 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                         ],
                       ),
                     ),
-                    //==================================> Book Now Button <===================
+                    //==================================> Action Buttons <===================
                     //==================================> Action Buttons <===================
                     Padding(
-                      padding: EdgeInsets.only(right: 16.w, bottom: 6.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          // -------- Cancel Button --------
-                          OutlinedButton(
-                            onPressed: () {
-                              _showCancelBottomSheet(context);
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: AppColors.primaryColor),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              minimumSize: Size(90.w, 34.h),
-                            ),
-                            child: Text(
-                              AppStrings.cancel.tr,
-                              style: TextStyle(
-                                color: AppColors.primaryColor,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-
-
-                          SizedBox(width: 8.w),
-
-                          // -------- Book Now Button --------
-                          CustomButton(
-                            onTap: () {
-                              _showPaymentBottomSheet(context);
-                            },
-                            text: AppStrings.bookNow.tr,
-                            width: 100.w,
-                            height: 34.h,
-                          ),
-                        ],
+                      padding: EdgeInsets.only(right: 16.w, left: 16.w, bottom: 10.h),
+                      child: Builder(
+                        builder: (context) {
+                          if (fromScreen == 'ongoing') {
+                            // 1. Ongoing: Full width Start Trip
+                            return CustomButton(
+                              onTap: () {
+                                // Your Start Trip Logic
+                              },
+                              text: "Start Trip",
+                              width: double.infinity, // Full width
+                              height: 45.h,
+                            );
+                          } else if (fromScreen == 'completed') {
+                            // 2. Completed: Full width Completed Trip
+                            return CustomButton(
+                              onTap: () {},
+                              text: "Completed Trip",
+                              width: double.infinity, // Full width
+                              height: 45.h,
+                              // color: Colors.grey, // Optional: make it look non-clickable
+                            );
+                          } else {
+                            // 3. Pending (Default): Cancel and Chat Now buttons
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // -------- Cancel Button --------
+                                OutlinedButton(
+                                  onPressed: () => _showCancelBottomSheet(context),
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(color: AppColors.primaryColor),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    minimumSize: Size(90.w, 34.h),
+                                  ),
+                                  child: Text(
+                                    AppStrings.cancel.tr,
+                                    style: TextStyle(
+                                      color: AppColors.primaryColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                // -------- Chat Now Button --------
+                                CustomButton(
+                                  onTap: () {
+                                    // Logic to go to Chat
+                                  },
+                                  text: "Chat Now",
+                                  width: 100.w,
+                                  height: 34.h,
+                                ),
+                              ],
+                            );
+                          }
+                        },
                       ),
                     ),
 

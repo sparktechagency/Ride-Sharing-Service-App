@@ -182,7 +182,16 @@ class CurrentTripsTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustomButton(
-                              onTap: () {},
+                              onTap: () {
+                                Get.toNamed(
+                                  AppRoutes.rideDetailsScreen,
+                                  arguments: {
+                                    'booking': statusBooking,
+                                    'user': userDetails,
+                                    'from': 'ongoing'
+                                  },
+                                );
+                              },
                               width: 100.w,
                               height: 34.h,
                               text: AppStrings.view.tr),

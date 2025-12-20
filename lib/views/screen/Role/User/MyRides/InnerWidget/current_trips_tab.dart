@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../controllers/booking_controller.dart';
 import '../../../../../../helpers/route.dart';
+import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -62,7 +63,7 @@ class CurrentTripsTab extends StatelessWidget {
                             children: [
                               CustomNetworkImage(
                                 imageUrl:
-                                'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                "${ApiConstants.imageBaseUrl}${userDetails?.profileImage}",
                                 height: 38.h,
                                 width: 38.w,
                                 boxShape: BoxShape.circle,
@@ -131,7 +132,7 @@ class CurrentTripsTab extends StatelessWidget {
 
                           Row(
                             children: [
-                              CustomText(text: 'Booking Time :'),
+                              CustomText(text: AppStrings.bookingTime.tr),
                               Expanded(
                                 child: CustomText(
                                   text: formattedDate,

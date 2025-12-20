@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../models/booking_user_details_model.dart';
 import '../../../../../../models/booking_with_status_model.dart';
+import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -13,8 +14,6 @@ import '../../../../../base/custom_button.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-
 
 
 class RideDetailsScreen extends StatefulWidget {
@@ -35,7 +34,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 
   void _onSubmit() {
     if (selectedPayment != null) {
-      print('Payment method selected: $selectedPayment');
+      debugPrint('Payment method selected: $selectedPayment');
       Navigator.of(context).pop(selectedPayment);
     }
   }
@@ -154,12 +153,12 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       children: [
                                         // Use passenger count from booking
                                         CustomText(text: '${statusBooking?.numberOfPeople ?? 0}  '),
-                                        CustomText(text: 'Passenger'.tr),
+
                                       ],
                                     ),
                                     SizedBox(height: 12.h),
                                     // Use vehicle type from booking
-                                    CustomText(text: statusBooking?.vehicleType ?? 'Car'),
+                                    CustomText(text: statusBooking?.vehicleType ?? ''),
                                   ],
                                 ),
                               ),
@@ -460,7 +459,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       children: [
                                         CustomNetworkImage(
                                           imageUrl: review['userImage'] ??
-                                              'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                              "${ApiConstants.imageBaseUrl}${userDetails?.profileImage}",
                                           height: 38.h,
                                           width: 38.w,
                                           boxShape: BoxShape.circle,

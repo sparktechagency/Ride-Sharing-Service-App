@@ -77,6 +77,9 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
     });
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +102,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
             SizedBox(width: 10.w),
             Flexible(
               child: CustomText(
-                text: partnerName.capitalize ?? '',
+                text: partnerName,
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
@@ -130,7 +133,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
                     }
 
                     if (controller.messageGet.isEmpty) {
-                      return Center(child: Text("No messages yet".tr));
+                      return Center(child: Text(AppStrings.noMessageYet.tr));
                     }
 
                     return ListView.builder(
@@ -170,7 +173,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
           Expanded(
             child: CustomTextField(
               controller: messageController,
-              hintText: "Write your message...",
+              hintText: AppStrings.writeYourMessage,
             ),
           ),
           SizedBox(width: 10.w),
@@ -248,6 +251,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Avatar
           CustomNetworkImage(
             imageUrl: partnerImage,
             height: 38.h,
@@ -255,6 +259,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
             boxShape: BoxShape.circle,
           ),
           SizedBox(width: 8.w),
+          // Bubble
           Flexible(
             child: ChatBubble(
               clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
@@ -262,7 +267,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
               margin: EdgeInsets.only(bottom: 8.h),
               child: Container(
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.70,
+                  maxWidth: MediaQuery.of(context).size.width * 0.65,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -290,7 +295,6 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
       ),
     );
   }
-
 
   Widget senderBubble(GetMessageAttributes msg) {
     // Check if this is a temporary local message
@@ -355,90 +359,6 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
     );
   }
 
-  void _showDeleteMessageBottomSheet(String messageId) {
-    showModalBottomSheet(
-      context: context,
-      isDismissible: true,
-      enableDrag: true,
-      backgroundColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24.r),
-              topRight: Radius.circular(24.r),
-            ),
-            border: Border(
-              top: BorderSide(width: 2.w, color: AppColors.primaryColor),
-            ),
-            color: AppColors.cardColor,
-          ),
-          height: 265.h,
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          child: Column(
-            children: [
-              SizedBox(
-                width: 48.w,
-                child: Divider(
-                  color: AppColors.greyColor,
-                  thickness: 5.5,
-                ),
-              ),
-              SizedBox(height: 12.h),
-
-              CustomText(
-                text: AppStrings.deleteMessage.tr,
-                fontWeight: FontWeight.w600,
-                fontSize: 18.sp,
-              ),
-
-              SizedBox(
-                width: 190.w,
-                child: Divider(color: AppColors.primaryColor),
-              ),
-
-              SizedBox(height: 16.h),
-
-              CustomText(
-                text: 'Are you sure you want to delete this message?'.tr,
-                maxLine: 5,
-                textAlign: TextAlign.center,
-              ),
-
-              SizedBox(height: 48.h),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomButton(
-                    width: 124.w,
-                    height: 46.h,
-                    onTap: () => Get.back(),
-                    text: "No".tr,
-                    color: Colors.white,
-                    textColor: AppColors.primaryColor,
-                  ),
-                  SizedBox(width: 16.w),
-                  CustomButton(
-                    width: 124.w,
-                    height: 46.h,
-                    onTap: () async {
-                      Get.back();
-                      await controller.deleteMessage(messageId);
-                    },
-                    text: "Yes".tr,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   PopupMenuButton<int> _popupMenuButton() {
     return PopupMenuButton<int>(
@@ -451,7 +371,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
       itemBuilder: (_) => [
         PopupMenuItem(
           value: 0,
-          child: Text('Delete Conversation'.tr), // Changed text to be more accurate
+          child: Text(AppStrings.deleteConversation.tr), // Changed text to be more accurate
         ),
       ],
     );
@@ -486,7 +406,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
               ),
               SizedBox(height: 12.h),
               CustomText(
-                text: 'Delete Conversation'.tr,
+                text: AppStrings.deleteConversation.tr,
                 fontWeight: FontWeight.w600,
                 fontSize: 18.sp,
               ),
@@ -496,7 +416,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
               ),
               SizedBox(height: 16.h),
               CustomText(
-                text: 'Are you sure you want to delete this entire conversation? This action cannot be undone.'.tr,
+                text: AppStrings.areYouSureToDeleteThisConversionThisNotUndone.tr,
                 maxLine: 5,
               ),
               SizedBox(height: 48.h),
@@ -507,7 +427,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
                     width: 124.w,
                     height: 46.h,
                     onTap: () => Get.back(),
-                    text: "No".tr,
+                    text: AppStrings.no.tr,
                     color: Colors.white,
                     textColor: AppColors.primaryColor,
                   ),
@@ -526,9 +446,9 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
                       Get.back();
 
                       // Optional: Show success message
-                      Get.snackbar('Success', 'Conversation deleted successfully');
+                      Get.snackbar(AppStrings.success, AppStrings.conversationDeletedSuccess);
                     },
-                    text: "Yes".tr,
+                    text: AppStrings.yes.tr,
                   ),
                 ],
               ),
@@ -539,4 +459,76 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
     );
   }
 
+
+  void _showDeleteMessageBottomSheet(String messageId) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
+            ),
+            border: Border(
+              top: BorderSide(width: 2.w, color: AppColors.primaryColor),
+            ),
+            color: AppColors.cardColor,
+          ),
+          height: 265.h,
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 48.w,
+                child: Divider(color: AppColors.greyColor, thickness: 5.5),
+              ),
+              SizedBox(height: 12.h),
+              CustomText(
+                text: AppStrings.deleteMessage.tr,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+              ),
+              SizedBox(
+                width: 190.w,
+                child: Divider(color: AppColors.primaryColor),
+              ),
+              SizedBox(height: 16.h),
+              CustomText(
+                text: AppStrings.areYouSureToDeleteThisMessage.tr,
+                maxLine: 5,
+              ),
+              SizedBox(height: 48.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () => Get.back(),
+                    text: AppStrings.no.tr,
+                    color: Colors.white,
+                    textColor: AppColors.primaryColor,
+                  ),
+                  SizedBox(width: 16.w),
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () async {
+                      Get.back();
+                      await controller.deleteMessage(messageId);
+                    },
+                    text: AppStrings.yes.tr,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

@@ -4,6 +4,7 @@ import 'package:ride_sharing/views/base/custom_page_loading.dart';
 import '../../../../../controllers/message_room_controller.dart';
 import '../../../../../helpers/prefs_helpers.dart';
 import '../../../../../helpers/route.dart';
+import '../../../../../service/api_constants.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_constants.dart';
 import '../../../../../utils/app_strings.dart';
@@ -90,7 +91,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                 final rooms = controller.filteredRooms;
 
                 if (rooms.isEmpty) {
-                  return Center(child: Text("No messages found".tr));
+                  return Center(child: Text(AppStrings.noMessagesFound.tr));
                 }
 
                 return ListView.builder(
@@ -113,7 +114,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                     }
 
                     final String otherUserName = participant.userName;
-                    final String otherUserImage = 'https://faysal5500.sobhoy.com/${participant.image}';
+                    final String otherUserImage = '${ApiConstants.imageBaseUrl}${participant.image}';
                     final String roomId = room.id; // conversation _id
 
                     DateTime updatedAt;
@@ -176,7 +177,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                                     ),
                                     SizedBox(height: 16.h),
                                     CustomText(
-                                      text: 'Are you sure you want to delete this conversation?'.tr,
+                                      text: AppStrings.areYouSureYouWantDeleteConversation.tr,
                                       maxLine: 5,
                                     ),
                                     SizedBox(height: 48.h),
@@ -187,7 +188,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                                           width: 124.w,
                                           height: 46.h,
                                           onTap: () => Get.back(),
-                                          text: "No".tr,
+                                          text: AppStrings.no.tr,
                                           color: Colors.white,
                                           textColor: AppColors.primaryColor,
                                         ),
@@ -199,7 +200,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                                             Get.back();
                                             await controller.deleteConversation(roomId);
                                           },
-                                          text: "Yes".tr,
+                                          text: AppStrings.yes.tr,
                                         ),
                                       ],
                                     ),
@@ -254,7 +255,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       CustomText(
-                                        text: otherUserName.capitalize ?? 'User',
+                                        text: otherUserName.capitalize ?? '',
                                         fontSize: 15.sp,
                                         fontWeight: FontWeight.bold,
                                         bottom: 4.h,

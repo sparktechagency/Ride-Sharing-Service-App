@@ -134,7 +134,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     }
 
                     if (controller.messageGet.isEmpty) {
-                      return Center(child: Text("No messages yet".tr));
+                      return Center(child: Text(AppStrings.noMessageYet.tr));
                     }
 
                     return ListView.builder(
@@ -174,7 +174,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
           Expanded(
             child: CustomTextField(
               controller: messageController,
-              hintText: "Write your message...",
+              hintText: AppStrings.writeYourMessage,
             ),
           ),
           SizedBox(width: 10.w),
@@ -372,7 +372,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       itemBuilder: (_) => [
         PopupMenuItem(
           value: 0,
-          child: Text('Delete Conversation'.tr), // Changed text to be more accurate
+          child: Text(AppStrings.deleteConversation.tr), // Changed text to be more accurate
         ),
       ],
     );
@@ -407,7 +407,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
               ),
               SizedBox(height: 12.h),
               CustomText(
-                text: 'Delete Conversation'.tr,
+                text: AppStrings.deleteConversation.tr,
                 fontWeight: FontWeight.w600,
                 fontSize: 18.sp,
               ),
@@ -417,7 +417,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
               ),
               SizedBox(height: 16.h),
               CustomText(
-                text: 'Are you sure you want to delete this entire conversation? This action cannot be undone.'.tr,
+                text: AppStrings.areYouSureToDeleteThisConversionThisNotUndone.tr,
                 maxLine: 5,
               ),
               SizedBox(height: 48.h),
@@ -428,7 +428,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     width: 124.w,
                     height: 46.h,
                     onTap: () => Get.back(),
-                    text: "No".tr,
+                    text: AppStrings.no.tr,
                     color: Colors.white,
                     textColor: AppColors.primaryColor,
                   ),
@@ -447,9 +447,9 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                       Get.back();
 
                       // Optional: Show success message
-                      Get.snackbar('Success', 'Conversation deleted successfully');
+                      Get.snackbar(AppStrings.success, AppStrings.conversationDeletedSuccess);
                     },
-                    text: "Yes".tr,
+                    text: AppStrings.yes.tr,
                   ),
                 ],
               ),
@@ -499,7 +499,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
               ),
               SizedBox(height: 16.h),
               CustomText(
-                text: 'Are you sure you want to delete this message?'.tr,
+                text: AppStrings.areYouSureToDeleteThisMessage.tr,
                 maxLine: 5,
               ),
               SizedBox(height: 48.h),
@@ -510,7 +510,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     width: 124.w,
                     height: 46.h,
                     onTap: () => Get.back(),
-                    text: "No".tr,
+                    text: AppStrings.no.tr,
                     color: Colors.white,
                     textColor: AppColors.primaryColor,
                   ),
@@ -522,7 +522,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                       Get.back();
                       await controller.deleteMessage(messageId);
                     },
-                    text: "Yes".tr,
+                    text: AppStrings.yes.tr,
                   ),
                 ],
               ),

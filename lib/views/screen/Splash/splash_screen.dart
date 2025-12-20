@@ -23,7 +23,13 @@ class _SplashScreenState extends State<SplashScreen> {
        final userRole = await PrefsHelper.getString(AppConstants.userRole);
        if (isLogged) {
          if (userRole == 'driver') {
-           Get.offAllNamed(AppRoutes.driverHomeScreen);
+           final hasLicenseUploaded =
+               await PrefsHelper.getBool(AppConstants.hasLicenseUploaded) ?? false;
+           if (hasLicenseUploaded) {
+             Get.offAllNamed(AppRoutes.driverHomeScreen);
+           } else {
+             Get.offAllNamed(AppRoutes.driverLicenceUploadScreen);
+           }
          } else if (userRole == 'user') {
            Get.offAllNamed(AppRoutes.userSearchScreen);
          } else {

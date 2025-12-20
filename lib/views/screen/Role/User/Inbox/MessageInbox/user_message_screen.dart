@@ -305,7 +305,8 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
     final bool isSending = msg.id.startsWith('temp_');
 
     return GestureDetector(
-      onTap: () => _showDeleteMessageBottomSheet(msg.id),
+      behavior: HitTestBehavior.opaque,
+      onLongPress: () => _showDeleteMessageBottomSheet(msg.id),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         child: Row(
@@ -356,19 +357,12 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
               ),
             ),
             SizedBox(width: 8.w),
-            // User Avatar
-            Container(
-              height: 38.h,
-              width: 38.w,
-              decoration: const BoxDecoration(shape: BoxShape.circle),
-              clipBehavior: Clip.antiAlias,
-              child: Image.asset(AppImages.user, fit: BoxFit.cover),
-            ),
           ],
         ),
       ),
     );
   }
+
 
   PopupMenuButton<int> _popupMenuButton() {
     return PopupMenuButton<int>(

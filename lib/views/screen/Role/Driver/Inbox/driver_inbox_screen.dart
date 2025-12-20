@@ -130,7 +130,7 @@ class _DriverInboxScreenState extends State<DriverInboxScreen> {
                         onTap: () {
                           // 2. Pass multiple arguments using a Map or List
                           Get.toNamed(
-                            AppRoutes.userMessageScreen,
+                            AppRoutes.driverMessageScreen,
                             arguments: [
                               roomId,          // index 0
                               otherUserName,   // index 1

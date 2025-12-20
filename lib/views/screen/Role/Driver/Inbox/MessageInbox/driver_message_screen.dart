@@ -99,7 +99,7 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
             SizedBox(width: 10.w),
             Flexible(
               child: CustomText(
-                text: partnerName,
+                text: partnerName.capitalize ?? '',
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
@@ -242,66 +242,63 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
 
 
   Widget receiverBubble(GetMessageAttributes msg) {
-    return GestureDetector(
-      onTap: () => _showDeleteMessageBottomSheet(msg.id),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Avatar
-            CustomNetworkImage(
-              imageUrl: partnerImage,
-              height: 38.h,
-              width: 38.w,
-              boxShape: BoxShape.circle,
-            ),
-            SizedBox(width: 8.w),
-            // Bubble
-            Flexible(
-              child: ChatBubble(
-                clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
-                backGroundColor: AppColors.cardColor,
-                margin: EdgeInsets.only(bottom: 8.h),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.65,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        msg.message,
-                        style: TextStyle(color: Colors.black, fontSize: 14.sp),
-                        textAlign: TextAlign.start,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomNetworkImage(
+            imageUrl: partnerImage,
+            height: 38.h,
+            width: 38.w,
+            boxShape: BoxShape.circle,
+          ),
+          SizedBox(width: 8.w),
+          Flexible(
+            child: ChatBubble(
+              clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
+              backGroundColor: AppColors.cardColor,
+              margin: EdgeInsets.only(bottom: 8.h),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.70,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      msg.message,
+                      style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      timeago.format(DateTime.parse(msg.createdAt)),
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 12.sp,
                       ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        timeago.format(DateTime.parse(msg.createdAt)),
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 12.sp,
-                        ),
-                        textAlign: TextAlign.end,
-                      ),
-                    ],
-                  ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
 
   Widget senderBubble(GetMessageAttributes msg) {
     // Check if this is a temporary local message
     final bool isSending = msg.id.startsWith('temp_');
 
     return GestureDetector(
-      onTap: () => _showDeleteMessageBottomSheet(msg.id),
+      behavior: HitTestBehavior.opaque,
+      onLongPress: () => _showDeleteMessageBottomSheet(msg.id),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         child: Row(
@@ -352,33 +349,18 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
               ),
             ),
             SizedBox(width: 8.w),
-            // User Avatar
-            Container(
-              height: 38.h,
-              width: 38.w,
-              decoration: const BoxDecoration(shape: BoxShape.circle),
-              clipBehavior: Clip.antiAlias,
-              child: Image.asset(AppImages.user, fit: BoxFit.cover),
-            ),
           ],
         ),
       ),
     );
   }
 
-  PopupMenuButton<int> _popupMenuButton() {
-    return PopupMenuButton<int>(
-      icon: const Icon(Icons.more_vert, color: Colors.white),
-      itemBuilder: (_) => [
-        PopupMenuItem(value: 0, child: Text('Block User'.tr)),
-      ],
-    );
-  }
-
-
   void _showDeleteMessageBottomSheet(String messageId) {
     showModalBottomSheet(
       context: context,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
@@ -400,24 +382,34 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
             children: [
               SizedBox(
                 width: 48.w,
-                child: Divider(color: AppColors.greyColor, thickness: 5.5),
+                child: Divider(
+                  color: AppColors.greyColor,
+                  thickness: 5.5,
+                ),
               ),
               SizedBox(height: 12.h),
+
               CustomText(
                 text: AppStrings.deleteMessage.tr,
                 fontWeight: FontWeight.w600,
                 fontSize: 18.sp,
               ),
+
               SizedBox(
                 width: 190.w,
                 child: Divider(color: AppColors.primaryColor),
               ),
+
               SizedBox(height: 16.h),
+
               CustomText(
                 text: 'Are you sure you want to delete this message?'.tr,
                 maxLine: 5,
+                textAlign: TextAlign.center,
               ),
+
               SizedBox(height: 48.h),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -447,4 +439,14 @@ class _DriverMessageScreenState extends State<DriverMessageScreen> {
       },
     );
   }
+
+  PopupMenuButton<int> _popupMenuButton() {
+    return PopupMenuButton<int>(
+      icon: const Icon(Icons.more_vert, color: Colors.white),
+      itemBuilder: (_) => [
+        PopupMenuItem(value: 0, child: Text('Block User'.tr)),
+      ],
+    );
+  }
+
 }

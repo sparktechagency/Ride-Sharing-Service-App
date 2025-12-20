@@ -10,6 +10,10 @@ import '../service/api_constants.dart';
 class MessageRoomController extends GetxController {
 
   IO.Socket? socket;
+  String currentUserId = ''; // Store this to filter socket messages
+
+  // Callback to trigger scroll in the UI
+  Function? onNewMessageReceived;
 
   /// =================== COMMON STATES ===================
   final isLoading = false.obs;
@@ -136,7 +140,9 @@ class MessageRoomController extends GetxController {
 
 
   /// =================== SOCKET INIT ===================
-  void initSocket(String conversationId) {
+  void initSocket(String conversationId, String userId) {
+    currentUserId = userId; // Set the current user ID
+
     socket = IO.io(
       'https://faysal6100.sobhoy.com',
       IO.OptionBuilder()
@@ -148,49 +154,63 @@ class MessageRoomController extends GetxController {
     socket!.connect();
 
     socket!.onConnect((_) {
-      debugPrint('Socket connected: ${socket!.id}');
+      debugPrint('✅ Socket connected: ${socket!.id}');
     });
 
-    // 1. LISTEN FOR NEW MESSAGES (Existing)
+    socket!.onConnectError((err) => debugPrint('❌ Socket Connect Error: $err'));
+    socket!.onError((err) => debugPrint('❌ Socket Error: $err'));
+
+    // 3. LISTEN FOR NEW MESSAGES
     socket!.on('new-message::$conversationId', (data) {
-      debugPrint('New message received: $data');
-      final msg = GetMessageAttributes(
-        id: data['_id'] ?? DateTime.now().millisecondsSinceEpoch.toString(),
-        message: data['message'] ?? '',
-        sender_id: data['sender_id'] ?? '',
-        isSeen: data['isSeen'] ?? false,
-        conversation_id: data['conversation_id'] ?? '',
-        createdAt: data['createdAt'] ?? DateTime.now().toIso8601String(),
-        updatedAt: data['updatedAt'] ?? DateTime.now().toIso8601String(),
-      );
-      messageGet.add(msg);
-    });
-
-    // 2. NEW EVENT LISTENER: NEW CONVERSATION
-    // Note: If you want this to trigger for ANY new conversation,
-    // you might need a static ID or a user-specific ID depending on your backend logic.
-    socket!.on('new-conversation::$conversationId', (data) {
-      debugPrint('New conversation created: $data');
+      debugPrint('📩 New message received via Socket: $data');
 
       try {
-        // Assuming the data matches your MessageRoomAttributes model
-        final newRoom = MessageRoomAttributes.fromJson(data);
+        String incomingId = data['_id'] ?? '';
+        String senderId = data['sender_id'] ?? '';
 
-        // Add the new room to the top of your message rooms list
-        messageRooms.insert(0, newRoom);
+        // Check if message is already in list or if it's sent by me
+        bool isMe = senderId.trim() == currentUserId.trim();
+        bool exists = messageGet.any((msg) => msg.id == incomingId);
+
+        if (!exists && !isMe) {
+          final msg = GetMessageAttributes(
+            id: incomingId,
+            message: data['message'] ?? '',
+            sender_id: senderId,
+            isSeen: data['isSeen'] ?? false,
+            conversation_id: data['conversation_id'] ?? '',
+            createdAt: data['createdAt'] ?? DateTime.now().toIso8601String(),
+            updatedAt: data['updatedAt'] ?? DateTime.now().toIso8601String(),
+          );
+
+          messageGet.add(msg);
+
+          // Trigger the scroll callback if defined in UI
+          if (onNewMessageReceived != null) {
+            onNewMessageReceived!();
+          }
+          debugPrint('✨ Message added to UI from Receiver');
+        } else {
+          debugPrint('🚫 Ignored duplicate or own message from Socket');
+        }
       } catch (e) {
-        debugPrint('Error parsing new conversation: $e');
+        debugPrint('❌ Parsing Error: $e');
       }
     });
 
     socket!.onDisconnect((_) {
-      debugPrint('Socket disconnected');
+      debugPrint('⚠️ Socket disconnected');
     });
   }
 
-  /// Disconnect socket
   void disposeSocket() {
-    socket?.disconnect();
+    if (socket != null) {
+      socket!.dispose();
+      socket = null;
+      onNewMessageReceived = null; // Clean up callback
+      debugPrint('🧹 Socket resources cleaned up');
+    }
   }
+
 
 }

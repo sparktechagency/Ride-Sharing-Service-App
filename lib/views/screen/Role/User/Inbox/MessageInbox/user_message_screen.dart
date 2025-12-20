@@ -60,7 +60,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
     await controller.getMessage(roomId);
 
     // Initialize socket for this conversation
-    controller.initSocket(roomId);
+    controller.initSocket(roomId,currentUserId);
 
     _scrollToBottom();
   }
@@ -198,51 +198,53 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
     final text = messageController.text.trim();
     if (text.isEmpty) return;
 
-    // 1️⃣ Add locally for instant UI update
+    final String tempId = "temp_${DateTime.now().millisecondsSinceEpoch}";
+
     final tempMessage = GetMessageAttributes(
-      id: DateTime.now().millisecondsSinceEpoch.toString(), // Temporary ID
+      id: tempId,
       message: text,
       sender_id: currentUserId,
       isSeen: false,
       conversation_id: roomId,
       createdAt: DateTime.now().toIso8601String(),
       updatedAt: DateTime.now().toIso8601String(),
-
     );
-    controller.messageGet.add(tempMessage);
 
-    // Clear input and scroll
+    // Add locally and scroll
+    controller.messageGet.add(tempMessage);
     messageController.clear();
     _scrollToBottom();
 
-    // 2️⃣ Send message to server
     controller.createMessage(
       conversation_id: roomId,
       message: text,
     ).then((_) {
       final created = controller.createMessageData.value;
       if (created != null) {
-        // Replace temp message with server data (optional)
-        final index = controller.messageGet.indexOf(tempMessage);
-        if (index != -1) {
+        int index = controller.messageGet.indexWhere((m) => m.id == tempId);
+
+        // If the socket ALREADY added the real message, remove our temp one
+        bool alreadyAddedBySocket = controller.messageGet.any((m) => m.id == created.sId);
+
+        if (alreadyAddedBySocket && index != -1) {
+          controller.messageGet.removeAt(index);
+        } else if (index != -1) {
+          // Otherwise, update the temp one to real
           controller.messageGet[index] = GetMessageAttributes(
-            id: created.sId ?? tempMessage.id,
-            message: created.message ?? tempMessage.message,
-            sender_id: created.senderId ?? tempMessage.sender_id,
+            id: created.sId ?? tempId,
+            message: created.message ?? text,
+            sender_id: created.senderId ?? currentUserId,
             isSeen: created.isSeen ?? false,
-            conversation_id: created.conversationId ?? tempMessage.conversation_id,
-            createdAt: created.createdAt ?? tempMessage.createdAt,
-            updatedAt: created.updatedAt ?? tempMessage.updatedAt,
-            // version: created.version ?? tempMessage.version,
+            conversation_id: created.conversationId ?? roomId,
+            createdAt: created.createdAt ?? DateTime.now().toIso8601String(),
+            updatedAt: created.updatedAt ?? DateTime.now().toIso8601String(),
           );
+          controller.messageGet.refresh();
         }
+        _scrollToBottom(); // Scroll again after API update
       }
-    }).catchError((e) {
-      debugPrint('Error sending message: $e');
-      // Optionally, mark temp message as failed or remove it
     });
   }
-
 
   Widget receiverBubble(GetMessageAttributes msg) {
     return GestureDetector(

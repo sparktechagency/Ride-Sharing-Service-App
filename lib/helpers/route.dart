@@ -112,6 +112,7 @@ class AppRoutes{
   static String seeAllScreen="/see_all_screen";
   static String rideDetailsScreen="/ride_details_screen";
 
+
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
     GetPage(name:onboardingScreen, page: ()=>const OnboardingScreen()),

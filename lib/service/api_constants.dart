@@ -18,10 +18,15 @@ class ApiConstants {
 
 
 
+
 //==========================================> User Role <=======================
   static const String getBookingUserDetails = "/booking/get-user-details/";
   static const String getBookingByStatus = "/booking/get/";
   static const String createRating = "/rating/create";
+  static const String getMessageRoomEndPoint = "/rooms/get";
+  static const String getMessage = "/message/get/";
+  static const String createMessage = "/message/create";
+  static const String deleteMessage = "/message/delete/";
 
 
 }

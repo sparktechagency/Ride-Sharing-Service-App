@@ -363,10 +363,100 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
 
   PopupMenuButton<int> _popupMenuButton() {
     return PopupMenuButton<int>(
+      onSelected: (value) {
+        if (value == 0) {
+          _showDeleteConversationBottomSheet(roomId);
+        }
+      },
       icon: const Icon(Icons.more_vert, color: Colors.white),
       itemBuilder: (_) => [
-        PopupMenuItem(value: 0, child: Text('Block User'.tr)),
+        PopupMenuItem(
+          value: 0,
+          child: Text('Delete Conversation'.tr), // Changed text to be more accurate
+        ),
       ],
+    );
+  }
+
+
+  void _showDeleteConversationBottomSheet(String conversationId) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
+            ),
+            border: Border(
+              top: BorderSide(width: 2.w, color: AppColors.primaryColor),
+            ),
+            color: AppColors.cardColor,
+          ),
+          height: 265.h,
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 48.w,
+                child: Divider(color: AppColors.greyColor, thickness: 5.5),
+              ),
+              SizedBox(height: 12.h),
+              CustomText(
+                text: 'Delete Conversation'.tr,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+              ),
+              SizedBox(
+                width: 190.w,
+                child: Divider(color: AppColors.primaryColor),
+              ),
+              SizedBox(height: 16.h),
+              CustomText(
+                text: 'Are you sure you want to delete this entire conversation? This action cannot be undone.'.tr,
+                maxLine: 5,
+              ),
+              SizedBox(height: 48.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () => Get.back(),
+                    text: "No".tr,
+                    color: Colors.white,
+                    textColor: AppColors.primaryColor,
+                  ),
+                  SizedBox(width: 16.w),
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () async {
+                      // 1. Close bottom sheet
+                      Get.back();
+
+                      // 2. Call controller to delete
+                      await controller.deleteConversation(conversationId);
+
+                      // 3. Go back to the Inbox/Previous screen
+                      Get.back();
+
+                      // Optional: Show success message
+                      Get.snackbar('Success', 'Conversation deleted successfully');
+                    },
+                    text: "Yes".tr,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -442,6 +532,8 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       },
     );
   }
+
+
 
 
 }

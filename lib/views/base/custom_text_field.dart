@@ -25,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final bool? isEmail;
   final bool? readOnly;
+  final ValueChanged<String>? onChanged;
 
   const CustomTextField({
     super.key,
@@ -45,6 +46,7 @@ class CustomTextField extends StatefulWidget {
     this.isPassword = false,
     this.readOnly = false,
     this.onTab, contentPadding,
+    this.onChanged,
   });
 
   @override
@@ -67,6 +69,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onTap: widget.onTab,
       readOnly: widget.readOnly!,
       controller: widget.controller,
+      onChanged: widget.onChanged,
       keyboardType: widget.keyboardType,
       obscuringCharacter: widget.obscureCharacrter!,
       validator: widget.validator,

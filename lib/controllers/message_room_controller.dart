@@ -31,6 +31,9 @@ class MessageRoomController extends GetxController {
   /// =================== DELETE MESSAGE ===================
   final deleteMessageData = Rxn<CreateMessageAttributes>();
 
+  /// =================== FILTERED MESSAGE ROOMS (LOCAL SEARCH) ===================
+  final filteredRooms = <MessageRoomAttributes>[].obs;
+
   /// ===================================================
   /// GET MESSAGE ROOMS
   /// ===================================================
@@ -45,6 +48,8 @@ class MessageRoomController extends GetxController {
       if (response.statusCode == 200) {
         final model = GetMessageRoomModel.fromJson(response.body);
         messageRooms.value = model.data.attributes;
+
+        filteredRooms.assignAll(messageRooms);
       } else {
         errorMessage(response.statusText ?? 'Failed to load message rooms');
       }
@@ -240,7 +245,8 @@ class MessageRoomController extends GetxController {
           messageRooms.insert(0, newRoom);
         }
 
-        messageRooms.refresh(); // Notify GetX UI
+        messageRooms.refresh();
+        filteredRooms.assignAll(messageRooms);
       } catch (e) {
         debugPrint('❌ Inbox Socket Error: $e');
       }
@@ -255,6 +261,34 @@ class MessageRoomController extends GetxController {
       debugPrint('🧹 Socket resources cleaned up');
     }
   }
+
+
+
+  /// =================== LOCAL INBOX SEARCH ===================
+  void searchInbox(String query) {
+    if (query.trim().isEmpty) {
+      filteredRooms.assignAll(messageRooms);
+      return;
+    }
+
+    final q = query.toLowerCase();
+
+    filteredRooms.assignAll(
+      messageRooms.where((room) {
+        final otherParticipants = room.participants.where((p) {
+          return p.id.toString().trim() != currentUserId.trim();
+        }).toList();
+
+        if (otherParticipants.isEmpty) return false;
+
+        final name = otherParticipants.first.userName.toLowerCase();
+        final lastMsg = room.lastMessage.toLowerCase();
+
+        return name.contains(q) || lastMsg.contains(q);
+      }).toList(),
+    );
+  }
+
 
 
 }

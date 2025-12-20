@@ -76,6 +76,9 @@ class _DriverInboxScreenState extends State<DriverInboxScreen> {
               controller: _searchCTRL,
               hintText: AppStrings.search.tr,
               prefixIcon: const Icon(Icons.search, color: Colors.grey),
+              onChanged: (value) {
+                controller.searchInbox(value);
+              },
             ),
             SizedBox(height: 16.h),
             Expanded(
@@ -84,7 +87,7 @@ class _DriverInboxScreenState extends State<DriverInboxScreen> {
                   return const Center(child: CustomPageLoading());
                 }
 
-                final rooms = controller.messageRooms;
+                final rooms = controller.filteredRooms;
 
                 if (rooms.isEmpty) {
                   return Center(child: Text("No messages found".tr));

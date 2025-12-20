@@ -246,56 +246,53 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
 
 
   Widget receiverBubble(GetMessageAttributes msg) {
-    return GestureDetector(
-      onTap: () => _showDeleteMessageBottomSheet(msg.id),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Avatar
-            CustomNetworkImage(
-              imageUrl: partnerImage,
-              height: 38.h,
-              width: 38.w,
-              boxShape: BoxShape.circle,
-            ),
-            SizedBox(width: 8.w),
-            // Bubble
-            Flexible(
-              child: ChatBubble(
-                clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
-                backGroundColor: AppColors.cardColor,
-                margin: EdgeInsets.only(bottom: 8.h),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.65,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        msg.message,
-                        style: TextStyle(color: Colors.black, fontSize: 14.sp),
-                        textAlign: TextAlign.start,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Avatar
+          CustomNetworkImage(
+            imageUrl: partnerImage,
+            height: 38.h,
+            width: 38.w,
+            boxShape: BoxShape.circle,
+          ),
+          SizedBox(width: 8.w),
+          // Bubble
+          Flexible(
+            child: ChatBubble(
+              clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
+              backGroundColor: AppColors.cardColor,
+              margin: EdgeInsets.only(bottom: 8.h),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.65,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      msg.message,
+                      style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      timeago.format(DateTime.parse(msg.createdAt)),
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 12.sp,
                       ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        timeago.format(DateTime.parse(msg.createdAt)),
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 12.sp,
-                        ),
-                        textAlign: TextAlign.end,
-                      ),
-                    ],
-                  ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -4,8 +4,10 @@ import 'package:ride_sharing/views/base/custom_page_loading.dart';
 import '../../../../../controllers/message_room_controller.dart';
 import '../../../../../helpers/prefs_helpers.dart';
 import '../../../../../helpers/route.dart';
+import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_constants.dart';
 import '../../../../../utils/app_strings.dart';
+import '../../../../base/custom_button.dart';
 import '../../../../base/custom_network_image.dart';
 import '../../../../base/custom_text.dart';
 import '../../../../base/custom_text_field.dart';
@@ -96,17 +98,15 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                   itemBuilder: (context, index) {
                     final room = rooms[index];
 
-
                     final otherParticipants = room.participants.where((p) {
                       final pId = p.id.toString().trim();
                       final currentId = currentUserId.trim();
                       return pId != currentId && pId.isNotEmpty;
                     }).toList();
 
-                  final participant = otherParticipants.isNotEmpty
+                    final participant = otherParticipants.isNotEmpty
                         ? otherParticipants.first
                         : room.participants.first;
-
 
                     if (otherParticipants.isEmpty && room.participants.length == 1) {
                       return const SizedBox.shrink();
@@ -114,8 +114,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
 
                     final String otherUserName = participant.userName;
                     final String otherUserImage = 'https://faysal5500.sobhoy.com/${participant.image}';
-                    final String roomId = room.id; // This is the _id from your JSON
-
+                    final String roomId = room.id; // conversation _id
 
                     DateTime updatedAt;
                     try {
@@ -127,73 +126,164 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
 
                     return Padding(
                       padding: EdgeInsets.only(bottom: 8.h),
-                      child: GestureDetector(
-                        onTap: () {
-                          // 2. Pass multiple arguments using a Map or List
-                          Get.toNamed(
-                            AppRoutes.userMessageScreen,
-                            arguments: [
-                              roomId,          // index 0
-                              otherUserName,   // index 1
-                              otherUserImage,  // index 2
-                            ],
-                          );
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(12.w),
+                      child: Dismissible(
+                        key: Key(roomId),
+                        direction: DismissDirection.endToStart, // swipe left to delete
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.red,
                             borderRadius: BorderRadius.circular(8.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              )
-                            ],
                           ),
-                          child: Row(
-                            children: [
-                              CustomNetworkImage(
-                                imageUrl: otherUserImage,
-                                height: 50.h,
-                                width: 50.w,
-                                boxShape: BoxShape.circle,
+                          child: const Icon(Icons.delete, color: Colors.white),
+                        ),
+                        confirmDismiss: (direction) async {
+                          // Show custom styled dialog
+                          showDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (ctx) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.r),
                               ),
-                              SizedBox(width: 12.w),
-                              Expanded(
+                              backgroundColor: Colors.transparent,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.cardColor,
+                                  borderRadius: BorderRadius.circular(24.r),
+                                  border: Border(
+                                    top: BorderSide(width: 2.w, color: AppColors.primaryColor),
+                                  ),
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                                height: 265.h,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomText(
-                                      text: otherUserName.capitalize ?? 'User',
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.bold,
-                                      bottom: 4.h,
+                                    SizedBox(
+                                      width: 48.w,
+                                      child: Divider(color: AppColors.greyColor, thickness: 5.5),
                                     ),
+                                    SizedBox(height: 12.h),
                                     CustomText(
-                                      text: room.lastMessage,
-                                      fontSize: 13.sp,
-                                      maxLine: 1,
-                                      color: Colors.grey,
-                                      textAlign: TextAlign.start,
+                                      text: AppStrings.deleteMessage.tr,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18.sp,
+                                    ),
+                                    SizedBox(
+                                      width: 190.w,
+                                      child: Divider(color: AppColors.primaryColor),
+                                    ),
+                                    SizedBox(height: 16.h),
+                                    CustomText(
+                                      text: 'Are you sure you want to delete this conversation?'.tr,
+                                      maxLine: 5,
+                                    ),
+                                    SizedBox(height: 48.h),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        CustomButton(
+                                          width: 124.w,
+                                          height: 46.h,
+                                          onTap: () => Get.back(),
+                                          text: "No".tr,
+                                          color: Colors.white,
+                                          textColor: AppColors.primaryColor,
+                                        ),
+                                        SizedBox(width: 16.w),
+                                        CustomButton(
+                                          width: 124.w,
+                                          height: 46.h,
+                                          onTap: () async {
+                                            Get.back();
+                                            await controller.deleteConversation(roomId);
+                                          },
+                                          text: "Yes".tr,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 8.w),
-                              CustomText(
-                                text: messageTime,
-                                fontSize: 11.sp,
-                                color: Colors.grey,
-                              ),
-                            ],
+                            ),
+                          );
+
+                          return false; // prevent auto-dismiss until confirmed
+                        },
+
+                        onDismissed: (direction) {
+                          // // Call deleteConversation from controller
+                          // controller.deleteConversation(roomId);
+                        },
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              AppRoutes.userMessageScreen,
+                              arguments: [
+                                roomId,
+                                otherUserName,
+                                otherUserImage,
+                              ],
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(12.w),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                CustomNetworkImage(
+                                  imageUrl: otherUserImage,
+                                  height: 50.h,
+                                  width: 50.w,
+                                  boxShape: BoxShape.circle,
+                                ),
+                                SizedBox(width: 12.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      CustomText(
+                                        text: otherUserName.capitalize ?? 'User',
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
+                                        bottom: 4.h,
+                                      ),
+                                      CustomText(
+                                        text: room.lastMessage,
+                                        fontSize: 13.sp,
+                                        maxLine: 1,
+                                        color: Colors.grey,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                CustomText(
+                                  text: messageTime,
+                                  fontSize: 11.sp,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     );
                   },
                 );
+
               }),
             ),
           ],

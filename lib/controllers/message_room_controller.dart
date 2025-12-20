@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../models/create_message_model.dart';
+import '../models/delete_room_conversations_model.dart';
 import '../models/get_message_model.dart';
 import '../models/get_message_room_model.dart';
 import '../service/api_client.dart';
@@ -33,6 +34,10 @@ class MessageRoomController extends GetxController {
 
   /// =================== FILTERED MESSAGE ROOMS (LOCAL SEARCH) ===================
   final filteredRooms = <MessageRoomAttributes>[].obs;
+
+  /// =================== DELETE ROOM ===================
+
+  final deleteConversationData = Rxn<DeleteConversationAttributes>();
 
   /// ===================================================
   /// GET MESSAGE ROOMS
@@ -137,6 +142,42 @@ class MessageRoomController extends GetxController {
       }
     } catch (e) {
       errorMessage(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
+  /// =================== DELETE CONVERSATION ===================
+  Future<void> deleteConversation(String conversationId) async {
+    try {
+      isLoading(true);
+      errorMessage('');
+
+      final response = await ApiClient.deleteData(
+          '${ApiConstants.deleteConverstaion}$conversationId');
+
+      if (response.statusCode == 200) {
+        final model = DeleteRoomConversationsModel.fromJson(response.body);
+        final deletedId = model.data?.attributes?.sId;
+
+        deleteConversationData.value = model.data?.attributes;
+
+        if (deletedId != null) {
+          // Remove from messageRooms
+          messageRooms.removeWhere((room) => room.id == deletedId);
+
+          // Remove from filteredRooms so UI updates immediately
+          filteredRooms.removeWhere((room) => room.id == deletedId);
+
+          debugPrint('✅ Conversation deleted: $deletedId');
+        }
+      } else {
+        errorMessage(response.statusText ?? 'Failed to delete conversation');
+      }
+    } catch (e) {
+      errorMessage(e.toString());
+      debugPrint('❌ Delete Conversation Error: $e');
     } finally {
       isLoading(false);
     }

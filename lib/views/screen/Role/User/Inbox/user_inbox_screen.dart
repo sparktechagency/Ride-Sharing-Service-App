@@ -34,7 +34,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
 
   Future<void> _loadUserId() async {
     final id = await PrefsHelper.getString(AppConstants.id);
-    String cleanId = id?.trim() ?? '';
+    String cleanId = id.trim() ?? '';
 
     setState(() {
       currentUserId = cleanId;
@@ -74,6 +74,9 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
               controller: _searchCTRL,
               hintText: AppStrings.search.tr,
               prefixIcon: const Icon(Icons.search, color: Colors.grey),
+              onChanged: (value) {
+                controller.searchInbox(value);
+              },
             ),
             SizedBox(height: 16.h),
             Expanded(
@@ -82,7 +85,7 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                   return const Center(child: CustomPageLoading());
                 }
 
-                final rooms = controller.messageRooms;
+                final rooms = controller.filteredRooms;
 
                 if (rooms.isEmpty) {
                   return Center(child: Text("No messages found".tr));

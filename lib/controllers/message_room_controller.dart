@@ -144,7 +144,7 @@ class MessageRoomController extends GetxController {
     currentUserId = userId; // Set the current user ID
 
     socket = IO.io(
-      'https://faysal6100.sobhoy.com',
+      ApiConstants.socketBaseUrl,
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
@@ -200,6 +200,50 @@ class MessageRoomController extends GetxController {
 
     socket!.onDisconnect((_) {
       debugPrint('⚠️ Socket disconnected');
+    });
+  }
+
+
+  /// =================== INBOX SOCKET INIT ===================
+  void initInboxSocket(String userId) {
+    currentUserId = userId;
+
+    socket = IO.io(
+      ApiConstants.socketBaseUrl,
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .build(),
+    );
+
+    socket!.connect();
+
+    socket!.onConnect((_) => debugPrint('✅ Inbox Socket connected: ${socket!.id}'));
+
+    // LISTEN FOR NEW CONVERSATIONS OR UPDATES
+    // Event: new-conversation::USER_ID
+    socket!.on('new-conversation::$userId', (data) {
+      debugPrint('📩 Inbox Update Received: $data');
+      try {
+        // Assuming 'data' matches your MessageRoomAttributes model structure
+        final newRoom = MessageRoomAttributes.fromJson(data);
+
+        // Check if this room already exists in our list
+        int existingIndex = messageRooms.indexWhere((room) => room.id == newRoom.id);
+
+        if (existingIndex != -1) {
+          // 1. If it exists, remove old and insert at top (latest message first)
+          messageRooms.removeAt(existingIndex);
+          messageRooms.insert(0, newRoom);
+        } else {
+          // 2. If it's a brand new conversation, insert it at the top
+          messageRooms.insert(0, newRoom);
+        }
+
+        messageRooms.refresh(); // Notify GetX UI
+      } catch (e) {
+        debugPrint('❌ Inbox Socket Error: $e');
+      }
     });
   }
 

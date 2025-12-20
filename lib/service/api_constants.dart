@@ -1,4 +1,5 @@
 class ApiConstants {
+  static const String socketBaseUrl = "https://faysal6100.sobhoy.com";
   static const String baseUrl = "https://faysal5500.sobhoy.com/api/v1";
   static const String imageBaseUrl = "https://faysal5500.sobhoy.com";
   static const String signUpEndPoint = "/auth/register";

@@ -34,11 +34,25 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
 
   Future<void> _loadUserId() async {
     final id = await PrefsHelper.getString(AppConstants.id);
+    String cleanId = id?.trim() ?? '';
+
     setState(() {
-      currentUserId = id?.trim() ?? '';
+      currentUserId = cleanId;
     });
+
     debugPrint('🟢 CURRENT USER ID: $currentUserId');
+
+    // 1. Fetch existing rooms via API
     await controller.getMessageRooms();
+
+    // 2. Initialize Inbox Socket to listen for real-time updates
+    controller.initInboxSocket(cleanId);
+  }
+
+  @override
+  void dispose() {
+    controller.disposeSocket();
+    super.dispose();
   }
 
   @override

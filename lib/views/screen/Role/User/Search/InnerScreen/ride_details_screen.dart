@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../../../../controllers/booking_controller.dart';
 import '../../../../../../models/booking_user_details_model.dart';
 import '../../../../../../models/booking_with_status_model.dart';
 import '../../../../../../service/api_constants.dart';
@@ -25,7 +26,7 @@ class RideDetailsScreen extends StatefulWidget {
 
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   String? selectedPayment;
-
+  final BookingController bookingController = Get.find<BookingController>();
 
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.
@@ -212,32 +213,50 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                       ),
                     ),
                     //==================================> Action Buttons <===================
-                    //==================================> Action Buttons <===================
                     Padding(
                       padding: EdgeInsets.only(right: 16.w, left: 16.w, bottom: 10.h),
                       child: Builder(
                         builder: (context) {
+                          final BookingController bookingController = Get.find<BookingController>();
+
                           if (fromScreen == 'ongoing') {
-                            // 1. Ongoing: Full width Start Trip
-                            return CustomButton(
-                              onTap: () {
-                                // Your Start Trip Logic
+                            // 1. Ongoing: Start Trip (Triggers status change to Completed)
+                            return Obx(() => CustomButton(
+                              onTap: () async {
+                                bool success = await bookingController.updateBookingStatus(
+                                  statusBooking!.id,
+                                  "Completed",
+                                );
+                                if (success) {
+                                  // Show snackbar before navigation to ensure context is valid
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text("Trip status updated successfully!")),
+                                  );
+                                  Get.back();
+                                } else {
+                                  // Show error if update fails
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(bookingController.errorMessage.value)),
+                                  );
+                                }
                               },
+                              loading: bookingController.isUpdatingStatus.value,
                               text: "Start Trip",
-                              width: double.infinity, // Full width
+                              width: double.infinity,
                               height: 45.h,
-                            );
+                            ));
                           } else if (fromScreen == 'completed') {
-                            // 2. Completed: Full width Completed Trip
+                            // 2. Completed: Static Button
                             return CustomButton(
                               onTap: () {},
                               text: "Completed Trip",
-                              width: double.infinity, // Full width
+                              width: double.infinity,
                               height: 45.h,
-                              // color: Colors.grey, // Optional: make it look non-clickable
+                              color: Colors.grey,
+                              broderColor: Colors.grey,
                             );
                           } else {
-                            // 3. Pending (Default): Cancel and Chat Now buttons
+                            // 3. Pending: Cancel (Outlined) and Chat Now (CustomButton)
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -269,6 +288,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                   text: "Chat Now",
                                   width: 100.w,
                                   height: 34.h,
+                                  fontSize: 12.sp,
                                 ),
                               ],
                             );

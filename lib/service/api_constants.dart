@@ -32,6 +32,7 @@ class ApiConstants {
   static const String createMessage = "/message/create";
   static const String deleteMessage = "/message/delete/";
   static const String deleteConverstaion = "/rooms/delete/";
+  static const String updateStatus = "/booking/update/";
 
 
 }

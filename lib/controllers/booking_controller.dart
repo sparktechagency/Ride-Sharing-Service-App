@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:ride_sharing/utils/app_constants.dart';
 
+import '../models/booking_update_model.dart';
 import '../models/booking_user_details_model.dart';
 import '../models/booking_with_status_model.dart';
 import '../service/api_client.dart';
@@ -12,6 +15,8 @@ class BookingController extends GetxController {
   final isLoadingUser = false.obs;
   final isLoadingBooking = false.obs;
   final errorMessage = ''.obs;
+
+  final isUpdatingStatus = false.obs;
 
   /// =================== USER DETAILS ===================
   final userDetails = Rxn<BookingUserAttributes>();
@@ -68,6 +73,49 @@ class BookingController extends GetxController {
       isLoadingBooking(false);
     }
   }
+
+
+  Future<bool> updateBookingStatus(String bookingId, String newStatus) async {
+    try {
+      isUpdatingStatus(true);
+
+      // Prepare the body - using a Map then encoding to JSON
+      Map<String, String> body = {
+        "status": newStatus,
+      };
+
+      final response = await ApiClient.patchData(
+        "${ApiConstants.updateStatus}$bookingId",
+        jsonEncode(body),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Parse the response using your BookingUpdateModel
+        final model = BookingUpdateModel.fromJson(response.body);
+
+        // Optional: Update the local list if the booking exists there
+        int index = bookings.indexWhere((element) => element.id == bookingId);
+        if (index != -1) {
+          // Assuming BookingAttribute and BookingAttributes are compatible
+          // or you just want to refresh the list:
+          getBookingsByStatus(newStatus);
+        }
+
+        print("Update Success: ${model.message}");
+        return true;
+      } else {
+        errorMessage(response.statusText ?? 'Failed to update status');
+        return false;
+      }
+    } catch (e) {
+      print("Error updating status: $e");
+      errorMessage(e.toString());
+      return false;
+    } finally {
+      isUpdatingStatus(false);
+    }
+  }
+
 
   /// ===================================================
   /// CLEAR DATA (OPTIONAL)

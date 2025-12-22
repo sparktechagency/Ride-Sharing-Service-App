@@ -1,4 +1,5 @@
 class ApiConstants {
+  static const String googleApiKey = "AIzaSyCrmEOP4JyFCozu7n85BIZqn_8LarJq_iI";
   static const String socketBaseUrl = "https://faysal6100.sobhoy.com";
   static const String baseUrl = "https://faysal5500.sobhoy.com/api/v1";
   static const String imageBaseUrl = "https://faysal5500.sobhoy.com";
@@ -24,6 +25,8 @@ class ApiConstants {
   static const String getBookingUserDetails = "/booking/get-user-details/";
   static const String getBookingByStatus = "/booking/get/";
   static const String createRating = "/rating/create";
+  static const String searchRide = "/ride/search-ride";
+
 
   //==========================================> Common <=======================
 

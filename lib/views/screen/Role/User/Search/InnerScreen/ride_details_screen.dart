@@ -220,7 +220,6 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           final BookingController bookingController = Get.find<BookingController>();
 
                           if (fromScreen == 'ongoing') {
-                            // 1. Ongoing: Start Trip (Triggers status change to Completed)
                             return Obx(() => CustomButton(
                               onTap: () async {
                                 bool success = await bookingController.updateBookingStatus(
@@ -228,24 +227,21 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                   "Completed",
                                 );
                                 if (success) {
-                                  // Show snackbar before navigation to ensure context is valid
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text("Trip status updated successfully!")),
-                                  );
-                                  Get.back();
+                                  // Just go back and pass 'true' as the result
+                                  Navigator.pop(context, true);
                                 } else {
-                                  // Show error if update fails
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(bookingController.errorMessage.value)),
-                                  );
+                                  // For errors, you can show them here since you aren't popping the screen
+                                  Get.snackbar("Error", bookingController.errorMessage.value,
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white);
                                 }
                               },
                               loading: bookingController.isUpdatingStatus.value,
-                              text: "Start Trip",
+                              text: "Start Trip", // Note: If the status is becoming 'Completed', usually the button says 'End Trip'
                               width: double.infinity,
                               height: 45.h,
                             ));
-                          } else if (fromScreen == 'completed') {
+                          }else if (fromScreen == 'completed') {
                             // 2. Completed: Static Button
                             return CustomButton(
                               onTap: () {},

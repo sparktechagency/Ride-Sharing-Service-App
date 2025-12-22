@@ -79,10 +79,7 @@ class BookingController extends GetxController {
     try {
       isUpdatingStatus(true);
 
-      // Prepare the body - using a Map then encoding to JSON
-      Map<String, String> body = {
-        "status": newStatus,
-      };
+      Map<String, String> body = {"status": newStatus};
 
       final response = await ApiClient.patchData(
         "${ApiConstants.updateStatus}$bookingId",
@@ -90,32 +87,29 @@ class BookingController extends GetxController {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // Parse the response using your BookingUpdateModel
-        final model = BookingUpdateModel.fromJson(response.body);
-
-        // Optional: Update the local list if the booking exists there
+        // 1. Find the item in the current observable list
         int index = bookings.indexWhere((element) => element.id == bookingId);
+
         if (index != -1) {
-          // Assuming BookingAttribute and BookingAttributes are compatible
-          // or you just want to refresh the list:
-          getBookingsByStatus(newStatus);
+          // 2. REMOVE the item from the current list immediately
+          // This ensures the "Ongoing" tab list clears that specific ride.
+          bookings.removeAt(index);
+          bookings.refresh(); // Forces Obx to update the UI
         }
 
-        print("Update Success: ${model.message}");
+        print("Update Success");
         return true;
       } else {
         errorMessage(response.statusText ?? 'Failed to update status');
         return false;
       }
     } catch (e) {
-      print("Error updating status: $e");
       errorMessage(e.toString());
       return false;
     } finally {
       isUpdatingStatus(false);
     }
   }
-
 
   /// ===================================================
   /// CLEAR DATA (OPTIONAL)

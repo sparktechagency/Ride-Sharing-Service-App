@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import '../../../../../controllers/booking_controller.dart';
 import '../../../../../controllers/profile_controller.dart';
 import '../../../../../helpers/prefs_helpers.dart';
 import '../../../../../helpers/route.dart';
@@ -121,6 +122,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       //===================> Logout ListTile <=================
                       CustomListTile(
                         onTap: () {
+                          Get.delete<BookingController>(force: true);
                           _showCustomBottomSheet(context);
                         },
                         title: AppStrings.logout.tr,

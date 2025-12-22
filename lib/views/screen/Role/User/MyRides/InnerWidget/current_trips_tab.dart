@@ -182,19 +182,36 @@ class CurrentTripsTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustomButton(
-                              onTap: () {
-                                Get.toNamed(
-                                  AppRoutes.rideDetailsScreen,
-                                  arguments: {
-                                    'booking': statusBooking,
-                                    'user': userDetails,
-                                    'from': 'ongoing'
-                                  },
+                            onTap: () async {
+                              // 1. Wait for the result from the details screen
+                              final result = await Get.toNamed(
+                                AppRoutes.rideDetailsScreen,
+                                arguments: {
+                                  'booking': statusBooking,
+                                  'user': userDetails,
+                                  'from': 'ongoing'
+                                },
+                              );
+
+                              // 2. If result is true, it means the trip was completed successfully
+                              if (result == true) {
+                                // Show the success message here on the parent screen
+                                Get.snackbar(
+                                  "Success",
+                                  "Trip completed successfully!",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.green,
+                                  colorText: Colors.white,
                                 );
-                              },
-                              width: 100.w,
-                              height: 34.h,
-                              text: AppStrings.view.tr),
+
+                                // 3. Refresh the ongoing list
+                                controller.getBookingsByStatus("ongoing");
+                              }
+                            },
+                            width: 100.w,
+                            height: 34.h,
+                            text: AppStrings.view.tr,
+                          ),
                           SizedBox(width: 8.w),
                           CustomButton(
                             onTap: () {},

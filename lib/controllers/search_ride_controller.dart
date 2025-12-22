@@ -1,3 +1,6 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/recent_search_model.dart';
 import '../models/search_ride_model.dart';
 import '../service/api_client.dart';
 import '../service/api_constants.dart';
@@ -15,6 +18,7 @@ class SearchRideController extends GetxController {
   final RxString currentSearchType = 'pickup'.obs; // pickup | dropoff
   final RxList searchResults = <dynamic>[].obs;
 
+  final RxList<RecentSearchModel> recentSearches = <RecentSearchModel>[].obs;
   final RxList<RideAttribute> rides = <RideAttribute>[].obs;
   /// Vehicle
   final List<String> vehicleTypes = ['Bike', 'Car', 'Combi', 'Moto'];
@@ -25,6 +29,12 @@ class SearchRideController extends GetxController {
   final Rx<LatLng?> dropoffLatLng = Rx<LatLng?>(null);
 
   final distanceKm = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadRecentSearches(); // Load data when controller starts
+  }
 
   void clearSearchResults() {
     searchResults.clear();
@@ -144,7 +154,6 @@ class SearchRideController extends GetxController {
 
 
 
-  /// ================= Search Ride API =================
   Future<void> searchRide({
     required String date,
     required int passenger,
@@ -154,64 +163,83 @@ class SearchRideController extends GetxController {
       return;
     }
 
-    // --- NEW: Safety check for distance ---
-    // If distance is still 0 but we have coordinates, try calculating it one last time
     if (distanceKm.value == 0) {
-      debugPrint('⚠️ Distance is 0, attempting last-minute calculation...');
       await calculateDistance();
     }
 
     isLoading.value = true;
 
-    final query = {
-      "pickup":
-      "${pickupLatLng.value!.longitude},${pickupLatLng.value!.latitude}",
-      "dropoff":
-      "${dropoffLatLng.value!.longitude},${dropoffLatLng.value!.latitude}",
+    // This Map matches your Postman Raw JSON Body exactly
+    final Map<String, dynamic> rawBody = {
+      "pickup": [pickupLatLng.value!.longitude, pickupLatLng.value!.latitude],
+      "dropoff": [dropoffLatLng.value!.longitude, dropoffLatLng.value!.latitude],
       "date": date,
-      "number_of_passenger": passenger.toString(),
-      "distanceKm": distanceKm.value.toString(),
-      "vehicleModel": selectedVehicle.value,
+      "number_of_passenger": passenger,
+      "distanceKm": distanceKm.value.toInt(),
+      "vehicleModel": selectedVehicle.value.toLowerCase(),
     };
 
     /// 🔍 LOG REQUEST
-    debugPrint('================= SEARCH RIDE REQUEST =================');
+    debugPrint('================= SEARCH RIDE REQUEST (GET RAW BODY) =================');
     debugPrint('➡️ API: ${ApiConstants.baseUrl}${ApiConstants.searchRide}');
-    debugPrint('➡️ Query Params:');
-    query.forEach((key, value) {
-      debugPrint('   $key : $value');
-    });
-    debugPrint('=======================================================');
+    debugPrint('➡️ Body: ${jsonEncode(rawBody)}');
+    debugPrint('======================================================================');
 
     final response = await ApiClient.getData(
       ApiConstants.searchRide,
-      query: query,
+      query: rawBody, // Passed as the body now
     );
-
-    /// 🔍 LOG RESPONSE
-    debugPrint('================= SEARCH RIDE RESPONSE =================');
-    debugPrint('⬅️ Status Code: ${response.statusCode}');
-    debugPrint('⬅️ Status Text: ${response.statusText}');
-    debugPrint('⬅️ Raw Body:');
-    debugPrint(response.bodyString ?? response.body.toString());
-    debugPrint('========================================================');
 
     if (response.statusCode == 200) {
       try {
         final model = SearchRideModel.fromJson(response.body);
         rides.assignAll(model.data.attributes);
-
-        debugPrint('✅ Parsed rides count: ${rides.length}');
+        debugPrint('✅ Found ${rides.length} rides');
       } catch (e) {
         debugPrint('❌ JSON Parse Error: $e');
         rides.clear();
       }
     } else {
-      debugPrint('❌ API Error: ${response.statusCode}');
+      debugPrint('❌ API Error: ${response.statusCode} - ${response.bodyString}');
       rides.clear();
     }
-
     isLoading.value = false;
   }
+
+
+
+  // Save search to local storage
+  Future<void> saveSearchLocally({required String pickup, required String dropoff, required String date, required int passengers}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Create new search object
+    RecentSearchModel newSearch = RecentSearchModel(
+      pickup: pickup,
+      dropoff: dropoff,
+      date: date,
+      passengers: passengers,
+    );
+
+    // Add to top of list and keep only last 5 items
+    recentSearches.insert(0, newSearch);
+    if (recentSearches.length > 5) recentSearches.removeLast();
+
+    // Convert list to JSON string and save
+    List<String> jsonList = recentSearches.map((e) => jsonEncode(e.toJson())).toList();
+    await prefs.setStringList('recent_searches', jsonList);
+  }
+
+  // Load searches from local storage
+  Future<void> loadRecentSearches() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? jsonList = prefs.getStringList('recent_searches');
+
+    if (jsonList != null) {
+      recentSearches.assignAll(
+          jsonList.map((e) => RecentSearchModel.fromJson(jsonDecode(e))).toList()
+      );
+    }
+  }
+
 }
 

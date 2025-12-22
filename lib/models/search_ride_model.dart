@@ -149,11 +149,17 @@ class GeoLocation {
   }
 }
 class Driver {
+  final String userName;
+  final String image;
+  final String vehicleType;
   final String email;
   final String id;
 
   Driver({
     required this.email,
+    required this.userName,
+    required this.image,
+    required this.vehicleType,
     required this.id,
   });
 
@@ -161,6 +167,9 @@ class Driver {
     return Driver(
       email: json['email'] ?? '',
       id: json['id'] ?? '',
+      userName: json['userName'] ?? '',
+      image: json['image'] ?? '',
+      vehicleType: json['vehicleType'] ?? '',
     );
   }
 }

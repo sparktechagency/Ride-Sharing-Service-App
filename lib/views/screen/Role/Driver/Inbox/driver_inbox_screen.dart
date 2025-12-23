@@ -63,7 +63,7 @@ class _DriverInboxScreenState extends State<DriverInboxScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: UserBottomMenu(2),
+      bottomNavigationBar: DriverBottomMenu(2),
       appBar: AppBar(
         title: CustomText(
           text: AppStrings.inbox.tr,

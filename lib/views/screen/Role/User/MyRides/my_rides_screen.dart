@@ -22,7 +22,9 @@ class MyRidesScreen extends StatefulWidget {
 
 class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final BookingController bookingController = Get.put(BookingController(), permanent: true);
+  final BookingController bookingController = Get.isRegistered<BookingController>()
+      ? Get.find<BookingController>()
+      : Get.put(BookingController(), permanent: true);
 
 
   final statuses = [ "pending", "ongoing", "cancelled", "completed"];

@@ -9,6 +9,7 @@ import 'package:ride_sharing/views/base/custom_app_bar.dart';
 import 'package:ride_sharing/views/screen/Role/User/Search/InnerScreen/search_ride_detail_screen.dart';
 import '../../../../../../controllers/booking_controller.dart';
 import '../../../../../../controllers/search_ride_controller.dart';
+import '../../../../../../models/search_ride_model.dart';
 import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
@@ -23,7 +24,6 @@ class SeeAllScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // 1. Access the existing controller instance
     final SearchRideController controller = Get.find<SearchRideController>();
-    final BookingController bookingController = Get.put(BookingController());
 
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.planYourRide.tr),
@@ -106,7 +106,11 @@ class SeeAllScreen extends StatelessWidget {
                                           children: [
                                             CustomText(text: AppStrings.pICKUP.tr, bottom: 12.h),
                                             // 5. Dynamic Pickup Address
-                                            CustomText(text: ride.pickUp.address, bottom: 8.w, maxLine: 2),
+                                            CustomText(
+                                              text: getFirstAddress(ride),
+                                              bottom: 8.w,
+                                              maxLine: 2,
+                                            ),
                                             CustomText(text: 'Passenger'.tr,bottom: 8.w, maxLine: 2),
                                             CustomText(text: 'Seat Booked'.tr),
                                           ],
@@ -126,7 +130,12 @@ class SeeAllScreen extends StatelessWidget {
                                           children: [
                                             CustomText(text: AppStrings.dROPOFF.tr, bottom: 12.h),
                                             // 6. Dynamic Dropoff Address
-                                            CustomText(text: ride.dropOff.address, bottom: 8.w, textAlign: TextAlign.end, maxLine: 2),
+                                            CustomText(
+                                              text: getLastAddress(ride),
+                                              bottom: 8.w,
+                                              textAlign: TextAlign.end,
+                                              maxLine: 2,
+                                            ),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
@@ -226,4 +235,18 @@ class SeeAllScreen extends StatelessWidget {
       ),
     );
   }
+
+
+  String getFirstAddress(RideAttribute ride) {
+    return ride.pickUp.address;
+  }
+
+
+  String getLastAddress(RideAttribute ride) {
+    if (ride.stopOver.isNotEmpty) {
+      return ride.stopOver.last.address;
+    }
+    return ride.dropOff.address;
+  }
+
 }

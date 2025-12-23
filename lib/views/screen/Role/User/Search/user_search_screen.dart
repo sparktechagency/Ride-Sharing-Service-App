@@ -26,7 +26,6 @@ class UserSearchScreen extends StatelessWidget {
 
   final SearchRideController controller =
   Get.put(SearchRideController());
-  final BookingController bookingController = Get.put(BookingController());
 
   @override
   Widget build(BuildContext context) {

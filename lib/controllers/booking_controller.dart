@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:ride_sharing/utils/app_constants.dart';
 
+import '../helpers/prefs_helpers.dart';
 import '../models/booking_update_model.dart';
 import '../models/booking_user_details_model.dart';
 import '../models/booking_with_status_model.dart';
+import '../models/create_booking_response_model.dart';
 import '../service/api_client.dart';
 import 'package:get/get.dart';
 
@@ -110,6 +113,83 @@ class BookingController extends GetxController {
       isUpdatingStatus(false);
     }
   }
+
+
+  /// ===================================================
+  /// CREATE BOOKING
+  /// ===================================================
+  Future<CreateBookingAttributes?> createBooking({
+    required String driverId,
+    required int price,
+    required int numberOfPeople,
+    required String vehicleType,
+    required CreateBookingLocationInfo pickUp,
+    required CreateBookingLocationInfo dropOff,
+    required String rideDate,
+    required String rideId,
+  }) async {
+    try {
+      isLoadingBooking(true);
+      errorMessage('');
+
+      // 1. Prepare the Body Map with proper types
+      final Map<String, dynamic> body = {
+        "driverId": driverId,
+        "price": price,
+        "number_of_people": numberOfPeople,
+        "vehicle_type": vehicleType,
+        "pickUp": {
+          "address": pickUp.address,
+          "location": {
+            "type": pickUp.location?.type ?? "Point",
+            "coordinates": pickUp.location?.coordinates ?? [],
+          }
+        },
+        "dropOff": {
+          "address": dropOff.address,
+          "location": {
+            "type": dropOff.location?.type ?? "Point",
+            "coordinates": dropOff.location?.coordinates ?? [],
+          }
+        },
+        "ride_date": rideDate,
+        "ride_id": rideId,
+      };
+
+      // 2. Fetch the token manually to build custom headers
+      String bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+
+      // 3. Define JSON headers to override the default ones in postData
+      Map<String, String> jsonHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $bearerToken',
+      };
+
+      /// =================== API CALL ===================
+      final response = await ApiClient.postData(
+        ApiConstants.createBooking,
+        jsonEncode(body), // Encode body to JSON string here
+        headers: jsonHeaders, // Pass the custom headers here
+      );
+
+      debugPrint("Response : $response");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final model = CreateBookingResponseModel.fromJson(response.body);
+        return model.data?.attributes;
+      } else {
+        errorMessage(response.statusText ?? 'Failed to create booking');
+        return null;
+      }
+    } catch (e) {
+      debugPrint("The real error is: $e");
+      errorMessage("Connection error: Please try again later.");
+      return null;
+    } finally {
+      isLoadingBooking(false);
+    }
+  }
+
 
   /// ===================================================
   /// CLEAR DATA (OPTIONAL)

@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../../controllers/booking_controller.dart';
+import '../../../../../../models/create_booking_response_model.dart';
+import '../../../../../../models/search_ride_model.dart' hide GeoLocation;
 import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
@@ -27,7 +29,10 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch driver details using the driver ID passed in arguments
+
+    // Clear old data so we don't see the previous driver's info
+    bookingController.userDetails.value = null;
+
     final dynamic driver = Get.arguments?['user'];
     if (driver != null) {
       bookingController.getBookingUserDetails(driver.id);
@@ -80,6 +85,8 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                   border: Border.all(width: 1.w, color: AppColors.borderColor),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: EdgeInsets.all(10.w),
@@ -100,6 +107,15 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                     ),
                     Divider(thickness: 1.5, color: AppColors.borderColor),
                     Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomText(
+                        text: '\$${ride.pricePerSeat}',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22.sp,
+
+                      ),
+                    ),
+                    Padding(
                       padding: EdgeInsets.all(12.w),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +126,8 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomText(text: AppStrings.pICKUP.tr, bottom: 12.h),
-                                CustomText(text: pickupAddr, bottom: 12.h),
+
+                                CustomText(text: getFirstAddress(ride), bottom: 12.h),
                                 CustomText(text: AppStrings.passenger.tr, bottom: 12.h),
                                 CustomText(text: AppStrings.vehiclesType.tr),
                               ],
@@ -128,7 +145,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 CustomText(text: AppStrings.dROPOFF.tr, bottom: 12.h),
-                                CustomText(text: dropoffAddr, bottom: 12.h, textAlign: TextAlign.end),
+                                CustomText(text: getLastAddress(ride), bottom: 12.h, textAlign: TextAlign.end),
                                 CustomText(text: passengerCount, bottom: 12.h),
                                 CustomText(text: vehicleType),
                               ],
@@ -169,7 +186,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                       padding: EdgeInsets.only(right: 16.w, left: 16.w, bottom: 10.h),
                       child: CustomButton(
                         onTap: () {
-                          // TODO: Implement Booking Confirmation Logic
+                          _showBookingConfirmation(context, ride, driverArg);
                         },
                         text: "Book Now",
                         width: double.infinity,
@@ -228,10 +245,10 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomText(text: user.userName ?? 'N/A', fontWeight: FontWeight.w500),
+                                    CustomText(text: user.userName, fontWeight: FontWeight.w500),
                                     Row(
                                       children: [
-                                        CustomText(text: '${user.averageRating ?? 0}', right: 4.w),
+                                        CustomText(text: '${user.averageRating}', right: 4.w),
                                         SvgPicture.asset(AppIcons.star),
                                       ],
                                     ),
@@ -248,15 +265,15 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                                 user.dateOfBirth != null ? DateFormat('yyyy-MM-dd').format(DateTime.parse(user.dateOfBirth!)) : 'N/A'
                             ),
                             SizedBox(height: 24.h),
-                            _buildDriverInfoRow(AppIcons.location, AppStrings.location.tr, user.address ?? 'N/A'),
+                            _buildDriverInfoRow(AppIcons.location, AppStrings.location.tr, user.address),
                             SizedBox(height: 24.h),
                             _buildDriverInfoRow(AppIcons.type, AppStrings.vehiclesType.tr, "${user.vehicleType} - ${user.vehicleModel}"),
 
                             // Reviews
-                            if (user.reviews != null && user.reviews!.isNotEmpty) ...[
+                            if (user.reviews.isNotEmpty) ...[
                               SizedBox(height: 24.h),
                               CustomText(text: AppStrings.reviews.tr, fontSize: 16.sp, fontWeight: FontWeight.w600, bottom: 16.h),
-                              ...user.reviews!.map<Widget>((review) => _buildReviewCard(review, user)).toList(),
+                              ...user.reviews.map<Widget>((review) => _buildReviewCard(review, user)),
                             ]
                           ],
                         ),
@@ -274,6 +291,19 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
   }
 
   // --- UI HELPERS ---
+
+
+  String getFirstAddress(RideAttribute ride) {
+    return ride.pickUp.address;
+  }
+
+
+  String getLastAddress(RideAttribute ride) {
+    if (ride.stopOver.isNotEmpty) {
+      return ride.stopOver.last.address;
+    }
+    return ride.dropOff.address;
+  }
 
   Widget _buildDriverInfoRow(String icon, String label, String value) {
     return Row(
@@ -327,4 +357,116 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
       ),
     );
   }
-}
+
+
+
+  void _showBookingConfirmation(BuildContext context, dynamic ride, dynamic driverArg) {
+    RxInt count = 1.obs;
+
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white, // Prevents tint color in newer Flutter versions
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        title: CustomText(text: "Confirm Booking", fontWeight: FontWeight.w600, fontSize: 18.sp),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomText(text: "How many seats do you want to book?"),
+            SizedBox(height: 16.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () => count.value > 1 ? count.value-- : null,
+                  icon: Icon(Icons.remove_circle_outline, color: AppColors.primaryColor),
+                ),
+                Obx(() => CustomText(
+                  text: count.value.toString(),
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                  left: 10.w,
+                  right: 10.w,
+                )),
+                IconButton(
+                  onPressed: () {
+                    if (count.value < (ride.totalPassenger ?? 1)) {
+                      count.value++;
+                    }
+                  },
+                  icon: Icon(Icons.add_circle_outline, color: AppColors.primaryColor),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actionsPadding: EdgeInsets.only(right: 16.w, bottom: 16.h, left: 16.w), // Better spacing
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              // Cancel Button
+              TextButton(
+                onPressed: () => Get.back(),
+                child: CustomText(text: "Cancel", color: Colors.red, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(width: 8.w),
+              // Confirm Button
+              Obx(() => CustomButton(
+                width: 120.w,  // Give it a fixed width
+                height: 40.h,  // Give it a smaller height for the dialog
+                fontSize: 14.sp,
+                loading: bookingController.isLoadingBooking.value, // Use the built-in loading property
+                onTap: () async {
+                  final createBookingPickUp = CreateBookingLocationInfo(
+                    address: ride.pickUp.address,
+                    location: GeoLocation(
+                      type: ride.pickUp.location.type,
+                      coordinates: ride.pickUp.location.coordinates,
+                    ),
+                  );
+
+                  final createBookingDropOff = CreateBookingLocationInfo(
+                    address: ride.dropOff.address,
+                    location: GeoLocation(
+                      type: ride.dropOff.location.type,
+                      coordinates: ride.dropOff.location.coordinates,
+                    ),
+                  );
+
+                  final result = await bookingController.createBooking(
+                    driverId: driverArg.id,
+                    price: (ride.pricePerSeat ?? 0).toInt(),
+                    numberOfPeople: count.value,
+                    vehicleType: driverArg.vehicleType ?? 'bike',
+                    pickUp: createBookingPickUp,
+                    dropOff: createBookingDropOff,
+                    rideDate: ride.goingDate?.toIso8601String() ?? '',
+                    rideId: ride.id,
+                  );
+
+                  if (result != null) {
+                    Get.back();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: CustomText(text: "Booking created successfully!", color: Colors.white),
+                        backgroundColor: AppColors.primaryColor,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: CustomText(text: bookingController.errorMessage.value, color: Colors.white),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                text: 'Confirm',
+              )),
+            ],
+          ),
+        ],
+      ),
+    );
+  }}

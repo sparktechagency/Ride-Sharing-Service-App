@@ -18,6 +18,7 @@ class ApiConstants {
   static const String driverLicenseUploadEndPoint = "/users/self/post-image-liscense";
   static const String homePageStatisticsEndPoint = "/home/statistics";
   static const String createRide = "/ride/create";
+  static const String driverStatusRides = "/home/orders/";
 
 
 

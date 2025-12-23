@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/controllers/post_rider_controller.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
 import 'package:ride_sharing/utils/app_strings.dart';
 import 'package:ride_sharing/views/base/custom_app_bar.dart';
 import 'package:ride_sharing/views/base/custom_button.dart';
-import 'package:ride_sharing/views/screen/Role/Driver/rider_post_submit/rider_post_submit.dart';
+import 'package:intl/intl.dart'; // Add this to your pubspec.yaml for date formatting
 
 import '../../../../base/custom_text.dart';
+import '../rider_post_submit/rider_post_submit.dart';
 
 class PassengersTakeScreen extends StatefulWidget {
   const PassengersTakeScreen({super.key});
@@ -17,11 +19,44 @@ class PassengersTakeScreen extends StatefulWidget {
 }
 
 class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
-  //=======================> Passenger Increment & Decrement Method <============================
+  final controller = Get.find<PostRideController>();
+
+  // Local state variables
   int passengerCount = 1;
+  int priceCount = 1;
+  DateTime selectedDate = DateTime.now();
+
+  //=======================> Date Picker Method <============================
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime.now(), // Cannot pick past dates
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
+  //=======================> Passenger Methods <============================
   void increment() {
     setState(() {
-      passengerCount++;
+      if (passengerCount < 10) passengerCount++;
     });
   }
 
@@ -33,14 +68,11 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
     }
   }
 
-  //=======================> Price Increment & Decrement Method <============================
-  int priceCount = 1;
+  //=======================> Price Methods <============================
   void incrementPrice() {
-    if (priceCount < 3) {
-      setState(() {
-        priceCount++;
-      });
-    }
+    setState(() {
+      priceCount++;
+    });
   }
 
   void decrementPrice() {
@@ -53,21 +85,53 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = Color(0xFF00AEEF);
+    final blueColor = const Color(0xFF00AEEF);
+
     return Scaffold(
-      appBar: CustomAppBar(title: ''),
+      appBar:  CustomAppBar(title: 'Ride Details'),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //=====================> Date Selection <=========================
+            CustomText(
+              text: "When are you going?",
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+            ),
+            SizedBox(height: 12.h),
+            GestureDetector(
+              onTap: () => _selectDate(context),
+              child: Container(
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.calendar_month, color: blueColor),
+                    SizedBox(width: 12.w),
+                    CustomText(
+                      text: DateFormat('yyyy-MM-dd').format(selectedDate),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    const Spacer(),
+                    Icon(Icons.edit, size: 18.sp, color: Colors.grey),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 24.h),
+
             //=====================> Passengers Count <=========================
             CustomText(
               text: AppStrings.howManyPassengers.tr,
-              fontSize: 22.sp,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              maxLine: 3,
-              textAlign: TextAlign.start,
             ),
             SizedBox(height: 16.h),
             Divider(color: Colors.grey.shade300, thickness: 1),
@@ -75,37 +139,32 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //===================> Minus button <==================
                 _pressButton(
                   Colors.blue.shade100,
-                  Icon(Icons.remove, color: Colors.white, size: 24.w),
+                  const Icon(Icons.remove, color: Colors.white),
                   decrement,
                 ),
                 SizedBox(width: 36.w),
-                //===================> Value <==================
                 CustomText(
                   text: passengerCount.toString(),
                   fontSize: 40.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
                 ),
-                SizedBox(width: 36),
-                //===================> Plus button <==================
+                SizedBox(width: 36.w),
                 _pressButton(
                   blueColor,
-                  Icon(Icons.add, color: Colors.white, size: 24.w),
+                  const Icon(Icons.add, color: Colors.white),
                   increment,
                 ),
               ],
             ),
             SizedBox(height: 32.h),
+
             //=====================> Price Count <=========================
             CustomText(
               text: AppStrings.setYourPricePerSeat.tr,
-              fontSize: 22.sp,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              maxLine: 3,
-              textAlign: TextAlign.start,
             ),
             SizedBox(height: 16.h),
             Divider(color: Colors.grey.shade300, thickness: 1),
@@ -113,74 +172,83 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //===================> Minus button <==================
                 _pressButton(
                   Colors.blue.shade100,
-                  Icon(Icons.remove, color: Colors.white, size: 24.w),
+                  const Icon(Icons.remove, color: Colors.white),
                   decrementPrice,
                 ),
                 SizedBox(width: 36.w),
-                //===================> Value <==================
                 CustomText(
-                  text: '\$${priceCount.toString()}',
+                  text: '\$$priceCount',
                   fontSize: 40.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
                 ),
-                SizedBox(width: 36),
-                //===================> Plus button <==================
+                SizedBox(width: 36.w),
                 _pressButton(
                   blueColor,
-                  Icon(Icons.add, color: Colors.white, size: 24.w),
+                  const Icon(Icons.add, color: Colors.white),
                   incrementPrice,
                 ),
               ],
             ),
+
             //===================> Recommended Price  <==================
             SizedBox(height: 24.h),
             Container(
               decoration: BoxDecoration(
-                color: AppColors.primaryColor,
+                color: AppColors.primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8.r),
+                border: Border.all(color: AppColors.primaryColor),
               ),
               child: Padding(
-                padding: EdgeInsets.all(8.w),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                 child: CustomText(
-                  text: 'Recommended Price : \$1 - \$3',
+                  text: 'Recommended Price : \$1 - \$5',
                   fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primaryColor,
                 ),
               ),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 8.h),
             CustomText(
               text: AppStrings.perfectPriceForThisRide.tr,
               fontSize: 12.sp,
               maxLine: 2,
               textAlign: TextAlign.start,
+              color: Colors.grey,
             ),
+
+            const Spacer(),
+
             //===================> Submit button <==================
-            Spacer(),
-            CustomButton(onTap: () {
-             //Get.toNamed()
-             Get.to(()=>RiderPostSubmit());
-            }, text: AppStrings.submit.tr),
-            SizedBox(height: 48.h),
+            CustomButton(
+                onTap: () {
+                  // 1. Save all local UI values to the controller
+                  controller.availableSeats.value = passengerCount;
+                  controller.estimatedPrice.value = priceCount.toDouble();
+                  controller.selectedDate.value = selectedDate;
+
+                  // 2. Just navigate to the next screen (Don't hit API yet)
+                  Get.to(() => const RiderPostSubmit());
+                },
+                text: AppStrings.submit.tr
+            ),
+            SizedBox(height: 40.h),
           ],
         ),
       ),
     );
   }
 
-  //=======================> Press Button <====================
-  _pressButton(Color color, Icon icon, VoidCallback method) {
+  //=======================> Press Button Component <====================
+  Widget _pressButton(Color color, Icon icon, VoidCallback method) {
     return GestureDetector(
       onTap: method,
       child: Container(
         decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-        width: 44.w,
-        height: 44.h,
+        width: 48.w,
+        height: 48.h,
         child: icon,
       ),
     );

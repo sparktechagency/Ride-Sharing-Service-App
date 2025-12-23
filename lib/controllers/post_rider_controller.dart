@@ -4,8 +4,28 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
+import 'package:ride_sharing/utils/app_colors.dart';
+import 'package:ride_sharing/views/base/custom_text.dart';
 import 'package:ride_sharing/views/screen/Role/Driver/rider_post_submit/rider_post_submit.dart';
 
+import '../helpers/prefs_helpers.dart';
+import '../helpers/route.dart';
+import '../models/create_ride_response_model.dart';
+import '../service/api_client.dart';
+import '../service/api_constants.dart';
+import '../utils/app_constants.dart';
+import '../views/screen/Role/Driver/AddCity/add_city_screen.dart';
+
+import 'dart:convert';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+
+// Ensure this model is defined only once in your project
 class Stopover {
   final String name;
   final LatLng latLng;
@@ -13,49 +33,45 @@ class Stopover {
 }
 
 class PostRideController extends GetxController {
-  // Text Controllers
+  // --- UI Text Controllers ---
   final pickupController = TextEditingController();
   final destinationController = TextEditingController();
 
-  // Location Data
+  var isPublishing = false.obs;
+  // --- Location Observables ---
   var pickupLatLng = Rxn<LatLng>();
   var destinationLatLng = Rxn<LatLng>();
   var pickupAddress = ''.obs;
   var destinationAddress = ''.obs;
 
-  // Route Data
-  var polylinePoints = <LatLng>[].obs;
-  var fullRoutePoints = <LatLng>[].obs; // ← Full real driving path
-  var routeBounds = Rxn<LatLngBounds>(); // ← For map zoom
+  // --- Ride Detail Observables ---
+  var stopovers = <Stopover>[].obs;
+  var selectedDate = DateTime.now().obs;
+  var availableSeats = 1.obs;
+  var estimatedPrice = 0.0.obs; // This acts as pricePerSeat in your UI
 
-  var distanceText = ''.obs;
+  // --- Route & Calculation Observables ---
+  var polylinePoints = <LatLng>[].obs;
+  var fullRoutePoints = <LatLng>[].obs;
+  var routeBounds = Rxn<LatLngBounds>();
+  var distanceText = '0 km'.obs;
   var durationText = ''.obs;
   var mainRoadName = 'Unknown Road'.obs;
   var hasTolls = false.obs;
   var isLoadingRoute = false.obs;
   var isFormValid = false.obs;
 
-  // Stopovers (added from AddCityScreen)
-  var stopovers = <Stopover>[].obs;
-
-  // Pricing
-  var estimatedPrice = 0.0.obs;
-
-  // Google API Key
-  final String googleApiKey = "AIzaSyBv_OSFFFy0xPIimcp2XO2lWmYSInjqk_E";
+  final String googleApiKey = "AIzaSyCrmEOP4JyFCozu7n85BIZqn_8LarJq_iI";
 
   @override
   void onInit() {
     super.onInit();
+    // Automatically fetch route whenever pickup or destination changes
     ever(pickupLatLng, (_) => _tryFetchRoute());
     ever(destinationLatLng, (_) => _tryFetchRoute());
   }
 
-  void setLocation({
-    required String type,
-    required String address,
-    required LatLng latLng,
-  }) {
+  void setLocation({required String type, required String address, required LatLng latLng}) {
     if (type == 'pickup') {
       pickupController.text = address;
       pickupAddress.value = address;
@@ -65,18 +81,6 @@ class PostRideController extends GetxController {
       destinationAddress.value = address;
       destinationLatLng.value = latLng;
     }
-  }
-
-  void addStopover(String name, LatLng latLng) {
-    stopovers.add(Stopover(name: name, latLng: latLng));
-  }
-
-  void removeStopover(int index) {
-    stopovers.removeAt(index);
-  }
-
-  void clearStopovers() {
-    stopovers.clear();
   }
 
   void _tryFetchRoute() {
@@ -91,13 +95,11 @@ class PostRideController extends GetxController {
     polylinePoints.clear();
     fullRoutePoints.clear();
     routeBounds.value = null;
-    distanceText.value = '';
-    durationText.value = '';
-    mainRoadName.value = 'Unknown Road';
-    hasTolls.value = false;
+    distanceText.value = '0 km';
     isFormValid.value = false;
   }
 
+  // --- GOOGLE DIRECTIONS API ---
   Future<void> fetchRealRoute() async {
     isLoadingRoute.value = true;
     final o = pickupLatLng.value!;
@@ -105,10 +107,10 @@ class PostRideController extends GetxController {
 
     final url = Uri.parse(
       'https://maps.googleapis.com/maps/api/directions/json'
-      '?origin=${o.latitude},${o.longitude}'
-      '&destination=${d.latitude},${d.longitude}'
-      '&key=$googleApiKey'
-      '&mode=driving',
+          '?origin=${o.latitude},${o.longitude}'
+          '&destination=${d.latitude},${d.longitude}'
+          '&key=$googleApiKey'
+          '&mode=driving',
     );
 
     try {
@@ -119,73 +121,134 @@ class PostRideController extends GetxController {
           final route = data['routes'][0];
           final leg = route['legs'][0];
 
-          // SAVE FULL ROUTE
+          // Decode Polyline for map drawing
           final encoded = route['overview_polyline']['points'];
           fullRoutePoints.value = _decodePoly(encoded);
           polylinePoints.value = fullRoutePoints;
 
-          // Calculate bounds
-          double minLat = fullRoutePoints[0].latitude,
-              maxLat = fullRoutePoints[0].latitude;
-          double minLng = fullRoutePoints[0].longitude,
-              maxLng = fullRoutePoints[0].longitude;
-          for (var p in fullRoutePoints) {
-            if (p.latitude < minLat) minLat = p.latitude;
-            if (p.latitude > maxLat) maxLat = p.latitude;
-            if (p.longitude < minLng) minLng = p.longitude;
-            if (p.longitude > maxLng) maxLng = p.longitude;
-          }
-          routeBounds.value = LatLngBounds(
-            southwest: LatLng(minLat, minLng),
-            northeast: LatLng(maxLat, maxLng),
-          );
+          // Calculate Map Bounds
+          _calculateBounds(fullRoutePoints);
 
-          // Distance & Time
+          // Meta Data
           distanceText.value = leg['distance']['text'];
           durationText.value = leg['duration']['text'];
 
-          // Tolls & Road Name
-          hasTolls.value =
-              (route['warnings'] as List?)?.any(
-                (w) => w.toString().toLowerCase().contains('toll'),
-              ) ==
-              true;
-
-          String road = "Main Road";
-          for (var step in leg['steps']) {
-            final instr =
-                step['html_instructions']?.toString().toLowerCase() ?? "";
-            if (instr.contains('mirpur'))
-              road = "Mirpur Rd";
-            else if (instr.contains('uttara'))
-              road = "Airport Rd";
-            else if (instr.contains('gulshan'))
-              road = "Gulshan Ave";
-            if (road != "Main Road") break;
-          }
-          mainRoadName.value = road;
-
-          // Price
+          // Basic Price Estimation (Adjust as needed)
           final distanceKm = (leg['distance']['value'] as int) / 1000.0;
-          double price = 50 + (distanceKm * 20);
-          estimatedPrice.value = price.roundToDouble();
+          estimatedPrice.value = (50 + (distanceKm * 20)).roundToDouble();
 
           isFormValid.value = true;
         }
       }
     } catch (e) {
-      final dist = Geolocator.distanceBetween(
-        o.latitude,
-        o.longitude,
-        d.latitude,
-        d.longitude,
-      );
-      distanceText.value = "≈ ${(dist / 1000).toStringAsFixed(1)} km";
-      fullRoutePoints.value = [o, d];
-      polylinePoints.value = [o, d];
+      debugPrint("Route Fetch Error: $e");
     } finally {
       isLoadingRoute.value = false;
     }
+  }
+
+  Future<void> publishRide() async {
+    try {
+      isPublishing.value = true;
+
+      // 1. Calculate raw distance and price per km
+      double rawDist = double.tryParse(distanceText.value.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+      double pricePerKm = rawDist > 0 ? (estimatedPrice.value / rawDist) : 0.0;
+
+      // 2. Prepare the Body Map
+      final Map<String, dynamic> rideBody = {
+        "pickUp": {
+          "address": pickupAddress.value,
+          "location": {
+            "type": "Point",
+            "coordinates": [pickupLatLng.value!.longitude, pickupLatLng.value!.latitude]
+          }
+        },
+        "dropOff": {
+          "address": destinationAddress.value,
+          "location": {
+            "type": "Point",
+            "coordinates": [destinationLatLng.value!.longitude, destinationLatLng.value!.latitude]
+          }
+        },
+        "goingDate": selectedDate.value.toIso8601String(),
+        "stopOver": stopovers.map((s) => {
+          "address": s.name,
+          "location": {
+            "type": "Point",
+            "coordinates": [s.latLng.longitude, s.latLng.latitude]
+          }
+        }).toList(),
+        "totalPassenger": availableSeats.value,
+        "pricePerSeat": estimatedPrice.value.toInt(),
+        "seatsBooked": 0,
+        "distanceKm": rawDist.toInt(),
+        "pricePerKm": pricePerKm.toInt()
+      };
+
+      String token = await PrefsHelper.getString(AppConstants.bearerToken);
+
+      debugPrint("==========> [API REQUEST] <==========");
+      debugPrint("URL: ${ApiConstants.createRide}");
+
+      // 3. Hit the API
+      // IMPORTANT: Use jsonEncode(rideBody) here to prevent the "Bad State" error
+      var response = await ApiClient.postData(
+        ApiConstants.createRide,
+        jsonEncode(rideBody), // <--- CHANGE THIS
+        headers: {
+          'Content-Type': 'application/json', // Matches the encoded string
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      debugPrint("==========> [API RESPONSE] <==========");
+      debugPrint("Status Code: ${response.statusCode}");
+      debugPrint("Response Body: ${response.body}");
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        CreateRideResponseModel result = CreateRideResponseModel.fromJson(response.body);
+
+        if (Get.context != null) {
+          ScaffoldMessenger.of(Get.context!).showSnackBar(
+            SnackBar(content: CustomText(text: "Create Ride Successfully",color: AppColors.backgroundColor,), backgroundColor: Colors.green),
+          );
+        }
+        Get.offAllNamed(AppRoutes.driverHomeScreen);
+      } else {
+        _showErrorSnackBar(response.statusText ?? "Failed to create ride");
+      }
+    } catch (e) {
+      debugPrint("===> Critical Error in publishRide: $e");
+      _showErrorSnackBar("An unexpected error occurred");
+    } finally {
+      isPublishing.value = false;
+    }
+  }
+
+// Helper to keep code clean
+  void _showErrorSnackBar(String message) {
+    if (Get.context != null) {
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        SnackBar(content: Text(message), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  // --- HELPER METHODS ---
+  void _calculateBounds(List<LatLng> points) {
+    double minLat = points[0].latitude, maxLat = points[0].latitude;
+    double minLng = points[0].longitude, maxLng = points[0].longitude;
+    for (var p in points) {
+      if (p.latitude < minLat) minLat = p.latitude;
+      if (p.latitude > maxLat) maxLat = p.latitude;
+      if (p.longitude < minLng) minLng = p.longitude;
+      if (p.longitude > maxLng) maxLng = p.longitude;
+    }
+    routeBounds.value = LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
+    );
   }
 
   List<LatLng> _decodePoly(String encoded) {
@@ -215,42 +278,8 @@ class PostRideController extends GetxController {
     return points;
   }
 
-  // FINAL: Publish the ride
-  void publishRide() {
-    final rideData = {
-      'pickup_address': pickupAddress.value,
-      'destination_address': destinationAddress.value,
-      'pickup_lat': pickupLatLng.value!.latitude,
-      'pickup_lng': pickupLatLng.value!.longitude,
-      'destination_lat': destinationLatLng.value!.latitude,
-      'destination_lng': destinationLatLng.value!.longitude,
-      'distance': distanceText.value,
-      'duration': durationText.value,
-      'estimated_price': estimatedPrice.value,
-      'main_road': mainRoadName.value,
-      'has_tolls': hasTolls.value,
-      'stopovers':
-          stopovers
-              .map(
-                (s) => {
-                  'name': s.name,
-                  'lat': s.latLng.latitude,
-                  'lng': s.latLng.longitude,
-                },
-              )
-              .toList(),
-      'published_at': DateTime.now().toIso8601String(),
-    };
-
-    // TODO: Send to backend
-    print("RIDE PUBLISHED: $rideData");
-
-    // Show success screen
-    Get.offAll(() => const RiderPostSubmit());
-  }
-
-  void goToRideDetails() {
-    Get.toNamed('/add-city');
+  void goToRideDetails(){
+    Get.to(AddCityScreen());
   }
 
   @override

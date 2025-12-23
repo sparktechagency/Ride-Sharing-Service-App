@@ -153,7 +153,7 @@ class AppRoutes{
     GetPage(name:activeOrderScreen, page: ()=>const ActiveOrderScreen()),
     GetPage(name:completedOrderScreen, page: ()=>const CompletedOrderScreen()),
     GetPage(name:pickUpScreen, page: ()=> PickUpScreen()),
-    GetPage(name:dropOffScreen, page: ()=> DropOffScreen()),
+    // GetPage(name:dropOffScreen, page: ()=> DropOffScreen()),
     GetPage(name:addCityScreen, page: ()=> AddCityScreen()),
     GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
    GetPage(name:passengersTakeScreen, page: ()=> PassengersTakeScreen()),

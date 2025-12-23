@@ -28,7 +28,7 @@ class _PickUpScreenState extends State<PickUpScreen> {
 
   // Your real Google Places API Key (only the key, not full URL!)
   final String googleApiKey =
-      "AIzaSyBv_OSFFFy0xPIimcp2XO2lWmYSInjqk_E"; // Keep safe
+      "AIzaSyCrmEOP4JyFCozu7n85BIZqn_8LarJq_iI"; // Keep safe
 
   final TextEditingController _searchController = TextEditingController();
 

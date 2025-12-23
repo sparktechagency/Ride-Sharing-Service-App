@@ -9,6 +9,8 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:ride_sharing/controllers/post_rider_controller.dart';
+import 'package:ride_sharing/views/base/custom_text.dart';
+import '../../../../utils/app_colors.dart';
 
 class StopoverPickerScreen extends StatefulWidget {
   const StopoverPickerScreen({super.key});
@@ -16,7 +18,7 @@ class StopoverPickerScreen extends StatefulWidget {
 }
 
 class _StopoverPickerScreenState extends State<StopoverPickerScreen> {
-  final controller = Get.put(PostRideController()); // ← FIXED
+  final controller = Get.put(PostRideController());
   GoogleMapController? mapController;
   LatLng? selectedPoint;
 
@@ -24,8 +26,8 @@ class _StopoverPickerScreenState extends State<StopoverPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pick Stopover on Route"),
-        backgroundColor: Color(0xFF0066FF),
+        title:  CustomText(text:  "Pick Stopover on Route",color:  AppColors.textColor,),
+        backgroundColor: AppColors.backgroundColor,
         foregroundColor: Colors.white,
       ),
       body: Obx(() {
@@ -36,11 +38,16 @@ class _StopoverPickerScreenState extends State<StopoverPickerScreen> {
           children: [
             GoogleMap(
               initialCameraPosition: CameraPosition(
-                target: points.isNotEmpty ? points[points.length ~/ 2] : LatLng(23.81, 90.41),
+                target: points.isNotEmpty ? points[points.length ~/ 2] : const LatLng(23.81, 90.41),
                 zoom: 11,
               ),
               polylines: {
-                Polyline(polylineId: PolylineId('route'), color: Colors.blue.shade700, width: 8, points: points),
+                Polyline(
+                    polylineId: const PolylineId('route'),
+                    color: Colors.blue.shade700,
+                    width: 8,
+                    points: points
+                ),
               },
               myLocationEnabled: true,
               onMapCreated: (c) {
@@ -51,11 +58,24 @@ class _StopoverPickerScreenState extends State<StopoverPickerScreen> {
                 if (_isNearRoute(latLng, points)) {
                   setState(() => selectedPoint = latLng);
                 } else {
-                  Get.snackbar("Invalid", "Please tap on the blue route only", backgroundColor: Colors.red, colorText: Colors.white);
+                  // REPLACED Get.snackbar with ScaffoldMessenger
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Invalid: Please tap on the blue route only"),
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                 }
               },
               markers: selectedPoint != null
-                  ? {Marker(markerId: MarkerId('stop'), position: selectedPoint!, icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange))}
+                  ? {
+                Marker(
+                    markerId: const MarkerId('stop'),
+                    position: selectedPoint!,
+                    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange)
+                )
+              }
                   : {},
             ),
             if (selectedPoint != null)
@@ -64,9 +84,13 @@ class _StopoverPickerScreenState extends State<StopoverPickerScreen> {
                 left: 20.w,
                 right: 20.w,
                 child: ElevatedButton.icon(
-                  icon: Icon(Icons.check_circle),
-                  label: Text("Confirm Stopover"),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green, padding: EdgeInsets.all(16.w), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r))),
+                  icon: const Icon(Icons.check_circle),
+                  label: const Text("Confirm Stopover"),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: EdgeInsets.all(16.w),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r))
+                  ),
                   onPressed: () async {
                     final address = await _getAddress(selectedPoint!);
                     Get.back(result: {'address': address, 'latLng': selectedPoint});
@@ -104,7 +128,9 @@ class _StopoverPickerScreenState extends State<StopoverPickerScreen> {
         final data = json.decode(res.body);
         return data['results'][0]['formatted_address'];
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint("Geocoding error: $e");
+    }
     return "Stopover Point";
   }
 }

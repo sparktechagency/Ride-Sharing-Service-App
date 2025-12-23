@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:intl/intl.dart';
-
+import 'package:get/get.dart';
+import 'package:ride_sharing/views/screen/Role/Driver/MyOrders/InnerWidget/single_ride_details_screen.dart';
 import '../../../../../../models/driver_status_rides_response_model.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
@@ -261,16 +262,20 @@ class RideCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CustomButton(
-                    onTap: onViewTap ?? () {},
+                    onTap: onViewTap ?? () {
+                      if (ride.id != null && ride.id!.isNotEmpty) {
+                        Get.to(() => SingleRideDetailsScreen(rideId: ride.id!));
+                      }
+                    },
                     width: 120.w,
                     height: 36.h,
                     text: AppStrings.view.tr,
-
                     textStyle: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+
                 ],
               ),
             ),

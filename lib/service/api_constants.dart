@@ -19,7 +19,7 @@ class ApiConstants {
   static const String homePageStatisticsEndPoint = "/home/statistics";
   static const String createRide = "/ride/create";
   static const String driverStatusRides = "/home/orders/";
-
+  static const String driverSingleRideDetails = "/ride/get-details/";
 
 
 

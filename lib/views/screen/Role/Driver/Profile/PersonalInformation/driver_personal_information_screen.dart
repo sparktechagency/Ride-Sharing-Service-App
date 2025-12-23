@@ -363,18 +363,19 @@ class _DriverPersonalInformationScreenState extends State<DriverPersonalInformat
                   ),
                   SizedBox(height: 16.h),
                   CustomNetworkImage(
-                    imageUrl: '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.licenseFrontUrl ?? ''}',
+                    imageUrl: '${ApiConstants.imageBaseUrl}/${_profileController.profileModel.value.licenseFrontUrl ?? ''}',
                     height: 197.h,
                     width: 362.w,
                     borderRadius: BorderRadius.circular(16.r),
                   ),
                   SizedBox(height: 16.h),
                   CustomNetworkImage(
-                    imageUrl: '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.licenseBackUrl ?? ''}',
+                    imageUrl: '${ApiConstants.imageBaseUrl}/${_profileController.profileModel.value.licenseBackUrl ?? ''}',
                     height: 197.h,
                     width: 362.w,
                     borderRadius: BorderRadius.circular(16.r),
                   ),
+
                 ],
               ),
             ),

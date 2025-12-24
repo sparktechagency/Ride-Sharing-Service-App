@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ride_sharing/views/base/custom_text.dart';
 
 import '../models/profile_model.dart';
 import '../service/api_checker.dart';
@@ -16,6 +17,8 @@ class ProfileController extends GetxController {
   String title = "Profile Screen";
   RxString frontSitePath = ''.obs;
   RxString backSitePaths = ''.obs;
+
+  RxBool isUpdateLoading = false.obs;
 
   @override
   void onInit() {
@@ -115,4 +118,84 @@ class ProfileController extends GetxController {
     }
     return null;
   }
-}
+
+
+//=============================> Update Profile <===============================
+  Future<void> updateProfile(BuildContext context) async {
+    isUpdateLoading(true);
+
+    // 1. Prepare Text Fields (Body)
+    Map<String, String> body = {
+      if (userNameCTRL.text.isNotEmpty) "userName": userNameCTRL.text,
+      if (phoneCTRL.text.isNotEmpty) "phoneNumber": phoneCTRL.text,
+      if (addressCtrl.text.isNotEmpty) "address": addressCtrl.text,
+      if (dateBirthCTRL.text.isNotEmpty) "dateOfBirth": dateBirthCTRL.text,
+      if (typeCTRL.text.isNotEmpty) "vehicleType": typeCTRL.text,
+      if (modelCTRL.text.isNotEmpty) "vehicleModel": modelCTRL.text,
+      if (licenseCTRL.text.isNotEmpty) "licensePlateNumber": licenseCTRL.text,
+
+      // Sending these as Strings (paths) instead of files
+      if (frontSitePath.value.isNotEmpty) "licenseFrontUrl": frontSitePath.value,
+      if (backSitePaths.value.isNotEmpty) "licenseBackUrl": backSitePaths.value,
+    };
+
+    // 2. Prepare Image Fields (Only profile image as File)
+    List<MultipartBody> multipartBody = [];
+    if (imagesPath.value.isNotEmpty) {
+      multipartBody.add(MultipartBody("image", File(imagesPath.value)));
+    }
+
+    try {
+      var response = await ApiClient.patchMultipartData(
+        ApiConstants.updateProfileData,
+        body,
+        multipartBody: multipartBody,
+      );
+
+      if (response.statusCode == 200) {
+        // Close the Edit Screen
+        Get.back();
+
+        // Use ScaffoldMessenger for success notification
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+             SnackBar(
+              content: CustomText(text: "User Updated Successfully",color: AppColors.backgroundColor,),
+              backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+
+        // Refresh the profile data to update the main screen
+        getProfileData();
+
+        // Clear local image path after successful upload
+        imagesPath.value = '';
+      } else {
+        // Handle API errors (e.g., token expired or server error)
+        ApiChecker.checkApi(response);
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response.body['message'] ?? "Update failed"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint("Update Error: $e");
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("An error occurred: $e"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      isUpdateLoading(false);
+    }
+  }}

@@ -63,7 +63,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: CustomText(
-                text: "My Orders".tr,
+                text: "My Rides".tr,
                 fontSize: 16.sp,
               ),
               centerTitle: true,

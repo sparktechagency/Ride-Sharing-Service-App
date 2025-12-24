@@ -33,7 +33,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
 
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) return;
-
+      setState(() {});
       if (_tabController.index == 0) {
         controller.fetchRidesByStatus("pending");
       } else if (_tabController.index == 1) {

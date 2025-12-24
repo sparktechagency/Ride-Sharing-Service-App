@@ -5,6 +5,8 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/views/screen/Role/Driver/MyOrders/InnerWidget/single_ride_details_screen.dart';
+import '../../../../../../controllers/driver_status_ride_controller.dart';
+import '../../../../../../helpers/route.dart';
 import '../../../../../../models/driver_status_rides_response_model.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
@@ -29,6 +31,9 @@ class RideCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Locate your List Controller (Update 'MyOrdersController' to your actual controller name)
+    final DriverStatusRidesController controller = Get.find<DriverStatusRidesController>();
+
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Container(
@@ -102,11 +107,9 @@ class RideCard extends StatelessWidget {
               padding: EdgeInsets.all(16.w),
               child: Column(
                 children: [
-                  // Route line with icons
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Pickup icon and line
                       Column(
                         children: [
                           Container(
@@ -115,16 +118,9 @@ class RideCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.green.shade50,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(
-                                color: Colors.green,
-                                width: 2.w,
-                              ),
+                              border: Border.all(color: Colors.green, width: 2.w),
                             ),
-                            child: Icon(
-                              Icons.circle,
-                              size: 8.w,
-                              color: Colors.green,
-                            ),
+                            child: Icon(Icons.circle, size: 8.w, color: Colors.green),
                           ),
                           Container(
                             width: 2.w,
@@ -138,28 +134,17 @@ class RideCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.red.shade50,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(
-                                color: Colors.red,
-                                width: 2.w,
-                              ),
+                              border: Border.all(color: Colors.red, width: 2.w),
                             ),
-                            child: Icon(
-                              Icons.location_on,
-                              size: 12.w,
-                              color: Colors.red,
-                            ),
+                            child: Icon(Icons.location_on, size: 12.w, color: Colors.red),
                           ),
                         ],
                       ),
-
                       SizedBox(width: 12.w),
-
-                      // Addresses
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Pickup address
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -179,10 +164,7 @@ class RideCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-
                             SizedBox(height: 24.h),
-
-                            // Dropoff address
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -207,15 +189,9 @@ class RideCard extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 16.h),
-
-                  // ======================== Booking Time ==================
                   Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 8.h,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade50,
                       borderRadius: BorderRadius.circular(8.r),
@@ -225,11 +201,7 @@ class RideCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(
-                              Icons.calendar_today,
-                              size: 16.w,
-                              color: Colors.grey.shade600,
-                            ),
+                            Icon(Icons.calendar_today, size: 16.w, color: Colors.grey.shade600),
                             SizedBox(width: 8.w),
                             CustomText(
                               text: 'Booking Time'.tr,
@@ -254,17 +226,26 @@ class RideCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: AppColors.borderColor, width: 1.w),
-                ),
+                border: Border(top: BorderSide(color: AppColors.borderColor, width: 1.w)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  // Inside RideCard Footer section
                   CustomButton(
-                    onTap: onViewTap ?? () {
+                    onTap: onViewTap ?? () async {
                       if (ride.id != null && ride.id!.isNotEmpty) {
-                        Get.to(() => SingleRideDetailsScreen(rideId: ride.id!));
+                        // 1. Navigate and await result
+                        final result = await Get.toNamed(
+                          AppRoutes.singleRideDetailsScreen,
+                          arguments: ride.id,
+                        );
+
+                        // 2. Logic to refresh the list if a successful update happened
+                        if (result == true) {
+                          // Pass the current ride status (e.g., "open") to refresh the specific list
+                          controller.fetchRidesByStatus(ride.status ?? "open");
+                        }
                       }
                     },
                     width: 120.w,
@@ -275,7 +256,6 @@ class RideCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -285,7 +265,6 @@ class RideCard extends StatelessWidget {
     );
   }
 
-  /// Date formatter
   String _formatDate(DateTime? date) {
     if (date == null) return '';
     return DateFormat('EEE dd MMM yyyy, hh:mm a').format(date);

@@ -10,9 +10,13 @@ import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
+import '../widgets/no_data_widget.dart';
 
 class PendingTab extends StatelessWidget {
-  PendingTab({super.key});
+  PendingTab({super.key}) {
+    // Fetch data immediately when tab is accessed
+    controller.fetchRidesByStatus("pending");
+  }
 
   final controller = Get.find<DriverStatusRidesController>();
 
@@ -23,18 +27,21 @@ class PendingTab extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
-      return ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-        itemCount: controller.pendingRides.length,
-        itemBuilder: (context, index) {
-          final ride = controller.pendingRides[index];
-
-          return RideCard(
-            statusText: AppStrings.canceled.tr,
-            statusColor: const Color(0xffFF5050),
-            ride: ride,
-          );
-        },
+      return RefreshIndicator(
+        onRefresh: () => controller.fetchRidesByStatus("pending"),
+        child: controller.pendingRides.isEmpty
+            ? const NoDataWidget(text: "No pending orders found")
+            : ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+          itemCount: controller.pendingRides.length,
+          itemBuilder: (context, index) {
+            return RideCard(
+              statusText: "Pending".tr,
+              statusColor: Colors.orange,
+              ride: controller.pendingRides[index],
+            );
+          },
+        ),
       );
     });
   }

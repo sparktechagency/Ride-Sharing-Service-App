@@ -11,9 +11,13 @@ import '../../../../../../utils/app_strings.dart';
 import '../../../../../base/custom_button.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
+import '../widgets/no_data_widget.dart';
 
 class CurrentTripsTab extends StatelessWidget {
-  CurrentTripsTab({super.key});
+  CurrentTripsTab({super.key}) {
+    // Fetch data immediately when tab is accessed
+    controller.fetchRidesByStatus("open");
+  }
 
   final controller = Get.find<DriverStatusRidesController>();
 
@@ -24,19 +28,26 @@ class CurrentTripsTab extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
-      return ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-        itemCount: controller.openRides.length,
-        itemBuilder: (context, index) {
-          final ride = controller.openRides[index];
 
-          return RideCard(
-            statusText: AppStrings.ongoing.tr,
-            statusColor: AppColors.primaryColor,
-            ride: ride,
-          );
-        },
+
+      return RefreshIndicator(
+        onRefresh: () => controller.fetchRidesByStatus("open"),
+        child: controller.openRides.isEmpty
+            ? const NoDataWidget(text: "No Current Trips orders found")
+            : ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+          itemCount: controller.openRides.length,
+          itemBuilder: (context, index) {
+            return RideCard(
+              statusText: AppStrings.ongoing.tr,
+              statusColor: AppColors.primaryColor,
+              ride: controller.openRides[index],
+            );
+          },
+        ),
       );
+
+
     });
   }
 }

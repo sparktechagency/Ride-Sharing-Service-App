@@ -12,9 +12,13 @@ import '../../../../../../utils/app_strings.dart';
 import '../../../../../base/custom_button.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
+import '../widgets/no_data_widget.dart';
 
 class CompletedTab extends StatelessWidget {
-  CompletedTab({super.key});
+  CompletedTab({super.key}) {
+    // Fetch data immediately when tab is accessed
+    controller.fetchRidesByStatus("complete");
+  }
 
   final controller = Get.find<DriverStatusRidesController>();
 
@@ -24,20 +28,24 @@ class CompletedTab extends StatelessWidget {
       if (controller.isLoadingComplete.value) {
         return const Center(child: CircularProgressIndicator());
       }
-
-      return ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-        itemCount: controller.completedRides.length,
-        itemBuilder: (context, index) {
-          final ride = controller.completedRides[index];
-
-          return RideCard(
-            statusText: AppStrings.completed.tr,
-            statusColor: Colors.green,
-            ride: ride,
-          );
-        },
+      return RefreshIndicator(
+        onRefresh: () => controller.fetchRidesByStatus("complete"),
+        child: controller.completedRides.isEmpty
+            ? const NoDataWidget(text: "No Complete orders found")
+            : ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+          itemCount: controller.completedRides.length,
+          itemBuilder: (context, index) {
+            return RideCard(
+              statusText: AppStrings.completed.tr,
+              statusColor: Colors.green,
+              ride: controller.completedRides[index],
+            );
+          },
+        ),
       );
+
+
     });
   }
 }

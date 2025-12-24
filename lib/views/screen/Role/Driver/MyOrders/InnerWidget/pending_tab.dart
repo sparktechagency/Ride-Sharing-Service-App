@@ -30,7 +30,7 @@ class PendingTab extends StatelessWidget {
       return RefreshIndicator(
         onRefresh: () => controller.fetchRidesByStatus("pending"),
         child: controller.pendingRides.isEmpty
-            ? const NoDataWidget(text: "No pending orders found")
+            ? NoDataWidget(text: "No pending orders found".tr)
             : ListView.builder(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
           itemCount: controller.pendingRides.length,

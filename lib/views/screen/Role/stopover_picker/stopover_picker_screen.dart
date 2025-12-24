@@ -26,7 +26,7 @@ class _StopoverPickerScreenState extends State<StopoverPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  CustomText(text:  "Pick Stopover on Route",color:  AppColors.textColor,),
+        title:  CustomText(text:  "Pick Stopover on Route".tr,color:  AppColors.textColor,),
         backgroundColor: AppColors.backgroundColor,
         foregroundColor: Colors.white,
       ),
@@ -131,6 +131,6 @@ class _StopoverPickerScreenState extends State<StopoverPickerScreen> {
     } catch (e) {
       debugPrint("Geocoding error: $e");
     }
-    return "Stopover Point";
+    return "Stopover Point".tr;
   }
 }

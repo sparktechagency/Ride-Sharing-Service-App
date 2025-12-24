@@ -143,7 +143,7 @@ class SettingsScreen extends StatelessWidget {
                         }
                         Get.back();
                       },
-                      text: "Spanish",
+                      text: "Spanish".tr,
                       color: Colors.white,
                       textColor: AppColors.primaryColor,
                     ),
@@ -157,7 +157,7 @@ class SettingsScreen extends StatelessWidget {
                           }
                           Get.back();
                         },
-                        text: "English"
+                        text: "English".tr
                     ),
                   ],
                 ),

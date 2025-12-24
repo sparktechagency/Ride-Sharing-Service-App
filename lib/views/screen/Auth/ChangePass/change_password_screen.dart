@@ -51,9 +51,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   hintText: AppStrings.newPassword.tr,
                   validator: (value) {
                     if (value == null) {
-                      return "Please set new password";
+                      return "Please set new password".tr;
                     } else if (value.length < 8 || !_validatePassword(value)) {
-                      return "Password: 8 characters min, letters & digits \nrequired";
+                      return "Password: 8 characters min, letters & digits \nrequired".tr;
                     }
                     return null;
                   },
@@ -66,9 +66,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   hintText: AppStrings.confirmPassword.tr,
                   validator: (value) {
                     if (value == null) {
-                      return "Please re-enter new password";
+                      return "Please re-enter new password".tr;
                     } else if (value != _authController.newPasswordCtrl.text) {
-                      return "Passwords do not match";
+                      return "Passwords do not match".tr;
                     }
                     return null;
                   },

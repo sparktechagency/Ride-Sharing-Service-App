@@ -160,7 +160,7 @@ class ProfileController extends GetxController {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
              SnackBar(
-              content: CustomText(text: "User Updated Successfully",color: AppColors.backgroundColor,),
+              content: CustomText(text: "User Updated Successfully".tr,color: AppColors.backgroundColor,),
               backgroundColor: Colors.green,
               behavior: SnackBarBehavior.floating,
             ),

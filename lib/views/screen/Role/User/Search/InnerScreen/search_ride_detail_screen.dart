@@ -188,7 +188,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                         onTap: () {
                           _showBookingConfirmation(context, ride, driverArg);
                         },
-                        text: "Book Now",
+                        text: "Book Now".tr,
                         width: double.infinity,
                         height: 45.h,
                       ),
@@ -372,7 +372,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomText(text: "How many seats do you want to book?"),
+            CustomText(text: "How many seats do you want to book?".tr),
             SizedBox(height: 16.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -408,7 +408,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
               // Cancel Button
               TextButton(
                 onPressed: () => Get.back(),
-                child: CustomText(text: "Cancel", color: Colors.red, fontWeight: FontWeight.w600),
+                child: CustomText(text: "Cancel".tr, color: Colors.red, fontWeight: FontWeight.w600),
               ),
               SizedBox(width: 8.w),
               // Confirm Button
@@ -449,7 +449,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                     Get.back();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: CustomText(text: "Booking created successfully!", color: Colors.white),
+                        content: CustomText(text: "Booking created successfully!".tr, color: Colors.white),
                         backgroundColor: AppColors.primaryColor,
                       ),
                     );

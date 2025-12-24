@@ -55,7 +55,7 @@ class _NessaryFuncationsState extends State<NessaryFuncations> {
           ),
           IntlPhoneField(
             decoration: InputDecoration(
-              hintText: "Phone number",
+              hintText: "Phone number".tr,
               contentPadding:EdgeInsets.symmetric(horizontal: 15.h),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16.r)),
@@ -531,7 +531,7 @@ class _NessaryFuncationsState extends State<NessaryFuncations> {
                         onTap: () {
                           Get.back();
                         },
-                        text: "No",
+                        text: "No".tr,
                         color: Colors.white,
                         textColor: AppColors.primaryColor,
                       )),
@@ -542,7 +542,7 @@ class _NessaryFuncationsState extends State<NessaryFuncations> {
                           onTap: () {
                             // Get.offAllNamed(AppRoutes.signInScreen);
                           },
-                          text: "Yes")),
+                          text: "Yes".tr)),
                 ],
               ),
             ],

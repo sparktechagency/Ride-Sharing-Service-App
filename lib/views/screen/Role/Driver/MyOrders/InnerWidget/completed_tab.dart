@@ -31,7 +31,7 @@ class CompletedTab extends StatelessWidget {
       return RefreshIndicator(
         onRefresh: () => controller.fetchRidesByStatus("complete"),
         child: controller.completedRides.isEmpty
-            ? const NoDataWidget(text: "No Complete orders found")
+            ? NoDataWidget(text: "No Complete orders found".tr)
             : ListView.builder(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
           itemCount: controller.completedRides.length,

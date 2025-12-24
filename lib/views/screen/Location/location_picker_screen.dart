@@ -198,7 +198,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                       latitude: cameraPosition.target.latitude.toString(),
                       longitude: cameraPosition.target.longitude.toString());
                 },
-                text: "Submit"),
+                text: "Submit".tr),
           )
         ],
       ),

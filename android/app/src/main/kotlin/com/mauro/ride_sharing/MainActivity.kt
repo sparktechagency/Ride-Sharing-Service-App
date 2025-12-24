@@ -1,4 +1,4 @@
-package com.mauro.ride_sharing
+package com.mauro.adedo
 
 import io.flutter.embedding.android.FlutterActivity
 

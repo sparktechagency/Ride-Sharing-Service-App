@@ -40,7 +40,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
               controller: searchCTRL,
               autofocus: true,
               decoration: InputDecoration(
-                hintText: "Search location...",
+                hintText: "Search location...".tr,
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: Obx(() => query.value.isNotEmpty
                     ? IconButton(

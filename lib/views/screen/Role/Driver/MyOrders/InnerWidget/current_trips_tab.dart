@@ -33,7 +33,7 @@ class CurrentTripsTab extends StatelessWidget {
       return RefreshIndicator(
         onRefresh: () => controller.fetchRidesByStatus("open"),
         child: controller.openRides.isEmpty
-            ? const NoDataWidget(text: "No Current Trips orders found")
+            ? NoDataWidget(text: "No Current Trips orders found".tr)
             : ListView.builder(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
           itemCount: controller.openRides.length,

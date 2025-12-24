@@ -77,21 +77,21 @@ class _CustomTextFieldState extends State<CustomTextField> {
               (value) {
             if (widget.isEmail == null) {
               if (value!.isEmpty) {
-                return "Please enter ${widget.hintText!.toLowerCase()}";
+                return "Please enter ${widget.hintText!.toLowerCase()}".tr;
               } else if (widget.isPassword) {
                 bool data = AppConstants.passwordValidator.hasMatch(value);
                 if (value.isEmpty) {
-                  return "Please enter ${widget.hintText!.toLowerCase()}";
+                  return "Please enter ${widget.hintText!.toLowerCase()}".tr;
                 } else if (!data) {
-                  return "Insecure password detected.";
+                  return "Insecure password detected.".tr;
                 }
               }
             } else {
               bool data = AppConstants.emailValidator.hasMatch(value!);
               if (value.isEmpty) {
-                return "Please enter ${widget.hintText!.toLowerCase()}";
+                return "Please enter ${widget.hintText!.toLowerCase()}".tr;
               } else if (!data) {
-                return "Please check your email!";
+                return "Please check your email!".tr;
               }
             }
             return null;

@@ -237,7 +237,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                 }
                               },
                               loading: bookingController.isUpdatingStatus.value,
-                              text: "Start Trip", // Note: If the status is becoming 'Completed', usually the button says 'End Trip'
+                              text: "Start Trip".tr, // Note: If the status is becoming 'Completed', usually the button says 'End Trip'
                               width: double.infinity,
                               height: 45.h,
                             ));
@@ -245,7 +245,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             // 2. Completed: Static Button
                             return CustomButton(
                               onTap: () {},
-                              text: "Completed Trip",
+                              text: "Completed Trip".tr,
                               width: double.infinity,
                               height: 45.h,
                               color: Colors.grey,
@@ -281,7 +281,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                   onTap: () {
                                     // Logic to go to Chat
                                   },
-                                  text: "Chat Now",
+                                  text: "Chat Now".tr,
                                   width: 100.w,
                                   height: 34.h,
                                   fontSize: 12.sp,

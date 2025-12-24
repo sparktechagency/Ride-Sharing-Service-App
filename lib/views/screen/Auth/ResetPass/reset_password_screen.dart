@@ -75,7 +75,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   prefixIcon: SvgPicture.asset(AppIcons.lock),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter your password";
+                      return "Please enter your password".tr;
                     }
                     return null;
                   },
@@ -90,7 +90,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   prefixIcon: SvgPicture.asset(AppIcons.lock),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please confirm your password";
+                      return "Please confirm your password".tr;
                     }
                     return null;
                   },

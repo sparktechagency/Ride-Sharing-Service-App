@@ -161,7 +161,7 @@ class _PickUpScreenState extends State<PickUpScreen> {
                   textEditingController: _searchController,
                   googleAPIKey: googleApiKey,
                   inputDecoration: InputDecoration(
-                    hintText: "Search for a place or address",
+                    hintText: "Search for a place or address".tr,
                     hintStyle: TextStyle(
                       color: AppColors.hintColor,
                       fontSize: 16.sp,

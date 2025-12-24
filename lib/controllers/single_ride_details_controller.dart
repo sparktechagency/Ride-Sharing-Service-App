@@ -64,7 +64,7 @@ class SingleRideDetailsController extends GetxController {
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: CustomText(text: "Ride Update successfully",color: AppColors.backgroundColor,), backgroundColor: Colors.green),
+           SnackBar(content: CustomText(text: "Ride Update successfully".tr,color: AppColors.backgroundColor,), backgroundColor: Colors.green),
         );
 
         // Use Navigator.pop with 'true' to trigger the refresh in the previous screen

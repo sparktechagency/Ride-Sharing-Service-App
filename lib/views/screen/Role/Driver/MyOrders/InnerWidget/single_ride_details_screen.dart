@@ -27,7 +27,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: BackButton(color: Colors.black, onPressed: () => Get.back()),
-        title: Text("Details", style: TextStyle(color: Colors.black, fontSize: 18.sp)),
+        title: Text("Details".tr, style: TextStyle(color: Colors.black, fontSize: 18.sp)),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -39,7 +39,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
 
         final data = controller.rideDetails.value;
         if (data == null) {
-          return Center(child: Text("No Details Found", style: TextStyle(fontSize: 16.sp)));
+          return Center(child: Text("No Details Found".tr, style: TextStyle(fontSize: 16.sp)));
         }
 
         return SingleChildScrollView(
@@ -58,7 +58,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
                   ),
                   TextButton(
                       onPressed: () {},
-                      child: Text("See all", style: TextStyle(color: Colors.grey, fontSize: 14.sp))
+                      child: Text("See all".tr, style: TextStyle(color: Colors.grey, fontSize: 14.sp))
                   ),
                 ],
               ),
@@ -210,7 +210,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
         backgroundColor: AppColors.backgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         title: CustomText(text: actionTitle, fontSize: 18.sp, fontWeight: FontWeight.w600),
-        content: CustomText(text: "Are you sure you want to $actionTitle?", fontSize: 14.sp, maxLine: 2),
+        content: CustomText(text: "Are you sure you want to $actionTitle?".tr, fontSize: 14.sp, maxLine: 2),
         actionsPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         actions: [
           Row(
@@ -218,7 +218,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
               Expanded(
                 child: CustomButton(
                   onTap: () => Navigator.pop(dialogContext),
-                  text: "Cancel",
+                  text: "Cancel".tr,
                   color: AppColors.backgroundColor,
                   broderColor: Colors.grey.shade300,
                   textColor: Colors.black,
@@ -232,7 +232,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
                     Navigator.pop(dialogContext);
                     controller.updateRideStatus(context, rideId, status);
                   },
-                  text: "Confirm",
+                  text: "Confirm".tr,
                   textStyle: TextStyle(color: Colors.white, fontSize: 14.sp),
                 ),
               ),
@@ -324,7 +324,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
                   onTap: () => _showReviewDialog(context, user),
                   width: 100.w,
                   height: 30.h,
-                  text: "Give Review",
+                  text: "Give Review".tr,
                   textStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -355,7 +355,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
                 child: Icon(Icons.check_circle, color: Colors.green, size: 40.w),
               ),
               SizedBox(height: 16.h),
-              CustomText(text: "Give Person rating out of 5!", fontSize: 18.sp, fontWeight: FontWeight.bold),
+              CustomText(text: "Give Person rating out of 5!".tr, fontSize: 18.sp, fontWeight: FontWeight.bold),
               SizedBox(height: 20.h),
               CustomText(text: user.userName, fontSize: 16.sp, fontWeight: FontWeight.w600),
               SizedBox(height: 16.h),
@@ -369,13 +369,13 @@ class SingleRideDetailsScreen extends StatelessWidget {
                 }),
               )),
               SizedBox(height: 16.h),
-              Align(alignment: Alignment.centerLeft, child: CustomText(text: "Write your feedback", fontSize: 14.sp)),
+              Align(alignment: Alignment.centerLeft, child: CustomText(text: "Write your feedback".tr, fontSize: 14.sp)),
               SizedBox(height: 8.h),
               TextField(
                 controller: feedbackController,
                 maxLines: 3,
                 decoration: InputDecoration(
-                  hintText: "Type here...",
+                  hintText: "Type here...".tr,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                   filled: true,
                   fillColor: Colors.grey.shade50,
@@ -387,7 +387,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
                   Expanded(
                     child: CustomButton(
                       onTap: () => Navigator.pop(dialogContext),
-                      text: "Cancel",
+                      text: "Cancel".tr,
                       color: AppColors.backgroundColor,
                       broderColor: Colors.grey.shade300,
                       textColor: Colors.black,
@@ -412,7 +412,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
                         );
                         if (result != null) Navigator.pop(dialogContext);
                       },
-                      text: "Submit",
+                      text: "Submit".tr,
                     )),
                   ),
                 ],

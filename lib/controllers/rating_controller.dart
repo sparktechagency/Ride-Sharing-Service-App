@@ -43,7 +43,7 @@ class RatingController extends GetxController {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
              SnackBar(
-              content: CustomText(text: "Rating submitted successfully!", color:  AppColors.backgroundColor,),
+              content: CustomText(text: "Rating submitted successfully!".tr, color:  AppColors.backgroundColor,),
               backgroundColor: Colors.green,
             ),
           );

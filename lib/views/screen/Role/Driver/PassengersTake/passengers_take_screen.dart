@@ -96,7 +96,7 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
           children: [
             //=====================> Date Selection <=========================
             CustomText(
-              text: "When are you going?",
+              text: "When are you going?".tr,
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
             ),

@@ -211,7 +211,7 @@ class PostRideController extends GetxController {
 
         if (Get.context != null) {
           ScaffoldMessenger.of(Get.context!).showSnackBar(
-            SnackBar(content: CustomText(text: "Create Ride Successfully",color: AppColors.backgroundColor,), backgroundColor: Colors.green),
+            SnackBar(content: CustomText(text: "Create Ride Successfully".tr,color: AppColors.backgroundColor,), backgroundColor: Colors.green),
           );
         }
         Get.offAllNamed(AppRoutes.driverHomeScreen);

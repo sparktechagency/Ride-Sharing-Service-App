@@ -84,22 +84,24 @@ class SingleRideDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildTripCard(BuildContext context, SingleRideDetailsModel data) {
-    // 1. Logic to determine button text and the next status for the API
     String buttonText = "";
     String nextStatus = "";
     bool showButton = true;
+    bool isClickable = true; // Tracks if the button should be active
 
-    // Normalize status to lowercase to avoid string matching errors
     String currentStatus = data.status.toLowerCase();
 
-    if (currentStatus == "open") {
+    if (currentStatus == "pending") {
       buttonText = "Start Trip";
-      nextStatus = "complete"; // Changes 'open' (Pending) to 'complete' (Ongoing)
-    } else if (currentStatus == "complete") {
+      nextStatus = "open";
+    } else if (currentStatus == "open") {
       buttonText = "Complete Trip";
-      nextStatus = "finished"; // Changes 'complete' (Ongoing) to 'finished' (Completed)
+      nextStatus = "complete";
+    } else if (currentStatus == "complete") {
+      buttonText = "Completed"; // Text requested
+      isClickable = false;      // Make non-clickable
+      showButton = true;
     } else {
-      // If status is 'finished' or 'cancelled', we don't show an action button
       showButton = false;
     }
 
@@ -198,13 +200,17 @@ class SingleRideDetailsScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(16.w),
               child: Obx(() => CustomButton(
-                onTap: () => _showConfirmationDialog(context, buttonText, nextStatus),
+                // If not clickable, onTap is null (disables button)
+                onTap: isClickable
+                    ? () => _showConfirmationDialog(context, buttonText, nextStatus)
+                    : () {}, // Pass an empty function instead of null
                 text: buttonText,
+                // Optional: You can change color to grey if isClickable is false
+                color: isClickable ? AppColors.primaryColor : Colors.grey.shade400,
                 loading: controller.isUpdating.value,
               )),
             ),
 
-          // Extra padding if button is hidden
           if (!showButton) SizedBox(height: 16.h),
         ],
       ),
@@ -215,22 +221,47 @@ class SingleRideDetailsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(actionTitle, style: TextStyle(fontSize: 18.sp)),
-        content: Text("Are you sure you want to $actionTitle?", style: TextStyle(fontSize: 14.sp)),
+        backgroundColor: AppColors.backgroundColor, // Set requested background
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        title: CustomText(
+            text: actionTitle,
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600
+        ),
+        content: CustomText(
+          text: "Are you sure you want to $actionTitle?",
+          fontSize: 14.sp,
+          maxLine: 2,
+        ),
+        actionsPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text("Cancel")),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              controller.updateRideStatus(context, rideId, status);
-            },
-            child: const Text("Confirm"),
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  onTap: () => Navigator.pop(dialogContext),
+                  text: "Cancel",
+                  color: Colors.grey.shade200,
+                  textStyle: TextStyle(color: Colors.black, fontSize: 14.sp),
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: CustomButton(
+                  onTap: () {
+                    Navigator.pop(dialogContext);
+                    controller.updateRideStatus(context, rideId, status);
+                  },
+                  text: "Confirm",
+                  textStyle: TextStyle(color: Colors.white, fontSize: 14.sp),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
-
   Widget _infoRow(String label, String value, {bool isPrice = false}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),

@@ -69,35 +69,13 @@ class SingleRideDetailsScreen extends StatelessWidget {
                 itemCount: data.bookingUsers.length,
                 separatorBuilder: (_, __) => SizedBox(height: 12.h),
                 itemBuilder: (context, index) {
-                  // Pass status here
-                  return _buildUserTile(context,data.bookingUsers[index], data.status);
+                  return _buildUserTile(context, data.bookingUsers[index], data.status);
                 },
               ),
             ],
           ),
         );
       }),
-      floatingActionButton: Obx(() => FloatingActionButton(
-        onPressed: chatController.isCreateLoading.value
-            ? null
-            : () {
-          final data = controller.rideDetails.value;
-          if (data != null) {
-            // Show confirmation before starting chat
-            _showChatConfirmation(context, rideId); // Assuming userId is the participant
-          }
-        },
-        backgroundColor: chatController.isCreateLoading.value
-            ? Colors.grey
-            : AppColors.primaryColor,
-        child: chatController.isCreateLoading.value
-            ? SizedBox(
-            height: 20.h,
-            width: 20.w,
-            child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
-        )
-            : Icon(Icons.chat_bubble_outline, color: AppColors.backgroundColor, size: 24.w),
-      )),
     );
   }
 
@@ -105,7 +83,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
     String buttonText = "";
     String nextStatus = "";
     bool showButton = true;
-    bool isClickable = true; // Tracks if the button should be active
+    bool isClickable = true;
 
     String currentStatus = data.status.toLowerCase();
 
@@ -116,8 +94,8 @@ class SingleRideDetailsScreen extends StatelessWidget {
       buttonText = "Complete Trip";
       nextStatus = "complete";
     } else if (currentStatus == "complete") {
-      buttonText = "Completed"; // Text requested
-      isClickable = false;      // Make non-clickable
+      buttonText = "Completed";
+      isClickable = false;
       showButton = true;
     } else {
       showButton = false;
@@ -137,7 +115,6 @@ class SingleRideDetailsScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // ======================== Header ========================
           Padding(
             padding: EdgeInsets.all(16.w),
             child: Row(
@@ -167,8 +144,6 @@ class SingleRideDetailsScreen extends StatelessWidget {
             ),
           ),
           const Divider(height: 1),
-
-          // ======================== Route Information ========================
           Padding(
             padding: EdgeInsets.all(16.w),
             child: Row(
@@ -205,30 +180,23 @@ class SingleRideDetailsScreen extends StatelessWidget {
             ),
           ),
           const Divider(height: 1),
-
-          // ======================== Seat & Price Details ========================
           _infoRow("Total Passengers Seat :", "${data.totalPassenger} Person"),
           _infoRow("Booking Seat :", "${data.seatsBooked.toString().padLeft(2, '0')} Person"),
           const Divider(height: 1),
           _infoRow("Available Seat :", "${data.totalPassenger - data.seatsBooked} Seat"),
           _infoRow("Per Seat Price :", "\$ ${data.pricePerSeat}", isPrice: true),
-
-          // ======================== Dynamic Action Button ========================
           if (showButton)
             Padding(
               padding: EdgeInsets.all(16.w),
               child: Obx(() => CustomButton(
-                // If not clickable, onTap is null (disables button)
                 onTap: isClickable
                     ? () => _showConfirmationDialog(context, buttonText, nextStatus)
-                    : () {}, // Pass an empty function instead of null
+                    : () {},
                 text: buttonText,
-                // Optional: You can change color to grey if isClickable is false
                 color: isClickable ? AppColors.primaryColor : Colors.grey.shade400,
                 loading: controller.isUpdating.value,
               )),
             ),
-
           if (!showButton) SizedBox(height: 16.h),
         ],
       ),
@@ -239,18 +207,10 @@ class SingleRideDetailsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppColors.backgroundColor, // Set requested background
+        backgroundColor: AppColors.backgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-        title: CustomText(
-            text: actionTitle,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600
-        ),
-        content: CustomText(
-          text: "Are you sure you want to $actionTitle?",
-          fontSize: 14.sp,
-          maxLine: 2,
-        ),
+        title: CustomText(text: actionTitle, fontSize: 18.sp, fontWeight: FontWeight.w600),
+        content: CustomText(text: "Are you sure you want to $actionTitle?", fontSize: 14.sp, maxLine: 2),
         actionsPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         actions: [
           Row(
@@ -280,6 +240,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget _infoRow(String label, String value, {bool isPrice = false}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -308,7 +269,7 @@ class SingleRideDetailsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(color: Colors.grey.shade200),
       ),
-      child: Column( // Changed to column to allow button below
+      child: Column(
         children: [
           Row(
             children: [
@@ -325,7 +286,17 @@ class SingleRideDetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user.userName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                    Row(
+                      children: [
+                        Text(user.userName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                        SizedBox(width: 8.w),
+                        // Individual Chat Trigger
+                        GestureDetector(
+                          onTap: () => _showChatConfirmation(context, user.id.toString()),
+                          child: Icon(Icons.chat_bubble_outline, size: 18.sp, color: AppColors.primaryColor),
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 4.h),
                     Row(
                       children: [
@@ -342,18 +313,13 @@ class SingleRideDetailsScreen extends StatelessWidget {
               Icon(Icons.star, color: Colors.amber, size: 20.w),
             ],
           ),
-
-          // Inside _buildUserTile method
           if (rideStatus.toLowerCase() == "complete")
             Padding(
               padding: EdgeInsets.only(top: 10.h),
               child: Align(
                 alignment: Alignment.centerRight,
                 child: CustomButton(
-                  onTap: () {
-                    // Trigger the review dialog
-                    _showReviewDialog(context, user);
-                  },
+                  onTap: () => _showReviewDialog(context, user),
                   width: 100.w,
                   height: 30.h,
                   text: "Give Review",
@@ -365,7 +331,6 @@ class SingleRideDetailsScreen extends StatelessWidget {
       ),
     );
   }
-
 
   void _showReviewDialog(BuildContext context, BookingUser user) {
     final RatingController ratingController = Get.put(RatingController());
@@ -382,50 +347,27 @@ class SingleRideDetailsScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // OK Icon
               Container(
                 padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: Colors.green.withOpacity(0.1), shape: BoxShape.circle),
                 child: Icon(Icons.check_circle, color: Colors.green, size: 40.w),
               ),
               SizedBox(height: 16.h),
-
-              CustomText(
-                text: "Give Person rating out of 5!",
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-              ),
+              CustomText(text: "Give Person rating out of 5!", fontSize: 18.sp, fontWeight: FontWeight.bold),
               SizedBox(height: 20.h),
-
-
-              SizedBox(height: 8.h),
               CustomText(text: user.userName, fontSize: 16.sp, fontWeight: FontWeight.w600),
               SizedBox(height: 16.h),
-
-              // Star Rating
               Obx(() => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (index) {
                   return IconButton(
                     onPressed: () => selectedStars.value = index + 1,
-                    icon: Icon(
-                      index < selectedStars.value ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                      size: 32.w,
-                    ),
+                    icon: Icon(index < selectedStars.value ? Icons.star : Icons.star_border, color: Colors.amber, size: 32.w),
                   );
                 }),
               )),
               SizedBox(height: 16.h),
-
-              // Feedback TextField
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(text: "Write your feedback", fontSize: 14.sp),
-              ),
+              Align(alignment: Alignment.centerLeft, child: CustomText(text: "Write your feedback", fontSize: 14.sp)),
               SizedBox(height: 8.h),
               TextField(
                 controller: feedbackController,
@@ -438,8 +380,6 @@ class SingleRideDetailsScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 24.h),
-
-              // Action Buttons
               Row(
                 children: [
                   Expanded(
@@ -454,26 +394,19 @@ class SingleRideDetailsScreen extends StatelessWidget {
                   Expanded(
                     child: Obx(() => CustomButton(
                       loading: ratingController.isLoading.value,
-                      // Inside _showReviewDialog's Submit Button
                       onTap: () async {
                         if (selectedStars.value == 0) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Please select stars"))
-                          );
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please select stars")));
                           return;
                         }
-
                         final result = await ratingController.createRating(
-                          context: context, // Passing the context here
+                          context: context,
                           ride: rideId,
                           target_id: user.id.toString(),
                           stars: selectedStars.value,
                           review: feedbackController.text,
                         );
-
-                        if (result != null) {
-                          Navigator.pop(dialogContext); // Close dialog on success
-                        }
+                        if (result != null) Navigator.pop(dialogContext);
                       },
                       text: "Submit",
                     )),
@@ -487,24 +420,14 @@ class SingleRideDetailsScreen extends StatelessWidget {
     );
   }
 
-
-  // 3. Chat Confirmation Dialog
   void _showChatConfirmation(BuildContext context, String participantId) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: AppColors.backgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-        title: CustomText(
-            text: "Start Conversation",
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600
-        ),
-        content: CustomText(
-          text: "Do you want to create a chat room with the ride participant?",
-          fontSize: 14.sp,
-          maxLine: 2,
-        ),
+        title: CustomText(text: "Start Conversation", fontSize: 18.sp, fontWeight: FontWeight.w600),
+        content: CustomText(text: "Do you want to create a chat room with this passenger?", fontSize: 14.sp, maxLine: 2),
         actionsPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         actions: [
           Row(
@@ -519,15 +442,15 @@ class SingleRideDetailsScreen extends StatelessWidget {
               ),
               SizedBox(width: 12.w),
               Expanded(
-                child: CustomButton(
+                child: Obx(() => CustomButton(
+                  loading: chatController.isCreateLoading.value,
                   onTap: () {
                     Navigator.pop(dialogContext);
-                    // Call the createChatRoom method from ChatController
                     chatController.createChatRoom(participantId);
                   },
                   text: "Yes, Start",
                   textStyle: TextStyle(color: Colors.white, fontSize: 14.sp),
-                ),
+                )),
               ),
             ],
           ),

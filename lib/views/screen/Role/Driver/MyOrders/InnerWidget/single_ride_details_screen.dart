@@ -7,6 +7,7 @@ import 'package:ride_sharing/views/base/custom_button.dart';
 import 'package:ride_sharing/views/base/custom_network_image.dart';
 import 'package:ride_sharing/views/base/custom_text.dart';
 
+import '../../../../../../controllers/create_message_room_controller.dart';
 import '../../../../../../controllers/rating_controller.dart';
 import '../../../../../../controllers/single_ride_details_controller.dart';
 import '../../../../../../models/single_ride_details_model.dart';
@@ -14,6 +15,7 @@ import '../../../../../../models/single_ride_details_model.dart';
 class SingleRideDetailsScreen extends StatelessWidget {
   final String rideId;
   final SingleRideDetailsController controller = Get.put(SingleRideDetailsController());
+  final ChatController chatController = Get.put(ChatController());
 
   SingleRideDetailsScreen({super.key, required this.rideId}) {
     controller.fetchRideDetails(rideId);
@@ -75,11 +77,27 @@ class SingleRideDetailsScreen extends StatelessWidget {
           ),
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppColors.primaryColor,
-        child: Icon(Icons.chat_bubble_outline, color: AppColors.backgroundColor, size: 24.w),
-      ),
+      floatingActionButton: Obx(() => FloatingActionButton(
+        onPressed: chatController.isCreateLoading.value
+            ? null
+            : () {
+          final data = controller.rideDetails.value;
+          if (data != null) {
+            // Show confirmation before starting chat
+            _showChatConfirmation(context, rideId); // Assuming userId is the participant
+          }
+        },
+        backgroundColor: chatController.isCreateLoading.value
+            ? Colors.grey
+            : AppColors.primaryColor,
+        child: chatController.isCreateLoading.value
+            ? SizedBox(
+            height: 20.h,
+            width: 20.w,
+            child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+        )
+            : Icon(Icons.chat_bubble_outline, color: AppColors.backgroundColor, size: 24.w),
+      )),
     );
   }
 
@@ -465,6 +483,55 @@ class SingleRideDetailsScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+
+  // 3. Chat Confirmation Dialog
+  void _showChatConfirmation(BuildContext context, String participantId) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.backgroundColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        title: CustomText(
+            text: "Start Conversation",
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600
+        ),
+        content: CustomText(
+          text: "Do you want to create a chat room with the ride participant?",
+          fontSize: 14.sp,
+          maxLine: 2,
+        ),
+        actionsPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  onTap: () => Navigator.pop(dialogContext),
+                  text: "No",
+                  color: Colors.grey.shade200,
+                  textStyle: TextStyle(color: Colors.black, fontSize: 14.sp),
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: CustomButton(
+                  onTap: () {
+                    Navigator.pop(dialogContext);
+                    // Call the createChatRoom method from ChatController
+                    chatController.createChatRoom(participantId);
+                  },
+                  text: "Yes, Start",
+                  textStyle: TextStyle(color: Colors.white, fontSize: 14.sp),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

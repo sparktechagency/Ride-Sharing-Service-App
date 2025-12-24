@@ -137,16 +137,16 @@ class _DriverProfileScreenState extends State<DriverProfileScreen> {
                                 ),
                               ),
                               //===================> My Ride ListTile <=================
-                              CustomListTile(
-                                onTap: () {
-                                  Get.toNamed(AppRoutes.driverMyRideScreen);
-                                },
-                                title: AppStrings.myRide.tr,
-                                prefixIcon: SvgPicture.asset(AppIcons.myRide),
-                                suffixIcon: SvgPicture.asset(
-                                  AppIcons.rightArrow,
-                                ),
-                              ),
+                              // CustomListTile(
+                              //   onTap: () {
+                              //     Get.toNamed(AppRoutes.driverMyRideScreen);
+                              //   },
+                              //   title: AppStrings.myRide.tr,
+                              //   prefixIcon: SvgPicture.asset(AppIcons.myRide),
+                              //   suffixIcon: SvgPicture.asset(
+                              //     AppIcons.rightArrow,
+                              //   ),
+                              // ),
                               //===================> Setting ListTile <=================
                               CustomListTile(
                                 onTap: () {

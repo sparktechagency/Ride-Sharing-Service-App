@@ -154,6 +154,7 @@ class AppStrings {
   static String settings = 'Settings';
   static String logout = 'Logout';
   static String editProfile = 'Edit Profile';
+  static String updateLicense = 'Update License';
   static String name = 'Name';
   static String drivingLicensePhoto = 'Driving License Photo';
   static String editPersonalDetails = 'Edit Personal Details';

@@ -50,13 +50,13 @@ class RiderPostSubmit extends StatelessWidget {
             SizedBox(height: 48.h),
 
             //=====================> Final Hit Button <=========================
-            CustomButton(
+            Obx(() => CustomButton(
+              loading: controller.isPublishing.value, // Now the UI will listen to this change
               onTap: () {
-                // This triggers the JSON construction and API call defined in your controller
                 controller.publishRide();
               },
               text: AppStrings.postRides.tr,
-            ),
+            )),
             const Spacer(),
           ],
         ),

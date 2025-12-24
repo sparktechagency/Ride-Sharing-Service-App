@@ -376,7 +376,7 @@ class _DriverPersonalInformationScreenState extends State<DriverPersonalInformat
 
                         },
                         child: CustomText(
-                          text: AppStrings.editProfile.tr, // Or use "Edit License"
+                          text: AppStrings.updateLicense.tr,
                           fontWeight: FontWeight.w500,
                           textDecoration: TextDecoration.underline,
                         ),

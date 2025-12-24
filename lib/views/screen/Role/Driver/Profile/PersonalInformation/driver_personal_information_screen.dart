@@ -13,6 +13,7 @@ import '../../../../../base/custom_app_bar.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_page_loading.dart';
 import '../../../../../base/custom_text.dart';
+import '../../../../Auth/DriverSignUp/driver_licence_upload_screen.dart';
 
 class DriverPersonalInformationScreen extends StatefulWidget {
   const DriverPersonalInformationScreen({super.key});
@@ -356,10 +357,31 @@ class _DriverPersonalInformationScreenState extends State<DriverPersonalInformat
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //========================> Driving license photo Section <==========================
-                  CustomText(
-                    text: AppStrings.drivingLicensePhoto.tr,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
+                  // Inside DriverPersonalInformationScreen, find the Driving license photo Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: AppStrings.drivingLicensePhoto.tr,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // Navigate to the new Edit License Screen
+                          Get.toNamed(
+                              AppRoutes.driverLicenceUploadScreen,
+                              arguments: {"isFromProfile": true}
+                          );
+
+                        },
+                        child: CustomText(
+                          text: AppStrings.editProfile.tr, // Or use "Edit License"
+                          fontWeight: FontWeight.w500,
+                          textDecoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 16.h),
                   CustomNetworkImage(

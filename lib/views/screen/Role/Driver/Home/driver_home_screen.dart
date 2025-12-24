@@ -161,7 +161,7 @@ class DriverHomeScreen extends StatelessWidget {
                       padding: EdgeInsets.only(right: 8.w),
                       child: GestureDetector(
                         onTap: () {
-                          Get.toNamed(statsData[index]['route']);
+                          // Get.toNamed(statsData[index]['route']);
                         },
                         child: Container(
                           decoration: BoxDecoration(

@@ -154,6 +154,7 @@ class AppStrings {
   static String settings = 'Settings';
   static String logout = 'Logout';
   static String editProfile = 'Edit Profile';
+  static String updateLicense = 'Update License';
   static String name = 'Name';
   static String drivingLicensePhoto = 'Driving License Photo';
   static String editPersonalDetails = 'Edit Personal Details';
@@ -214,5 +215,17 @@ class AppStrings {
   static const confirmRideCancelConfirmation = 'Are You Sure You Want To Cancel ?';
   static const confirmRideCancelAlert = 'If you cancel this ride within 24 hours If you want to cancel 10% balance will be deducted from your current balance.';
   static const inbox = "Inbox";
+  static const myRides = "My Rides";
+  static const noMessagesFound = "No messages found";
+  static const noMessageYet = "No messages yet";
+  static const writeYourMessage = "Write your message...";
+  static const deleteConversation = "Delete Conversation";
+  static const areYouSureToDeleteThisConversionThisNotUndone = "Are you sure you want to delete this entire conversation? This action cannot be undone.";
+  static const success = "Success";
+  static const conversationDeletedSuccess = "Conversation deleted successfully";
+  static const areYouSureToDeleteThisMessage = "Are you sure you want to delete this message?";
+
+
+
 
 }

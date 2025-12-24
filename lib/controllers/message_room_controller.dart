@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../models/create_message_model.dart';
+import '../models/delete_room_conversations_model.dart';
 import '../models/get_message_model.dart';
 import '../models/get_message_room_model.dart';
 import '../service/api_client.dart';
@@ -31,6 +32,13 @@ class MessageRoomController extends GetxController {
   /// =================== DELETE MESSAGE ===================
   final deleteMessageData = Rxn<CreateMessageAttributes>();
 
+  /// =================== FILTERED MESSAGE ROOMS (LOCAL SEARCH) ===================
+  final filteredRooms = <MessageRoomAttributes>[].obs;
+
+  /// =================== DELETE ROOM ===================
+
+  final deleteConversationData = Rxn<DeleteConversationAttributes>();
+
   /// ===================================================
   /// GET MESSAGE ROOMS
   /// ===================================================
@@ -45,6 +53,8 @@ class MessageRoomController extends GetxController {
       if (response.statusCode == 200) {
         final model = GetMessageRoomModel.fromJson(response.body);
         messageRooms.value = model.data.attributes;
+
+        filteredRooms.assignAll(messageRooms);
       } else {
         errorMessage(response.statusText ?? 'Failed to load message rooms');
       }
@@ -86,7 +96,7 @@ class MessageRoomController extends GetxController {
     required String message,
   }) async {
     try {
-      isLoading(true);
+      // REMOVED: isLoading(true); <- This was causing the full-screen spinner
       errorMessage('');
 
       final body = {
@@ -94,19 +104,19 @@ class MessageRoomController extends GetxController {
         'message': message,
       };
 
-      final response =
-      await ApiClient.postData(ApiConstants.createMessage, body);
+      final response = await ApiClient.postData(ApiConstants.createMessage, body);
 
       if (response.statusCode == 201) {
         final model = CreateMessageModel.fromJson(response.body);
         createMessageData.value = model.data?.attributes;
       } else {
-        errorMessage(response.statusText ?? 'Failed to create message');
+        // You can handle error silently or show a toast
+        debugPrint('Failed to send message: ${response.statusText}');
       }
     } catch (e) {
-      errorMessage(e.toString());
+      debugPrint('Create Message Error: $e');
     } finally {
-      isLoading(false);
+      // REMOVED: isLoading(false);
     }
   }
 
@@ -138,13 +148,49 @@ class MessageRoomController extends GetxController {
   }
 
 
+  /// =================== DELETE CONVERSATION ===================
+  Future<void> deleteConversation(String conversationId) async {
+    try {
+      isLoading(true);
+      errorMessage('');
+
+      final response = await ApiClient.deleteData(
+          '${ApiConstants.deleteConverstaion}$conversationId');
+
+      if (response.statusCode == 200) {
+        final model = DeleteRoomConversationsModel.fromJson(response.body);
+        final deletedId = model.data?.attributes?.sId;
+
+        deleteConversationData.value = model.data?.attributes;
+
+        if (deletedId != null) {
+          // Remove from messageRooms
+          messageRooms.removeWhere((room) => room.id == deletedId);
+
+          // Remove from filteredRooms so UI updates immediately
+          filteredRooms.removeWhere((room) => room.id == deletedId);
+
+          debugPrint('✅ Conversation deleted: $deletedId');
+        }
+      } else {
+        errorMessage(response.statusText ?? 'Failed to delete conversation');
+      }
+    } catch (e) {
+      errorMessage(e.toString());
+      debugPrint('❌ Delete Conversation Error: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
 
   /// =================== SOCKET INIT ===================
   void initSocket(String conversationId, String userId) {
     currentUserId = userId; // Set the current user ID
 
     socket = IO.io(
-      'https://faysal6100.sobhoy.com',
+      ApiConstants.socketBaseUrl,
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
@@ -203,6 +249,51 @@ class MessageRoomController extends GetxController {
     });
   }
 
+
+  /// =================== INBOX SOCKET INIT ===================
+  void initInboxSocket(String userId) {
+    currentUserId = userId;
+
+    socket = IO.io(
+      ApiConstants.socketBaseUrl,
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .build(),
+    );
+
+    socket!.connect();
+
+    socket!.onConnect((_) => debugPrint('✅ Inbox Socket connected: ${socket!.id}'));
+
+    // LISTEN FOR NEW CONVERSATIONS OR UPDATES
+    // Event: new-conversation::USER_ID
+    socket!.on('new-conversation::$userId', (data) {
+      debugPrint('📩 Inbox Update Received: $data');
+      try {
+        // Assuming 'data' matches your MessageRoomAttributes model structure
+        final newRoom = MessageRoomAttributes.fromJson(data);
+
+        // Check if this room already exists in our list
+        int existingIndex = messageRooms.indexWhere((room) => room.id == newRoom.id);
+
+        if (existingIndex != -1) {
+          // 1. If it exists, remove old and insert at top (latest message first)
+          messageRooms.removeAt(existingIndex);
+          messageRooms.insert(0, newRoom);
+        } else {
+          // 2. If it's a brand new conversation, insert it at the top
+          messageRooms.insert(0, newRoom);
+        }
+
+        messageRooms.refresh();
+        filteredRooms.assignAll(messageRooms);
+      } catch (e) {
+        debugPrint('❌ Inbox Socket Error: $e');
+      }
+    });
+  }
+
   void disposeSocket() {
     if (socket != null) {
       socket!.dispose();
@@ -211,6 +302,34 @@ class MessageRoomController extends GetxController {
       debugPrint('🧹 Socket resources cleaned up');
     }
   }
+
+
+
+  /// =================== LOCAL INBOX SEARCH ===================
+  void searchInbox(String query) {
+    if (query.trim().isEmpty) {
+      filteredRooms.assignAll(messageRooms);
+      return;
+    }
+
+    final q = query.toLowerCase();
+
+    filteredRooms.assignAll(
+      messageRooms.where((room) {
+        final otherParticipants = room.participants.where((p) {
+          return p.id.toString().trim() != currentUserId.trim();
+        }).toList();
+
+        if (otherParticipants.isEmpty) return false;
+
+        final name = otherParticipants.first.userName.toLowerCase();
+        final lastMsg = room.lastMessage.toLowerCase();
+
+        return name.contains(q) || lastMsg.contains(q);
+      }).toList(),
+    );
+  }
+
 
 
 }

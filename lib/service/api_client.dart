@@ -17,30 +17,43 @@ class ApiClient extends GetxService {
   static const int timeoutInSeconds = 30;
   static String bearerToken = "";
 
-  //==========================================> Get Data <======================================
   static Future<Response> getData(
-    String uri, {
-    Map<String, dynamic>? query,
-    Map<String, String>? headers,
-  }) async {
-    bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+      String uri, {
+        Map<String, dynamic>? query, // This will now be sent as a JSON body
+        Map<String, String>? headers,
+      }) async {
+    String bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
 
     var mainHeaders = {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json', // Set to JSON
       'Authorization': 'Bearer $bearerToken',
     };
-    try {
-      debugPrint('====> API Call: $uri\nHeader: ${headers ?? mainHeaders}');
 
-      http.Response response = await client
-          .get(
-            Uri.parse(ApiConstants.baseUrl + uri),
-            headers: headers ?? mainHeaders,
-          )
-          .timeout(const Duration(seconds: timeoutInSeconds));
+    try {
+      debugPrint('====> API Call (GET with Body): $uri');
+
+      // Create a manual request to allow a body in a GET call
+      var request = http.Request('GET', Uri.parse(ApiConstants.baseUrl + uri));
+
+      // Add headers
+      request.headers.addAll(headers ?? mainHeaders);
+
+      // Add the "Raw Body" if query is provided
+      if (query != null) {
+        request.body = jsonEncode(query);
+      }
+
+      // Send the request
+      http.StreamedResponse streamedResponse = await request.send().timeout(
+        const Duration(seconds: timeoutInSeconds),
+      );
+
+      // Convert streamed response to standard response
+      http.Response response = await http.Response.fromStream(streamedResponse);
+
       return handleResponse(response, uri);
     } catch (e) {
-      debugPrint('------------${e.toString()}');
+      debugPrint('------------ Error: ${e.toString()}');
       return const Response(statusCode: 1, statusText: noInternetMessage);
     }
   }

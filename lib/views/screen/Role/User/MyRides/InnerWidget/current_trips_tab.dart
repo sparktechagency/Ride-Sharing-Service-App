@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../controllers/booking_controller.dart';
 import '../../../../../../helpers/route.dart';
+import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -62,7 +63,7 @@ class CurrentTripsTab extends StatelessWidget {
                             children: [
                               CustomNetworkImage(
                                 imageUrl:
-                                'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                "${ApiConstants.imageBaseUrl}${userDetails?.profileImage}",
                                 height: 38.h,
                                 width: 38.w,
                                 boxShape: BoxShape.circle,
@@ -131,7 +132,7 @@ class CurrentTripsTab extends StatelessWidget {
 
                           Row(
                             children: [
-                              CustomText(text: 'Booking Time :'),
+                              CustomText(text: AppStrings.bookingTime.tr),
                               Expanded(
                                 child: CustomText(
                                   text: formattedDate,
@@ -181,10 +182,36 @@ class CurrentTripsTab extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CustomButton(
-                              onTap: () {},
-                              width: 100.w,
-                              height: 34.h,
-                              text: AppStrings.view.tr),
+                            onTap: () async {
+                              // 1. Wait for the result from the details screen
+                              final result = await Get.toNamed(
+                                AppRoutes.rideDetailsScreen,
+                                arguments: {
+                                  'booking': statusBooking,
+                                  'user': userDetails,
+                                  'from': 'ongoing'
+                                },
+                              );
+
+                              // 2. If result is true, it means the trip was completed successfully
+                              if (result == true) {
+                                // Show the success message here on the parent screen
+                                Get.snackbar(
+                                  "Success",
+                                  "Trip completed successfully!",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.green,
+                                  colorText: Colors.white,
+                                );
+
+                                // 3. Refresh the ongoing list
+                                controller.getBookingsByStatus("ongoing");
+                              }
+                            },
+                            width: 100.w,
+                            height: 34.h,
+                            text: AppStrings.view.tr,
+                          ),
                           SizedBox(width: 8.w),
                           CustomButton(
                             onTap: () {},

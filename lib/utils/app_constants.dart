@@ -5,7 +5,7 @@ class AppConstants{
   static String APP_NAME = "Ride-Sharing";
   static String userRole = "userRole";
   static String fcmToken = "fcmToken";
-
+  static String hasLicenseUploaded = "hasLicenseUploaded";
 
   static const String bearerToken = "BearerToken";
   static const String phoneNumber = "PhoneNumber";

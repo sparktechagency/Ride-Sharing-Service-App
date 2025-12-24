@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
+import 'package:ride_sharing/utils/app_strings.dart';
 import '../../../../../controllers/booking_controller.dart';
 import '../../../../../helpers/prefs_helpers.dart';
 import '../../../../../utils/app_constants.dart';
@@ -21,10 +22,12 @@ class MyRidesScreen extends StatefulWidget {
 
 class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final BookingController bookingController = Get.put(BookingController());
+  final BookingController bookingController = Get.isRegistered<BookingController>()
+      ? Get.find<BookingController>()
+      : Get.put(BookingController(), permanent: true);
 
 
-  final statuses = ['pending', 'ongoing', 'cancelled', 'completed'];
+  final statuses = [ "pending", "ongoing", "cancelled", "completed"];
 
   @override
   void initState() {
@@ -76,7 +79,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: CustomText(
-                text: "My Rides".tr,
+                text: AppStrings.myRides.tr,
                 fontSize: 16.sp,
               ),
               centerTitle: true,
@@ -100,7 +103,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Pending'.tr,
+                          text: AppStrings.pending.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -117,7 +120,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Current Trips'.tr,
+                          text: AppStrings.currentTrips.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -134,7 +137,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Canceled'.tr,
+                          text: AppStrings.canceled.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -151,7 +154,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Completed'.tr,
+                          text: AppStrings.completed.tr,
                           fontSize: 12.sp,
                         ),
                       ),

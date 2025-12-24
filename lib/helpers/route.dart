@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:get/get.dart';
+import 'package:ride_sharing/views/screen/Role/Driver/MyOrders/InnerWidget/single_ride_details_screen.dart';
 import 'package:ride_sharing/views/screen/Role/Driver/rider_post_submit/rider_post_submit.dart';
 import '../views/screen/AboutUs/about_us_screen.dart';
 import '../views/screen/ActiveOrderDetails/active_order_details.dart';
@@ -111,6 +112,7 @@ class AppRoutes{
   static String myRidesScreen="/my_rides_screen";
   static String seeAllScreen="/see_all_screen";
   static String rideDetailsScreen="/ride_details_screen";
+  static String singleRideDetailsScreen="/single_ride_details_screen";
 
 
  static List<GetPage> page=[
@@ -153,7 +155,7 @@ class AppRoutes{
     GetPage(name:activeOrderScreen, page: ()=>const ActiveOrderScreen()),
     GetPage(name:completedOrderScreen, page: ()=>const CompletedOrderScreen()),
     GetPage(name:pickUpScreen, page: ()=> PickUpScreen()),
-    GetPage(name:dropOffScreen, page: ()=> DropOffScreen()),
+    // GetPage(name:dropOffScreen, page: ()=> DropOffScreen()),
     GetPage(name:addCityScreen, page: ()=> AddCityScreen()),
     GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
    GetPage(name:passengersTakeScreen, page: ()=> PassengersTakeScreen()),
@@ -170,7 +172,10 @@ class AppRoutes{
    GetPage(name:userMessageScreen, page: ()=> UserMessageScreen()),
    GetPage(name:seeAllScreen, page: ()=> SeeAllScreen()),
    GetPage(name:rideDetailsScreen, page: ()=> RideDetailsScreen()),
-
+   GetPage(
+     name: singleRideDetailsScreen,
+     page: () => SingleRideDetailsScreen(rideId: Get.arguments as String),
+   ),
 
  ];
 }

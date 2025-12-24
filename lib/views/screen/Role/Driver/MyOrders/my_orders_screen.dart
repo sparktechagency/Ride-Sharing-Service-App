@@ -3,9 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/utils/app_colors.dart';
 
+import '../../../../../controllers/driver_status_ride_controller.dart';
 import '../../../../base/custom_text.dart';
 import '../BottomNavBar/driver_bottom_menu..dart';
-import 'InnerWidget/canceled_tab.dart';
+import 'InnerWidget/pending_tab.dart';
 import 'InnerWidget/completed_tab.dart';
 import 'InnerWidget/current_trips_tab.dart';
 
@@ -18,16 +19,31 @@ class MyOrdersScreen extends StatefulWidget {
 
 class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final DriverStatusRidesController controller =
+  Get.put(DriverStatusRidesController());
 
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+    // Initial fetch (Current Trips = open)
+    controller.fetchRidesByStatus("pending");
+
     _tabController.addListener(() {
+      if (_tabController.indexIsChanging) return;
       setState(() {});
+      if (_tabController.index == 0) {
+        controller.fetchRidesByStatus("pending");
+      } else if (_tabController.index == 1) {
+        controller.fetchRidesByStatus("open");
+      } else {
+        controller.fetchRidesByStatus("complete");
+      }
     });
   }
+
 
   @override
   void dispose() {
@@ -47,7 +63,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: CustomText(
-                text: "My Orders".tr,
+                text: "My Rides".tr,
                 fontSize: 16.sp,
               ),
               centerTitle: true,
@@ -72,7 +88,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Current Trips'.tr,
+                          text: 'Pending'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -89,7 +105,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
                       child: Align(
                         alignment: Alignment.center,
                         child: CustomText(
-                          text: 'Canceled'.tr,
+                          text: 'Current Trips'.tr,
                           fontSize: 12.sp,
                         ),
                       ),
@@ -118,8 +134,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with SingleTickerProvid
             body:TabBarView(
               controller: _tabController,
               children:  [
+
+                PendingTab(),
                 CurrentTripsTab(),
-                CanceledTab(),
                 CompletedTab(),
               ],
             ))

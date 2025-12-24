@@ -63,7 +63,7 @@ class DriverBottomMenu extends StatelessWidget {
       getItem(AppIcons.home, 'Home'.tr, theme, 0),
       getItem(AppIcons.postRides, 'Post Rides'.tr, theme, 1),
       getItem(AppIcons.chats, 'Inbox'.tr, theme, 2),
-      getItem(AppIcons.myOrder, 'My Orders'.tr, theme, 3),
+      getItem(AppIcons.myOrder, 'My Rides'.tr, theme, 3),
       getItem(AppIcons.profile, 'Profile'.tr, theme, 4),
     ];
 

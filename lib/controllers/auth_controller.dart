@@ -375,6 +375,8 @@ class AuthController extends GetxController {
         bool hasLicenseUploaded =
             response.body['data']['attributes']['user']['licenseVerified'] ??
             false;
+        await PrefsHelper.setBool(AppConstants.hasLicenseUploaded, hasLicenseUploaded);
+
         if (hasLicenseUploaded) {
           Get.offAllNamed(AppRoutes.driverHomeScreen);
         } else {

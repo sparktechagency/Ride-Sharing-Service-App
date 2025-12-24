@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../../../../controllers/booking_controller.dart';
 import '../../../../../../models/booking_user_details_model.dart';
 import '../../../../../../models/booking_with_status_model.dart';
+import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
@@ -13,8 +15,6 @@ import '../../../../../base/custom_button.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-
 
 
 class RideDetailsScreen extends StatefulWidget {
@@ -26,6 +26,7 @@ class RideDetailsScreen extends StatefulWidget {
 
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   String? selectedPayment;
+  final BookingController bookingController = Get.find<BookingController>();
 
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.
@@ -35,7 +36,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 
   void _onSubmit() {
     if (selectedPayment != null) {
-      print('Payment method selected: $selectedPayment');
+      debugPrint('Payment method selected: $selectedPayment');
       Navigator.of(context).pop(selectedPayment);
     }
   }
@@ -44,6 +45,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   Widget build(BuildContext context) {
     // --- 1. RECEIVE AND EXTRACT ARGUMENTS ---
     final arguments = Get.arguments as Map<String, dynamic>?;
+    final String fromScreen = arguments?['from'] ?? '';
 
     // Safely extract the passed data
     statusBooking = arguments?['booking'] as BookingAttribute?;
@@ -154,12 +156,12 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       children: [
                                         // Use passenger count from booking
                                         CustomText(text: '${statusBooking?.numberOfPeople ?? 0}  '),
-                                        CustomText(text: 'Passenger'.tr),
+
                                       ],
                                     ),
                                     SizedBox(height: 12.h),
                                     // Use vehicle type from booking
-                                    CustomText(text: statusBooking?.vehicleType ?? 'Car'),
+                                    CustomText(text: statusBooking?.vehicleType ?? ''),
                                   ],
                                 ),
                               ),
@@ -210,48 +212,84 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                         ],
                       ),
                     ),
-                    //==================================> Book Now Button <===================
                     //==================================> Action Buttons <===================
                     Padding(
-                      padding: EdgeInsets.only(right: 16.w, bottom: 6.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          // -------- Cancel Button --------
-                          OutlinedButton(
-                            onPressed: () {
-                              _showCancelBottomSheet(context);
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: AppColors.primaryColor),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              minimumSize: Size(90.w, 34.h),
-                            ),
-                            child: Text(
-                              AppStrings.cancel.tr,
-                              style: TextStyle(
-                                color: AppColors.primaryColor,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
+                      padding: EdgeInsets.only(right: 16.w, left: 16.w, bottom: 10.h),
+                      child: Builder(
+                        builder: (context) {
+                          final BookingController bookingController = Get.find<BookingController>();
 
-
-                          SizedBox(width: 8.w),
-
-                          // -------- Book Now Button --------
-                          CustomButton(
-                            onTap: () {
-                              _showPaymentBottomSheet(context);
-                            },
-                            text: AppStrings.bookNow.tr,
-                            width: 100.w,
-                            height: 34.h,
-                          ),
-                        ],
+                          if (fromScreen == 'ongoing') {
+                            return Obx(() => CustomButton(
+                              onTap: () async {
+                                bool success = await bookingController.updateBookingStatus(
+                                  statusBooking!.id,
+                                  "Completed",
+                                );
+                                if (success) {
+                                  // Just go back and pass 'true' as the result
+                                  Navigator.pop(context, true);
+                                } else {
+                                  // For errors, you can show them here since you aren't popping the screen
+                                  Get.snackbar("Error", bookingController.errorMessage.value,
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white);
+                                }
+                              },
+                              loading: bookingController.isUpdatingStatus.value,
+                              text: "Start Trip", // Note: If the status is becoming 'Completed', usually the button says 'End Trip'
+                              width: double.infinity,
+                              height: 45.h,
+                            ));
+                          }else if (fromScreen == 'completed') {
+                            // 2. Completed: Static Button
+                            return CustomButton(
+                              onTap: () {},
+                              text: "Completed Trip",
+                              width: double.infinity,
+                              height: 45.h,
+                              color: Colors.grey,
+                              broderColor: Colors.grey,
+                            );
+                          } else {
+                            // 3. Pending: Cancel (Outlined) and Chat Now (CustomButton)
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // -------- Cancel Button --------
+                                OutlinedButton(
+                                  onPressed: () => _showCancelBottomSheet(context),
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(color: AppColors.primaryColor),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    minimumSize: Size(90.w, 34.h),
+                                  ),
+                                  child: Text(
+                                    AppStrings.cancel.tr,
+                                    style: TextStyle(
+                                      color: AppColors.primaryColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                // -------- Chat Now Button --------
+                                CustomButton(
+                                  onTap: () {
+                                    // Logic to go to Chat
+                                  },
+                                  text: "Chat Now",
+                                  width: 100.w,
+                                  height: 34.h,
+                                  fontSize: 12.sp,
+                                ),
+                              ],
+                            );
+                          }
+                        },
                       ),
                     ),
 
@@ -460,7 +498,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       children: [
                                         CustomNetworkImage(
                                           imageUrl: review['userImage'] ??
-                                              'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
+                                              "${ApiConstants.imageBaseUrl}${userDetails?.profileImage}",
                                           height: 38.h,
                                           width: 38.w,
                                           boxShape: BoxShape.circle,

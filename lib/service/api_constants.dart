@@ -1,4 +1,6 @@
 class ApiConstants {
+  static const String googleApiKey = "AIzaSyCrmEOP4JyFCozu7n85BIZqn_8LarJq_iI";
+  static const String socketBaseUrl = "https://faysal6100.sobhoy.com";
   static const String baseUrl = "https://faysal5500.sobhoy.com/api/v1";
   static const String imageBaseUrl = "https://faysal5500.sobhoy.com";
   static const String signUpEndPoint = "/auth/register";
@@ -15,6 +17,12 @@ class ApiConstants {
   //==========================================> Driver Role <=======================
   static const String driverLicenseUploadEndPoint = "/users/self/post-image-liscense";
   static const String homePageStatisticsEndPoint = "/home/statistics";
+  static const String createRide = "/ride/create";
+  static const String driverStatusRides = "/home/orders/";
+  static const String driverSingleRideDetails = "/ride/get-details/";
+  static const String driverRideStatusUpdate = "/ride/update/";
+  static const String driverRoomCreate = "/rooms/create";
+
 
 
 
@@ -23,10 +31,18 @@ class ApiConstants {
   static const String getBookingUserDetails = "/booking/get-user-details/";
   static const String getBookingByStatus = "/booking/get/";
   static const String createRating = "/rating/create";
+  static const String searchRide = "/ride/search-ride";
+
+
+  //==========================================> Common <=======================
+
   static const String getMessageRoomEndPoint = "/rooms/get";
   static const String getMessage = "/message/get/";
   static const String createMessage = "/message/create";
   static const String deleteMessage = "/message/delete/";
-
+  static const String deleteConverstaion = "/rooms/delete/";
+  static const String updateStatus = "/booking/update/";
+  static const String createBooking = "/booking/create";
+  static const String updateProfileData = "/users/self/update";
 
 }

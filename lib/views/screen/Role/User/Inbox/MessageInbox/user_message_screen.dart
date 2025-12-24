@@ -134,7 +134,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     }
 
                     if (controller.messageGet.isEmpty) {
-                      return Center(child: Text("No messages yet".tr));
+                      return Center(child: Text(AppStrings.noMessageYet.tr));
                     }
 
                     return ListView.builder(
@@ -174,7 +174,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
           Expanded(
             child: CustomTextField(
               controller: messageController,
-              hintText: "Write your message...",
+              hintText: AppStrings.writeYourMessage,
             ),
           ),
           SizedBox(width: 10.w),
@@ -210,11 +210,12 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       updatedAt: DateTime.now().toIso8601String(),
     );
 
-    // Add locally and scroll
+    // 1. ADD IMMEDIATELY (UI feels instant)
     controller.messageGet.add(tempMessage);
     messageController.clear();
     _scrollToBottom();
 
+    // 2. BACKGROUND API CALL (No full-screen loading)
     controller.createMessage(
       conversation_id: roomId,
       message: text,
@@ -222,14 +223,12 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       final created = controller.createMessageData.value;
       if (created != null) {
         int index = controller.messageGet.indexWhere((m) => m.id == tempId);
-
-        // If the socket ALREADY added the real message, remove our temp one
         bool alreadyAddedBySocket = controller.messageGet.any((m) => m.id == created.sId);
 
         if (alreadyAddedBySocket && index != -1) {
           controller.messageGet.removeAt(index);
         } else if (index != -1) {
-          // Otherwise, update the temp one to real
+          // REPLACE TEMP WITH REAL DATA
           controller.messageGet[index] = GetMessageAttributes(
             id: created.sId ?? tempId,
             message: created.message ?? text,
@@ -241,69 +240,70 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
           );
           controller.messageGet.refresh();
         }
-        _scrollToBottom(); // Scroll again after API update
       }
     });
   }
 
+
   Widget receiverBubble(GetMessageAttributes msg) {
-    return GestureDetector(
-      onTap: () => _showDeleteMessageBottomSheet(msg.id),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Avatar
-            CustomNetworkImage(
-              imageUrl: partnerImage,
-              height: 38.h,
-              width: 38.w,
-              boxShape: BoxShape.circle,
-            ),
-            SizedBox(width: 8.w),
-            // Bubble
-            Flexible(
-              child: ChatBubble(
-                clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
-                backGroundColor: AppColors.cardColor,
-                margin: EdgeInsets.only(bottom: 8.h),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.65,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        msg.message,
-                        style: TextStyle(color: Colors.black, fontSize: 14.sp),
-                        textAlign: TextAlign.start,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Avatar
+          CustomNetworkImage(
+            imageUrl: partnerImage,
+            height: 38.h,
+            width: 38.w,
+            boxShape: BoxShape.circle,
+          ),
+          SizedBox(width: 8.w),
+          // Bubble
+          Flexible(
+            child: ChatBubble(
+              clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
+              backGroundColor: AppColors.cardColor,
+              margin: EdgeInsets.only(bottom: 8.h),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.65,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      msg.message,
+                      style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      timeago.format(DateTime.parse(msg.createdAt)),
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 12.sp,
                       ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        timeago.format(DateTime.parse(msg.createdAt)),
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 12.sp,
-                        ),
-                        textAlign: TextAlign.end,
-                      ),
-                    ],
-                  ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget senderBubble(GetMessageAttributes msg) {
+    // Check if this is a temporary local message
+    final bool isSending = msg.id.startsWith('temp_');
+
     return GestureDetector(
-      onTap: () => _showDeleteMessageBottomSheet(msg.id),
+      behavior: HitTestBehavior.opaque,
+      onLongPress: () => _showDeleteMessageBottomSheet(msg.id),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         child: Row(
@@ -324,17 +324,29 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     children: [
                       Text(
                         msg.message,
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 14.sp),
                         textAlign: TextAlign.start,
                       ),
                       SizedBox(height: 4.h),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          timeago.format(DateTime.parse(msg.createdAt)),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(color: Colors.white70, fontSize: 12.sp),
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // Expanded to push the status to the right
+                          const Spacer(),
+                          Text(
+                            timeago.format(DateTime.parse(msg.createdAt)),
+                            textAlign: TextAlign.end,
+                            style: TextStyle(color: Colors.white70, fontSize: 10.sp),
+                          ),
+                          SizedBox(width: 4.w),
+                          // Status Icon: Show clock for sending, checkmark for delivered
+                          Icon(
+                            isSending ? Icons.access_time_rounded : Icons.done_all,
+                            size: 14.sp,
+                            color: isSending ? Colors.white60 : Colors.white,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -342,13 +354,6 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
               ),
             ),
             SizedBox(width: 8.w),
-            Container(
-              height: 38.h,
-              width: 38.w,
-              decoration: const BoxDecoration(shape: BoxShape.circle),
-              clipBehavior: Clip.antiAlias,
-              child: Image.asset(AppImages.user, fit: BoxFit.cover),
-            ),
           ],
         ),
       ),
@@ -358,10 +363,100 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
 
   PopupMenuButton<int> _popupMenuButton() {
     return PopupMenuButton<int>(
+      onSelected: (value) {
+        if (value == 0) {
+          _showDeleteConversationBottomSheet(roomId);
+        }
+      },
       icon: const Icon(Icons.more_vert, color: Colors.white),
       itemBuilder: (_) => [
-        PopupMenuItem(value: 0, child: Text('Block User'.tr)),
+        PopupMenuItem(
+          value: 0,
+          child: Text(AppStrings.deleteConversation.tr), // Changed text to be more accurate
+        ),
       ],
+    );
+  }
+
+
+  void _showDeleteConversationBottomSheet(String conversationId) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
+            ),
+            border: Border(
+              top: BorderSide(width: 2.w, color: AppColors.primaryColor),
+            ),
+            color: AppColors.cardColor,
+          ),
+          height: 265.h,
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 48.w,
+                child: Divider(color: AppColors.greyColor, thickness: 5.5),
+              ),
+              SizedBox(height: 12.h),
+              CustomText(
+                text: AppStrings.deleteConversation.tr,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+              ),
+              SizedBox(
+                width: 190.w,
+                child: Divider(color: AppColors.primaryColor),
+              ),
+              SizedBox(height: 16.h),
+              CustomText(
+                text: AppStrings.areYouSureToDeleteThisConversionThisNotUndone.tr,
+                maxLine: 5,
+              ),
+              SizedBox(height: 48.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () => Get.back(),
+                    text: AppStrings.no.tr,
+                    color: Colors.white,
+                    textColor: AppColors.primaryColor,
+                  ),
+                  SizedBox(width: 16.w),
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () async {
+                      // 1. Close bottom sheet
+                      Get.back();
+
+                      // 2. Call controller to delete
+                      await controller.deleteConversation(conversationId);
+
+                      // 3. Go back to the Inbox/Previous screen
+                      Get.back();
+
+                      // Optional: Show success message
+                      Get.snackbar(AppStrings.success, AppStrings.conversationDeletedSuccess);
+                    },
+                    text: AppStrings.yes.tr,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -404,7 +499,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
               ),
               SizedBox(height: 16.h),
               CustomText(
-                text: 'Are you sure you want to delete this message?'.tr,
+                text: AppStrings.areYouSureToDeleteThisMessage.tr,
                 maxLine: 5,
               ),
               SizedBox(height: 48.h),
@@ -415,7 +510,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                     width: 124.w,
                     height: 46.h,
                     onTap: () => Get.back(),
-                    text: "No".tr,
+                    text: AppStrings.no.tr,
                     color: Colors.white,
                     textColor: AppColors.primaryColor,
                   ),
@@ -427,7 +522,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                       Get.back();
                       await controller.deleteMessage(messageId);
                     },
-                    text: "Yes".tr,
+                    text: AppStrings.yes.tr,
                   ),
                 ],
               ),
@@ -437,6 +532,8 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       },
     );
   }
+
+
 
 
 }

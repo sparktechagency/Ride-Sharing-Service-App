@@ -460,18 +460,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             ],
                           ),
                           SizedBox(height: 24.h),
-                          //=====================> Reviews Section <=================
-                          (userDetails!.reviews.isNotEmpty)
-                              ? CustomText(
-                            text: AppStrings.reviews.tr,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
+                          //=====================> Users in Ride Section <=================
+                          CustomText(
+                            text: "Users in this ride".tr,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
                             bottom: 16.h,
-                          )
-                              : const SizedBox(),
-
-                          (userDetails!.reviews.isNotEmpty)
-                              ? Obx(() {
+                          ),
+                          Obx(() {
                             // Get current user ID to filter out their reviews
                             String currentUserId = bookingController.userDetails.value?.userId ?? '';
 
@@ -486,95 +482,98 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 
                             return Column(
                               children: filteredReviews.map((review) {
-                                final reviewFormattedDate = review['date'] == null
-                                    ? ''
-                                    : DateFormat('EEE dd MMMM yyyy h.mm a')
-                                        .format(DateTime.parse(review['date']))
-                                        .toLowerCase();
+                                // Only show chat button for pending and ongoing rides
+                                bool showChatButton = (fromScreen == 'pending' || fromScreen == 'ongoing');
 
                                 return Padding(
-                                  padding: EdgeInsets.only(bottom: 8.h),
+                                  padding: EdgeInsets.only(bottom: 12.h),
                                   child: Container(
+                                    padding: EdgeInsets.all(12.w),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16.r),
-                                      border: Border.all(width: 1.w, color: AppColors.borderColor),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      border: Border.all(color: Colors.grey.shade200),
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(12.w),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          CustomNetworkImage(
-                                            imageUrl: review['userImage'] ??
-                                                "${ApiConstants.imageBaseUrl}${review['userImage'] ?? ''}",
-                                            height: 38.h,
-                                            width: 38.w,
-                                            boxShape: BoxShape.circle,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 50.w,
+                                          height: 50.h,
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue.shade50,
+                                            borderRadius: BorderRadius.circular(8.r),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                review['userImage'] != null && review['userImage'] != ''
+                                                    ? "${ApiConstants.imageBaseUrl}${review['userImage']}"
+                                                    : "https://via.placeholder.com/50"
+                                              ),
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                          SizedBox(width: 8.w),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                CustomText(
-                                                  text: review['userName'] ?? '',
-                                                  bottom: 4.h,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                CustomText(
-                                                  text: reviewFormattedDate,
-                                                  fontSize: 9.sp,
-                                                ),
-                                                Row(
-                                                  children: List.generate(
-                                                    review['rating'] ?? 0,
-                                                    (index) => const Icon(
-                                                      Icons.star,
-                                                      color: Colors.orange,
-                                                      size: 20,
+                                        ),
+                                        SizedBox(width: 12.w),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    review['userName'] ?? 'Unknown User',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 16.sp
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(width: 8.w),
-                                          OutlinedButton(
-                                            onPressed: () {
-                                              // Access the nested id: review['reviewerId']['id']
-                                              final reviewerId = review['reviewerId']?['id'] ?? '';
-                                              if (reviewerId.isNotEmpty) {
-                                                _showChatConfirmation(context, reviewerId);
-                                              } else {
-                                                // Handle case where ID might be missing
-                                                debugPrint("Reviewer ID not found");
-                                              }
-                                            },
-                                            style: OutlinedButton.styleFrom(
-                                              side: BorderSide(color: AppColors.primaryColor),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(8.r),
+                                                  if (showChatButton) ...[
+                                                    SizedBox(width: 8.w),
+                                                    // Chat Icon Button
+                                                    GestureDetector(
+                                                      onTap: () => _showChatConfirmation(context, review['userId'] ?? review['id'] ?? ''),
+                                                      child: Icon(
+                                                        Icons.chat_bubble_outline,
+                                                        size: 18.sp,
+                                                        color: AppColors.primaryColor,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ],
                                               ),
-                                              minimumSize: Size(60.w, 30.h),
-                                            ),
-                                            child: Text(
-                                              "Chat".tr,
-                                              style: TextStyle(
-                                                color: AppColors.primaryColor,
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w500,
+                                              SizedBox(height: 4.h),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "Rating: ",
+                                                    style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: Colors.grey
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    (review['rating'] ?? 0).toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      fontWeight: FontWeight.bold
+                                                    ),
+                                                  ),
+                                                  Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                    size: 16.w,
+                                                  ),
+                                                ],
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );
                               }).toList(),
                             );
-                          })
-                              : const SizedBox.shrink(),
+                          }),
 
                         ],
                       ),

@@ -45,5 +45,7 @@ class ApiConstants {
   static const String updateStatus = "/booking/update/";
   static const String createBooking = "/booking/create";
   static const String updateProfileData = "/users/self/update";
+  static const String getRecent = "/rating/get/";
+
 
 }

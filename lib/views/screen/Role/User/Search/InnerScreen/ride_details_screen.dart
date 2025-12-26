@@ -222,27 +222,15 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           if (fromScreen == 'ongoing') {
                             return Obx(() => CustomButton(
                               onTap: () async {
-                                bool success = await bookingController.updateBookingStatus(
-                                  statusBooking!.id,
-                                  "Completed",
-                                );
-                                if (success) {
-                                  // Just go back and pass 'true' as the result
-                                  Navigator.pop(context, true);
-                                } else {
-                                  // For errors, you can show them here since you aren't popping the screen
-                                  Get.snackbar("Error", bookingController.errorMessage.value,
-                                      backgroundColor: Colors.red,
-                                      colorText: Colors.white);
-                                }
+                                bool success = await bookingController.updateBookingStatus(statusBooking!.id, "Completed");
+                                if (success) Navigator.pop(context, true);
                               },
                               loading: bookingController.isUpdatingStatus.value,
-                              text: "Start Trip".tr, // Note: If the status is becoming 'Completed', usually the button says 'End Trip'
+                              text: "Start Trip".tr,
                               width: double.infinity,
                               height: 45.h,
                             ));
-                          }else if (fromScreen == 'completed') {
-                            // 2. Completed: Static Button
+                          } else if (fromScreen == 'completed') {
                             return CustomButton(
                               onTap: () {},
                               text: "Completed Trip".tr,
@@ -251,35 +239,37 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                               color: Colors.grey,
                               broderColor: Colors.grey,
                             );
+                          } else if (fromScreen == 'cancelled') {
+                            // Show static Cancelled button if user is coming from Cancelled Tab
+                            return CustomButton(
+                              onTap: () {},
+                              text: "Cancelled".tr,
+                              width: double.infinity,
+                              height: 45.h,
+                              color: Colors.red.shade300,
+                              broderColor: Colors.red.shade300,
+                            );
                           } else {
-                            // 3. Pending: Cancel (Outlined) and Chat Now (CustomButton)
+                            // Pending state: Show Cancel and Chat
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                // -------- Cancel Button --------
                                 OutlinedButton(
                                   onPressed: () => _showCancelBottomSheet(context),
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(color: AppColors.primaryColor),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                                     minimumSize: Size(90.w, 34.h),
                                   ),
                                   child: Text(
                                     AppStrings.cancel.tr,
-                                    style: TextStyle(
-                                      color: AppColors.primaryColor,
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                    style: TextStyle(color: AppColors.primaryColor, fontSize: 12.sp, fontWeight: FontWeight.w500),
                                   ),
                                 ),
                                 SizedBox(width: 8.w),
-                                // -------- Chat Now Button --------
                                 CustomButton(
                                   onTap: () {
-                                    // Logic to go to Chat
+                                    // Chat Logic
                                   },
                                   text: "Chat Now".tr,
                                   width: 100.w,
@@ -338,14 +328,6 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           //=====================> Name & Image Row <=================
                           Row(
                             children: [
-                              // CustomNetworkImage(
-                              //   // Use user image
-                              //   imageUrl: userDetails!.profilePic ??
-                              //       'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                              //   height: 38.h,
-                              //   width: 38.w,
-                              //   boxShape: BoxShape.circle,
-                              // ),
                               SizedBox(width: 8.w),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -636,6 +618,10 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   }
 
   void _showCancelBottomSheet(BuildContext context) {
+    // Get the controller and ID needed for the API call
+    final BookingController bookingController = Get.find<BookingController>();
+    final String bookingId = statusBooking!.id;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -663,100 +649,84 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                   borderRadius: BorderRadius.circular(4.r),
                 ),
               ),
-
               CustomText(
                 text: AppStrings.cancelRide.tr,
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
                 bottom: 8.h,
               ),
-
               CustomText(
                 text: AppStrings.confirmRideCancelConfirmation.tr,
                 fontSize: 14.sp,
                 bottom: 12.h,
               ),
-
               CustomText(
-                text:
-                 AppStrings.confirmRideCancelAlert.tr,
+                text: AppStrings.confirmRideCancelAlert.tr,
                 fontSize: 12.sp,
                 color: Colors.red,
                 textAlign: TextAlign.center,
                 bottom: 20.h,
                 maxLine: 5,
               ),
-
               Row(
                 children: [
-                  // -------- Cancel Button --------
                   Expanded(
                     child: SizedBox(
                       height: 44.h,
                       child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(color: AppColors.primaryColor, width: 1.5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.r),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
                           backgroundColor: Colors.white,
                         ),
                         child: Text(
                           AppStrings.cancel.tr,
-                          style: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyle(color: AppColors.primaryColor, fontSize: 14.sp, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
                   ),
-
                   SizedBox(width: 12.w),
-
-                  // -------- Yes Button --------
                   Expanded(
                     child: SizedBox(
                       height: 44.h,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          // 🔥 Call cancel API here
+                        onPressed: () async {
+                          Navigator.pop(context); // Close the bottom sheet
+
+                          // 🔥 Logic to update status to Cancelled
+                          bool success = await bookingController.updateBookingStatus(
+                              bookingId,
+                              "Cancelled"
+                          );
+
+                          if (success) {
+                            // Go back to the previous screen and refresh list
+                            Navigator.pop(Get.context!, true);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.r),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
                           elevation: 0,
                         ),
                         child: Text(
                           AppStrings.yes.tr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-
-
-              SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+              SizedBox(height: MediaQuery.of(context).viewInsets.bottom + 16.h),
             ],
           ),
         );
       },
     );
   }
-
 
   //===========================================> Payment Option <==================================
   _paymentOption(

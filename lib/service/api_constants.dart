@@ -22,6 +22,7 @@ class ApiConstants {
   static const String driverSingleRideDetails = "/ride/get-details/";
   static const String driverRideStatusUpdate = "/ride/update/";
   static const String driverRoomCreate = "/rooms/create";
+  static const String getRecentOrder = "/booking/get-recent";
 
 
 

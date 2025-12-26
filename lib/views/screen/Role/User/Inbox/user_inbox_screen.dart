@@ -99,24 +99,34 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                   itemBuilder: (context, index) {
                     final room = rooms[index];
 
-                    final otherParticipants = room.participants.where((p) {
-                      final pId = p.id.toString().trim();
-                      final currentId = currentUserId.trim();
-                      return pId != currentId && pId.isNotEmpty;
-                    }).toList();
+                    // Get all participants except current user
+                    final otherParticipants = room.participants
+                        .where((p) => p.id.toString().trim() != currentUserId.trim())
+                        .toList();
 
+                    // Pick the first other participant or fallback to the first one
                     final participant = otherParticipants.isNotEmpty
                         ? otherParticipants.first
-                        : room.participants.first;
+                        : (room.participants.isNotEmpty ? room.participants.first : null);
 
-                    if (otherParticipants.isEmpty && room.participants.length == 1) {
+                    if (participant == null) {
+                      // No participants at all
                       return const SizedBox.shrink();
                     }
 
-                    final String otherUserName = participant.userName;
-                    final String otherUserImage = '${ApiConstants.imageBaseUrl}${participant.image}';
-                    final String roomId = room.id; // conversation _id
+                    final lastMessage = (room.lastMessage != null && room.lastMessage!.isNotEmpty)
+                        ? room.lastMessage!
+                        : "No messages yet"; // This prevents the blank space confusion
 
+                    // Safe extraction
+                    final otherUserName =
+                    participant.userName.isNotEmpty ? participant.userName : 'Unknown User';
+                    final otherUserImage = (participant.image != null && participant.image!.isNotEmpty)
+                        ? '${ApiConstants.imageBaseUrl}${participant.image}'
+                        : ''; // placeholder
+
+
+                    // Safe message time
                     DateTime updatedAt;
                     try {
                       updatedAt = DateTime.parse(room.updatedAt);
@@ -125,11 +135,13 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                     }
                     final messageTime = timeago.format(updatedAt);
 
+                    final String roomId = room.id; // conversation _id
+
                     return Padding(
                       padding: EdgeInsets.only(bottom: 8.h),
                       child: Dismissible(
                         key: Key(roomId),
-                        direction: DismissDirection.endToStart, // swipe left to delete
+                        direction: DismissDirection.endToStart,
                         background: Container(
                           alignment: Alignment.centerRight,
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -140,7 +152,6 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                           child: const Icon(Icons.delete, color: Colors.white),
                         ),
                         confirmDismiss: (direction) async {
-                          // Show custom styled dialog
                           showDialog(
                             context: context,
                             barrierDismissible: true,
@@ -161,20 +172,14 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                                 height: 265.h,
                                 child: Column(
                                   children: [
-                                    SizedBox(
-                                      width: 48.w,
-                                      child: Divider(color: AppColors.greyColor, thickness: 5.5),
-                                    ),
+                                    SizedBox(width: 48.w, child: Divider(color: AppColors.greyColor, thickness: 5.5)),
                                     SizedBox(height: 12.h),
                                     CustomText(
                                       text: AppStrings.deleteMessage.tr,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18.sp,
                                     ),
-                                    SizedBox(
-                                      width: 190.w,
-                                      child: Divider(color: AppColors.primaryColor),
-                                    ),
+                                    SizedBox(width: 190.w, child: Divider(color: AppColors.primaryColor)),
                                     SizedBox(height: 16.h),
                                     CustomText(
                                       text: AppStrings.areYouSureYouWantDeleteConversation.tr,
@@ -210,17 +215,12 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                             ),
                           );
 
-                          return false; // prevent auto-dismiss until confirmed
-                        },
-
-                        onDismissed: (direction) {
-                          // // Call deleteConversation from controller
-                          // controller.deleteConversation(roomId);
+                          return false;
                         },
                         child: GestureDetector(
                           onTap: () {
                             Get.toNamed(
-                              AppRoutes.userMessageScreen,
+                              AppRoutes.driverMessageScreen,
                               arguments: [
                                 roomId,
                                 otherUserName,
@@ -255,13 +255,13 @@ class _UserInboxScreenState extends State<UserInboxScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       CustomText(
-                                        text: otherUserName.capitalize ?? '',
+                                        text: otherUserName.capitalizeFirst ?? '', // Added capitalizeFirst
                                         fontSize: 15.sp,
                                         fontWeight: FontWeight.bold,
                                         bottom: 4.h,
                                       ),
                                       CustomText(
-                                        text: room.lastMessage,
+                                        text: lastMessage, // Now guaranteed to have text
                                         fontSize: 13.sp,
                                         maxLine: 1,
                                         color: Colors.grey,

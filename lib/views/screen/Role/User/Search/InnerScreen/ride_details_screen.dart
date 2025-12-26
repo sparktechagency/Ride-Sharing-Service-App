@@ -76,7 +76,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
         .toLowerCase();
 
     return Scaffold(
-      appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
+      appBar: CustomAppBar(title: AppStrings.rideDetails.tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -468,12 +468,11 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             bottom: 16.h,
                           ),
                           Obx(() {
-                            // Get current user ID to filter out their reviews
                             String currentUserId = bookingController.userDetails.value?.userId ?? '';
 
-                            // Filter reviews to exclude current user's reviews
+                            // 1. Updated filter: Access userId from reviewerId object
                             List filteredReviews = userDetails!.reviews
-                                .where((review) => review['userId'] != currentUserId)
+                                .where((review) => review['reviewerId']?['id'] != currentUserId)
                                 .toList();
 
                             if (filteredReviews.isEmpty) {
@@ -482,8 +481,10 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 
                             return Column(
                               children: filteredReviews.map((review) {
-                                // Only show chat button for pending and ongoing rides
                                 bool showChatButton = (fromScreen == 'pending' || fromScreen == 'ongoing');
+
+                                // Extract reviewer data for cleaner code
+                                var reviewer = review['reviewerId'];
 
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: 12.h),
@@ -504,9 +505,10 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                             borderRadius: BorderRadius.circular(8.r),
                                             image: DecorationImage(
                                               image: NetworkImage(
-                                                review['userImage'] != null && review['userImage'] != ''
-                                                    ? "${ApiConstants.imageBaseUrl}${review['userImage']}"
-                                                    : "https://via.placeholder.com/50"
+                                                // 2. Updated Image path: reviewer['image']
+                                                  reviewer?['image'] != null && reviewer?['image'] != ''
+                                                      ? "${ApiConstants.imageBaseUrl}${reviewer['image']}"
+                                                      : "https://via.placeholder.com/50"
                                               ),
                                               fit: BoxFit.cover,
                                             ),
@@ -520,17 +522,18 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    review['userName'] ?? 'Unknown User',
+                                                    // 3. Updated Name path: reviewer['userName']
+                                                    reviewer?['userName'] ?? 'Unknown User',
                                                     style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 16.sp
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 16.sp
                                                     ),
                                                   ),
                                                   if (showChatButton) ...[
                                                     SizedBox(width: 8.w),
-                                                    // Chat Icon Button
                                                     GestureDetector(
-                                                      onTap: () => _showChatConfirmation(context, review['userId'] ?? review['id'] ?? ''),
+                                                      // 4. Updated Chat ID path: reviewer['id']
+                                                      onTap: () => _showChatConfirmation(context, reviewer?['id'] ?? ''),
                                                       child: Icon(
                                                         Icons.chat_bubble_outline,
                                                         size: 18.sp,
@@ -543,25 +546,12 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                               SizedBox(height: 4.h),
                                               Row(
                                                 children: [
-                                                  Text(
-                                                    "Rating: ",
-                                                    style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: Colors.grey
-                                                    ),
-                                                  ),
+                                                  Text("Rating: ", style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
                                                   Text(
                                                     (review['rating'] ?? 0).toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      fontWeight: FontWeight.bold
-                                                    ),
+                                                    style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
                                                   ),
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                    size: 16.w,
-                                                  ),
+                                                  Icon(Icons.star, color: Colors.amber, size: 16.w),
                                                 ],
                                               ),
                                             ],
@@ -748,7 +738,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           Navigator.pop(context); // Close the bottom sheet
 
                           // Update status to Cancelled
-                          bool success = await bookingController.updateBookingStatus(bookingId, "Cancelled");
+                          bool success = await bookingController.updateBookingStatus(bookingId, "cancelled");
                           if (success) {
                             Navigator.pop(context, true);
                           }

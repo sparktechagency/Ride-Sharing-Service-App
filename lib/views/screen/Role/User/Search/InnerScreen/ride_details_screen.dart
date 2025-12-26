@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../controllers/booking_controller.dart';
+import '../../../../../../controllers/create_message_room_controller.dart';
+import '../../../../../../helpers/route.dart';
 import '../../../../../../models/booking_user_details_model.dart';
 import '../../../../../../models/booking_with_status_model.dart';
 import '../../../../../../service/api_constants.dart';
@@ -27,12 +29,14 @@ class RideDetailsScreen extends StatefulWidget {
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   String? selectedPayment;
   final BookingController bookingController = Get.find<BookingController>();
-
+  final ChatController chatController = Get.put(ChatController());
+  
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.
+  late String fromScreen;
+  late String driverId;
   late BookingAttribute? statusBooking;
   late BookingUserAttributes? userDetails;
-  late String formattedDate;
 
   void _onSubmit() {
     if (selectedPayment != null) {
@@ -42,31 +46,37 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // --- 1. RECEIVE AND EXTRACT ARGUMENTS ---
+  void initState() {
+    super.initState();
+    
+    // Get arguments
     final arguments = Get.arguments as Map<String, dynamic>?;
-    final String fromScreen = arguments?['from'] ?? '';
-
-    // Safely extract the passed data
+    fromScreen = arguments?['from'] ?? '';
+    driverId = arguments?['driverId'] ?? arguments?['booking']?['driverId'] ?? '';
     statusBooking = arguments?['booking'] as BookingAttribute?;
     userDetails = arguments?['user'] as BookingUserAttributes?;
+    
+    // Load user details for the driver if needed
+    if (driverId.isNotEmpty) {
+      bookingController.getBookingUserDetails(driverId);
+    }
+  }
 
-    // Handle null case (should not happen if navigation from PendingTab is correct)
+  @override
+  Widget build(BuildContext context) {
     if (statusBooking == null || userDetails == null) {
       return Scaffold(
         appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
         body: const Center(child: Text('Error: Ride or User details missing.')),
       );
     }
-
-    // Format the date using the retrieved booking data
-    formattedDate = DateFormat('EEE dd MMMM yyyy h.mm a')
+    
+    final formattedDate = DateFormat('EEE dd MMMM yyyy h.mm a')
         .format(DateTime.parse(statusBooking!.rideDate))
         .toLowerCase();
-    // -----------------------------------------
 
     return Scaffold(
-      appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
+      appBar: CustomAppBar(title: AppStrings.rideDetails.tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -217,32 +227,18 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                       padding: EdgeInsets.only(right: 16.w, left: 16.w, bottom: 10.h),
                       child: Builder(
                         builder: (context) {
-                          final BookingController bookingController = Get.find<BookingController>();
-
                           if (fromScreen == 'ongoing') {
                             return Obx(() => CustomButton(
                               onTap: () async {
-                                bool success = await bookingController.updateBookingStatus(
-                                  statusBooking!.id,
-                                  "Completed",
-                                );
-                                if (success) {
-                                  // Just go back and pass 'true' as the result
-                                  Navigator.pop(context, true);
-                                } else {
-                                  // For errors, you can show them here since you aren't popping the screen
-                                  Get.snackbar("Error", bookingController.errorMessage.value,
-                                      backgroundColor: Colors.red,
-                                      colorText: Colors.white);
-                                }
+                                bool success = await bookingController.updateBookingStatus(statusBooking!.id, "Completed");
+                                if (success) Navigator.pop(context, true);
                               },
                               loading: bookingController.isUpdatingStatus.value,
-                              text: "Start Trip".tr, // Note: If the status is becoming 'Completed', usually the button says 'End Trip'
+                              text: "Start Trip".tr,
                               width: double.infinity,
                               height: 45.h,
                             ));
-                          }else if (fromScreen == 'completed') {
-                            // 2. Completed: Static Button
+                          } else if (fromScreen == 'completed') {
                             return CustomButton(
                               onTap: () {},
                               text: "Completed Trip".tr,
@@ -251,35 +247,42 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                               color: Colors.grey,
                               broderColor: Colors.grey,
                             );
+                          } else if (fromScreen == 'cancelled') {
+                            // Show static Cancelled button if user is coming from Cancelled Tab
+                            return CustomButton(
+                              onTap: () {},
+                              text: "Cancelled".tr,
+                              width: double.infinity,
+                              height: 45.h,
+                              color: Colors.red.shade300,
+                              broderColor: Colors.red.shade300,
+                            );
                           } else {
-                            // 3. Pending: Cancel (Outlined) and Chat Now (CustomButton)
+                            // Pending state: Show Cancel and Chat
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                // -------- Cancel Button --------
                                 OutlinedButton(
                                   onPressed: () => _showCancelBottomSheet(context),
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(color: AppColors.primaryColor),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                                     minimumSize: Size(90.w, 34.h),
                                   ),
                                   child: Text(
                                     AppStrings.cancel.tr,
-                                    style: TextStyle(
-                                      color: AppColors.primaryColor,
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                    style: TextStyle(color: AppColors.primaryColor, fontSize: 12.sp, fontWeight: FontWeight.w500),
                                   ),
                                 ),
                                 SizedBox(width: 8.w),
-                                // -------- Chat Now Button --------
                                 CustomButton(
                                   onTap: () {
-                                    // Logic to go to Chat
+                                    // // 🔥 Trigger the confirmation dialog
+                                    // if (userDetails?.id != null) {
+                                    //   _showChatConfirmation(context, userDetails!.id!);
+                                    // } else {
+                                    //   Fluttertoast.showToast(msg: "Passenger details not found".tr);
+                                    // }
                                   },
                                   text: "Chat Now".tr,
                                   width: 100.w,
@@ -338,14 +341,6 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           //=====================> Name & Image Row <=================
                           Row(
                             children: [
-                              // CustomNetworkImage(
-                              //   // Use user image
-                              //   imageUrl: userDetails!.profilePic ??
-                              //       'https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
-                              //   height: 38.h,
-                              //   width: 38.w,
-                              //   boxShape: BoxShape.circle,
-                              // ),
                               SizedBox(width: 8.w),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -465,71 +460,99 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             ],
                           ),
                           SizedBox(height: 24.h),
-                          //=====================> Reviews Section <=================
-                          (userDetails!.reviews.isNotEmpty)
-                              ? CustomText(
-                            text: AppStrings.reviews.tr,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
+                          //=====================> Users in Ride Section <=================
+                          CustomText(
+                            text: "Users in this ride".tr,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
                             bottom: 16.h,
-                          )
-                              : const SizedBox(),
+                          ),
+                          Obx(() {
+                            String currentUserId = bookingController.userDetails.value?.userId ?? '';
 
-                          (userDetails!.reviews.isNotEmpty)
-                              ? Column(
-                            children: userDetails!.reviews.map((review) {
-                              final reviewFormattedDate = review['date'] == null
-                                  ? ''
-                                  : DateFormat('EEE dd MMMM yyyy h.mm a')
-                                  .format(DateTime.parse(review['date']))
-                                  .toLowerCase();
+                            // 1. Updated filter: Access userId from reviewerId object
+                            List filteredReviews = userDetails!.reviews
+                                .where((review) => review['reviewerId']?['id'] != currentUserId)
+                                .toList();
 
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 8.h),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.r),
-                                    border: Border.all(width: 1.w, color: AppColors.borderColor),
-                                  ),
-                                  child: Padding(
+                            if (filteredReviews.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return Column(
+                              children: filteredReviews.map((review) {
+                                bool showChatButton = (fromScreen == 'pending' || fromScreen == 'ongoing');
+
+                                // Extract reviewer data for cleaner code
+                                var reviewer = review['reviewerId'];
+
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 12.h),
+                                  child: Container(
                                     padding: EdgeInsets.all(12.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      border: Border.all(color: Colors.grey.shade200),
+                                    ),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        CustomNetworkImage(
-                                          imageUrl: review['userImage'] ??
-                                              "${ApiConstants.imageBaseUrl}${userDetails?.profileImage}",
-                                          height: 38.h,
-                                          width: 38.w,
-                                          boxShape: BoxShape.circle,
+                                        Container(
+                                          width: 50.w,
+                                          height: 50.h,
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue.shade50,
+                                            borderRadius: BorderRadius.circular(8.r),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                // 2. Updated Image path: reviewer['image']
+                                                  reviewer?['image'] != null && reviewer?['image'] != ''
+                                                      ? "${ApiConstants.imageBaseUrl}${reviewer['image']}"
+                                                      : "https://via.placeholder.com/50"
+                                              ),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
-                                        SizedBox(width: 8.w),
+                                        SizedBox(width: 12.w),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              CustomText(
-                                                text: review['userName'] ?? '',
-                                                bottom: 4.h,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              CustomText(
-                                                text: reviewFormattedDate,
-                                                fontSize: 9.sp,
-                                              ),
                                               Row(
-                                                children: List.generate(
-                                                  review['rating'] ?? 0,
-                                                      (index) => const Icon(
-                                                    Icons.star,
-                                                    color: Colors.orange,
-                                                    size: 20,
+                                                children: [
+                                                  Text(
+                                                    // 3. Updated Name path: reviewer['userName']
+                                                    reviewer?['userName'] ?? 'Unknown User',
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 16.sp
+                                                    ),
                                                   ),
-                                                ),
+                                                  if (showChatButton) ...[
+                                                    SizedBox(width: 8.w),
+                                                    GestureDetector(
+                                                      // 4. Updated Chat ID path: reviewer['id']
+                                                      onTap: () => _showChatConfirmation(context, reviewer?['id'] ?? ''),
+                                                      child: Icon(
+                                                        Icons.chat_bubble_outline,
+                                                        size: 18.sp,
+                                                        color: AppColors.primaryColor,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ],
                                               ),
-                                              CustomText(
-                                                text: review['comment'] ?? '',
-                                                maxLine: 10,
+                                              SizedBox(height: 4.h),
+                                              Row(
+                                                children: [
+                                                  Text("Rating: ", style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+                                                  Text(
+                                                    (review['rating'] ?? 0).toString(),
+                                                    style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
+                                                  ),
+                                                  Icon(Icons.star, color: Colors.amber, size: 16.w),
+                                                ],
                                               ),
                                             ],
                                           ),
@@ -537,11 +560,10 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                       ],
                                     ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
-                          )
-                              : const SizedBox.shrink(),
+                                );
+                              }).toList(),
+                            );
+                          }),
 
                         ],
                       ),
@@ -560,6 +582,9 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   //===============================> Payment Bottom Sheet <===============================
   _showPaymentBottomSheet(BuildContext context) {
     String? selectedPaymentOption;
+
+    // Get price based on booking data
+    double price = statusBooking?.price.toDouble() ?? 0.0;
 
     showModalBottomSheet(
       context: context,
@@ -599,14 +624,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                   ),
                   _paymentOption(
                     AppStrings.cashPayment.tr,
-                    statusBooking!.price.toDouble() , // Use actual price
+                    price, // Use actual price
                     'cash',
                     selectedPaymentOption,
                         (val) => setState(() => selectedPaymentOption = val),
                   ),
                   _paymentOption(
                     AppStrings.onlinePayment.tr,
-                    statusBooking!.price.toDouble(), // Use actual price
+                    price, // Use actual price
                     'online',
                     selectedPaymentOption,
                         (val) => setState(() => selectedPaymentOption = val),
@@ -636,6 +661,9 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   }
 
   void _showCancelBottomSheet(BuildContext context) {
+    // Get the controller and ID needed for the API call
+    final String bookingId = statusBooking?.id ?? '';
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -663,100 +691,79 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                   borderRadius: BorderRadius.circular(4.r),
                 ),
               ),
-
               CustomText(
                 text: AppStrings.cancelRide.tr,
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
                 bottom: 8.h,
               ),
-
               CustomText(
                 text: AppStrings.confirmRideCancelConfirmation.tr,
                 fontSize: 14.sp,
                 bottom: 12.h,
               ),
-
               CustomText(
-                text:
-                 AppStrings.confirmRideCancelAlert.tr,
+                text: AppStrings.confirmRideCancelAlert.tr,
                 fontSize: 12.sp,
                 color: Colors.red,
                 textAlign: TextAlign.center,
                 bottom: 20.h,
                 maxLine: 5,
               ),
-
               Row(
                 children: [
-                  // -------- Cancel Button --------
                   Expanded(
                     child: SizedBox(
                       height: 44.h,
                       child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(color: AppColors.primaryColor, width: 1.5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.r),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
                           backgroundColor: Colors.white,
                         ),
                         child: Text(
                           AppStrings.cancel.tr,
-                          style: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyle(color: AppColors.primaryColor, fontSize: 14.sp, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
                   ),
-
                   SizedBox(width: 12.w),
-
-                  // -------- Yes Button --------
                   Expanded(
                     child: SizedBox(
                       height: 44.h,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          // 🔥 Call cancel API here
+                        onPressed: () async {
+                          Navigator.pop(context); // Close the bottom sheet
+
+                          // Update status to Cancelled
+                          bool success = await bookingController.updateBookingStatus(bookingId, "cancelled");
+                          if (success) {
+                            Navigator.pop(context, true);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.r),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
                           elevation: 0,
                         ),
                         child: Text(
                           AppStrings.yes.tr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-
-
-              SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+              SizedBox(height: MediaQuery.of(context).viewInsets.bottom + 16.h),
             ],
           ),
         );
       },
     );
   }
-
 
   //===========================================> Payment Option <==================================
   _paymentOption(
@@ -825,6 +832,50 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+
+  void _showChatConfirmation(BuildContext context, String participantId) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.cardColor, // Adjusted to match your app theme
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        title: CustomText(text: "Start Conversation".tr, fontSize: 18.sp, fontWeight: FontWeight.w600),
+        content: CustomText(text: "Do you want to create a chat room with this user?".tr, fontSize: 14.sp, maxLine: 2),
+        actionsPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  onTap: () => Navigator.pop(dialogContext),
+                  text: "No".tr,
+                  color: Colors.white,
+                  broderColor: Colors.grey.shade300,
+                  textColor: Colors.black,
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Obx(() => CustomButton(
+                  loading: chatController.isCreateLoading.value,
+                  onTap: () async {
+                    Navigator.pop(dialogContext);
+                    bool success = await chatController.createChatRoom(participantId);
+                    if (success) {
+                      // Navigate to user inbox screen after successful chat creation
+                      Get.offAllNamed(AppRoutes.userInboxScreen);
+                    }
+                  },
+                  text: "Yes, Start".tr,
+                )),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

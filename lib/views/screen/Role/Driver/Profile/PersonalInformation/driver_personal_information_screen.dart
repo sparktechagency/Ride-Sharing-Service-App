@@ -232,15 +232,13 @@ class _DriverPersonalInformationScreenState extends State<DriverPersonalInformat
                                     SvgPicture.asset(AppIcons.calender),
                                     SizedBox(width: 12.w),
                                     Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                        CustomText(text: AppStrings.dateOfBirth.tr),
                                         CustomText(
-                                            text: AppStrings.dateOfBirth.tr
-                                        ),
-                                        CustomText(
-                                          text: DateFormat('yyyy-MM-dd').format(
-                                            DateTime.parse('${_profileController.profileModel.value.dateOfBirth ?? 'N/A'}')),
+                                          text: _profileController.profileModel.value.dateOfBirth != null
+                                              ? DateFormat('yyyy-MM-dd').format(_profileController.profileModel.value.dateOfBirth!)
+                                              : 'N/A',
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                           maxLine: 3,

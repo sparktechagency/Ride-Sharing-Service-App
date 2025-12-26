@@ -11,8 +11,8 @@ class ApiConstants {
   static const String changePassEndPoint = "/auth/change-password";
   static const String getPersonalInfoEndPoint = "/users/self/in";
   static const String setLocationEndPoint = "";
-  static const String termsConditionEndPoint = "";
-  static const String privacyPolicyEndPoint = "";
+  static const String termsConditionEndPoint = "/admin/get-terms-conditions";
+  static const String privacyPolicyEndPoint = "/admin/get-privacy-policy";
   static const String aboutUsEndPoint = "";
   //==========================================> Driver Role <=======================
   static const String driverLicenseUploadEndPoint = "/users/self/post-image-liscense";
@@ -22,6 +22,8 @@ class ApiConstants {
   static const String driverSingleRideDetails = "/ride/get-details/";
   static const String driverRideStatusUpdate = "/ride/update/";
   static const String driverRoomCreate = "/rooms/create";
+  static const String getRecentOrder = "/booking/get-recent";
+  static const String driverWalletDetails = "/home/my-wallet";
 
 
 
@@ -44,5 +46,7 @@ class ApiConstants {
   static const String updateStatus = "/booking/update/";
   static const String createBooking = "/booking/create";
   static const String updateProfileData = "/users/self/update";
+  static const String getRecent = "/rating/get/";
+
 
 }

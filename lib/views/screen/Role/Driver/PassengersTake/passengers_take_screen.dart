@@ -26,26 +26,33 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
   int priceCount = 1;
   DateTime selectedDate = DateTime.now();
 
-  //=======================> Date Picker Method <============================
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime.now(), // Cannot pick past dates
+      firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
+            // 1. Sets the header, selection circle, and active day color
             colorScheme: ColorScheme.light(
               primary: AppColors.primaryColor,
               onPrimary: Colors.white,
               onSurface: Colors.black,
+            ),
+            // 2. Explicitly sets the OK/CANCEL button text colors
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primaryColor, // Button text color
+              ),
             ),
           ),
           child: child!,
         );
       },
     );
+
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
@@ -108,11 +115,13 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.grey.shade300),
+                  // Optional: Change border color to primary when active
+                  border: Border.all(color: AppColors.primaryColor.withOpacity(0.5)),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_month, color: blueColor),
+                    // Changed blueColor to your primaryColor for consistency
+                    Icon(Icons.calendar_month, color: AppColors.primaryColor),
                     SizedBox(width: 12.w),
                     CustomText(
                       text: DateFormat('yyyy-MM-dd').format(selectedDate),
@@ -120,7 +129,8 @@ class _PassengersTakeScreenState extends State<PassengersTakeScreen> {
                       fontWeight: FontWeight.w500,
                     ),
                     const Spacer(),
-                    Icon(Icons.edit, size: 18.sp, color: Colors.grey),
+                    // Changed edit icon to primary or keep grey for subtle look
+                    Icon(Icons.edit, size: 18.sp, color: AppColors.primaryColor),
                   ],
                 ),
               ),

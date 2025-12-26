@@ -4,10 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../controllers/booking_controller.dart';
+import '../../../../../../helpers/route.dart';
 import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
 import '../../../../../../utils/app_strings.dart';
+import '../../../../../base/custom_button.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
 
@@ -173,6 +175,30 @@ class CanceledTab extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Divider(thickness: 1.5, color: AppColors.borderColor),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomButton(
+                              onTap: () {
+                                Get.toNamed(
+                                  AppRoutes.rideDetailsScreen,
+                                  arguments: {
+                                    'driverId': statusBooking.driverId,
+                                    'booking': statusBooking,
+                                    'user': userDetails,
+                                    'from': 'cancelled'
+                                  },
+                                );
+                              },
+                              width: 100.w,
+                              height: 34.h,
+                              text: AppStrings.view.tr),
+                        ],
+                      ),
+                    )
 
 
                   ],

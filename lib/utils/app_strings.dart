@@ -84,7 +84,7 @@ class AppStrings {
   //=====================================================================> Driver Role <=============================================================
   static String recentOrder = 'Recent Order';
   static String activeOrders = 'Active Orders';
-  static String recentlyAcceptedOrder = 'Recently accepted order';
+  static String recentlyAcceptedOrder = 'Recent order';
   static String ongoing = 'Ongoing';
   static String pICKUP = 'PICK-UP';
   static String dROPOFF = 'DROP-OFF';

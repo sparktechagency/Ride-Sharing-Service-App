@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../models/create_message_model.dart';
@@ -12,7 +13,7 @@ class MessageRoomController extends GetxController {
 
   IO.Socket? socket;
   String currentUserId = ''; // Store this to filter socket messages
-
+  String _searchQuery = '';
   // Callback to trigger scroll in the UI
   Function? onNewMessageReceived;
 
@@ -171,12 +172,35 @@ class MessageRoomController extends GetxController {
           filteredRooms.removeWhere((room) => room.id == deletedId);
 
           debugPrint('✅ Conversation deleted: $deletedId');
+
+          Fluttertoast.showToast(
+            msg: model.message ?? "Conversation deleted successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
         }
       } else {
-        errorMessage(response.statusText ?? 'Failed to delete conversation');
+        Fluttertoast.showToast(
+          msg: response.statusText ?? 'Failed to delete conversation',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.redAccent,
+          textColor: Colors.white,
+          fontSize: 14.0,
+        );
       }
     } catch (e) {
-      errorMessage(e.toString());
+      Fluttertoast.showToast(
+        msg: 'Something went wrong: $e',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        textColor: Colors.white,
+        fontSize: 14.0,
+      );
       debugPrint('❌ Delete Conversation Error: $e');
     } finally {
       isLoading(false);
@@ -271,25 +295,33 @@ class MessageRoomController extends GetxController {
     socket!.on('new-conversation::$userId', (data) {
       debugPrint('📩 Inbox Update Received: $data');
       try {
-        // Assuming 'data' matches your MessageRoomAttributes model structure
-        final newRoom = MessageRoomAttributes.fromJson(data);
+        // FIX: Your console log shows { conversation: { ... } }
+        // We must extract the conversation part if it's wrapped
+        var roomData = data['conversation'] ?? data;
 
-        // Check if this room already exists in our list
+        final newRoom = MessageRoomAttributes.fromJson(roomData);
+
         int existingIndex = messageRooms.indexWhere((room) => room.id == newRoom.id);
 
         if (existingIndex != -1) {
-          // 1. If it exists, remove old and insert at top (latest message first)
           messageRooms.removeAt(existingIndex);
-          messageRooms.insert(0, newRoom);
-        } else {
-          // 2. If it's a brand new conversation, insert it at the top
-          messageRooms.insert(0, newRoom);
         }
 
+        messageRooms.insert(0, newRoom);
+
+        // Update the filtered list so the UI actually reacts
+        if (_searchQuery.isEmpty) {
+          filteredRooms.assignAll(messageRooms);
+        } else {
+          searchInbox(_searchQuery);
+        }
+
+        // Force Obx to see the change
         messageRooms.refresh();
-        filteredRooms.assignAll(messageRooms);
+        filteredRooms.refresh();
+
       } catch (e) {
-        debugPrint('❌ Inbox Socket Error: $e');
+        debugPrint('❌ Inbox Socket Mapping Error: $e');
       }
     });
   }
@@ -307,6 +339,8 @@ class MessageRoomController extends GetxController {
 
   /// =================== LOCAL INBOX SEARCH ===================
   void searchInbox(String query) {
+    _searchQuery = query;
+
     if (query.trim().isEmpty) {
       filteredRooms.assignAll(messageRooms);
       return;
@@ -316,19 +350,20 @@ class MessageRoomController extends GetxController {
 
     filteredRooms.assignAll(
       messageRooms.where((room) {
-        final otherParticipants = room.participants.where((p) {
-          return p.id.toString().trim() != currentUserId.trim();
-        }).toList();
+        final participant = room.participants.firstWhere(
+              (p) => p.id.toString().trim() != currentUserId.trim(),
+          orElse: () => room.participants.first,
+        );
 
-        if (otherParticipants.isEmpty) return false;
-
-        final name = otherParticipants.first.userName.toLowerCase();
-        final lastMsg = room.lastMessage.toLowerCase();
+        final name = participant.userName.toLowerCase();
+        // Use null-aware check for lastMessage
+        final lastMsg = (room.lastMessage ?? "").toLowerCase();
 
         return name.contains(q) || lastMsg.contains(q);
       }).toList(),
     );
   }
+
 
 
 

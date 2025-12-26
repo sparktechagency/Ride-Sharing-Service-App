@@ -245,38 +245,38 @@ class _PickUpScreenState extends State<PickUpScreen> {
                 SizedBox(height: 12.h),
 
                 // Current Location Button
-                Material(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.r),
-                  elevation: 6,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16.r),
-                    onTap: _getCurrentLocation,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16.h,
-                        horizontal: 20.w,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.my_location,
-                            color: AppColors.primaryColor,
-                          ),
-                          SizedBox(width: 16.w),
-                          Text(
-                            "Use Current Location",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              color:AppColors.greyColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // Material(
+                //   color: Colors.white,
+                //   borderRadius: BorderRadius.circular(16.r),
+                //   elevation: 6,
+                //   child: InkWell(
+                //     borderRadius: BorderRadius.circular(16.r),
+                //     onTap: _getCurrentLocation,
+                //     child: Container(
+                //       padding: EdgeInsets.symmetric(
+                //         vertical: 16.h,
+                //         horizontal: 20.w,
+                //       ),
+                //       child: Row(
+                //         children: [
+                //           Icon(
+                //             Icons.my_location,
+                //             color: AppColors.primaryColor,
+                //           ),
+                //           SizedBox(width: 16.w),
+                //           Text(
+                //             "Use Current Location",
+                //             style: TextStyle(
+                //               fontSize: 16.sp,
+                //               fontWeight: FontWeight.w600,
+                //               color:AppColors.greyColor,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

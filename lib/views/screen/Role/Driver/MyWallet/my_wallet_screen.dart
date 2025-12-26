@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
-import '../../../../../helpers/route.dart';
+import 'package:intl/intl.dart';
+import '../../../../../controllers/wallet_details_controller.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
 import '../../../../../utils/app_strings.dart';
@@ -13,8 +13,23 @@ import '../../../../base/custom_text.dart';
 
 
 
-class MyWalletScreen extends StatelessWidget {
+class MyWalletScreen extends StatefulWidget {
   const MyWalletScreen({super.key});
+
+  @override
+  State<MyWalletScreen> createState() => _MyWalletScreenState();
+}
+
+class _MyWalletScreenState extends State<MyWalletScreen> {
+  final WalletDetailsController walletController = Get.isRegistered<WalletDetailsController>()
+      ? Get.find<WalletDetailsController>()
+      : Get.put(WalletDetailsController(), permanent: true);
+
+  @override
+  void initState() {
+    super.initState();
+    walletController.fetchWalletDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,107 +37,147 @@ class MyWalletScreen extends StatelessWidget {
       appBar: CustomAppBar(title: AppStrings.myWallet.tr),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //====================> Balance Container Row <==================
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _balanceContainer('\$50000', AppStrings.totalBalance.tr),
-                _balanceContainer('\$50000', AppStrings.totalWithdrawal.tr),
-              ],
-            ),
-            SizedBox(height: 32.h),
-            //====================> Transactions History <==================
-            CustomText(
-              text: AppStrings.transactionsHistory.tr,
-              fontWeight: FontWeight.w600,
-              fontSize: 18.sp,
-              maxLine: 3,
-              bottom: 16.h,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(width: 1.w, color: AppColors.primaryColor),
+        child: Obx(() {
+          if (walletController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final wallet = walletController.getWalletSummary();
+          final transactions = walletController.getTransactions();
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //====================> Balance Container Row <==================
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _balanceContainer(
+                    '\$${wallet?.totalEarnings?.toStringAsFixed(2) ?? '0.00'}',
+                    AppStrings.totalBalance.tr
+                  ),
+                  _balanceContainer(
+                    '\$${wallet?.totalWithDrawal?.toStringAsFixed(2) ?? '0.00'}',
+                    AppStrings.totalWithdrawal.tr
+                  ),
+                ],
               ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //====================> Transactions Status <==================
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          text: AppStrings.withdrawal.tr,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18.sp,
-                          maxLine: 3,
-                        ),
-                        CustomText(
-                          text: 'Completed'.tr,
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.h),
-                    //====================> Total amount <==================
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          text: 'Total Amount :'.tr,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.sp,
-                          maxLine: 3,
-                        ),
-                        CustomText(
-                          text: '\$100'.tr,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 2.h),
-                    Divider(thickness: 0.6, color: Colors.grey.shade200),
-                    SizedBox(height: 2.h),
-                    //====================> Total amount <==================
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          text: 'Payment Date :'.tr,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.sp,
-                          maxLine: 3,
-                        ),
-                        CustomText(
-                          text: '12 jan 25 8.00AM'.tr,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              SizedBox(height: 32.h),
+              //====================> Transactions History <==================
+              CustomText(
+                text: AppStrings.transactionsHistory.tr,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+                maxLine: 3,
+                bottom: 16.h,
               ),
-            ),
-            SizedBox(height: 132.h),
-            //====================> Withdraw balance Button <==================
-            CustomButton(
-              onTap: () {},
-              text: AppStrings.withdrawBalance.tr,
-            ),
-          ],
-        ),
+              Expanded(
+                child: transactions != null && transactions.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: transactions.length,
+                      itemBuilder: (context, index) {
+                        final transaction = transactions[index];
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.r),
+                            border: Border.all(width: 1.w, color: AppColors.primaryColor),
+                          ),
+                          margin: EdgeInsets.only(bottom: 12.h),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                //====================> Transactions Status <==================
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomText(
+                                      text: transaction.paymentType?.tr ?? AppStrings.withdrawal.tr,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18.sp,
+                                      maxLine: 3,
+                                    ),
+                                    CustomText(
+                                      text: transaction.status?.toUpperCase() ?? 'N/A',
+                                      color: transaction.status == 'completed'
+                                          ? Colors.green
+                                          : transaction.status == 'pending'
+                                              ? Colors.orange
+                                              : Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 16.h),
+                                //====================> Total amount <==================
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomText(
+                                      text: 'Total Amount :'.tr,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.sp,
+                                      maxLine: 3,
+                                    ),
+                                    CustomText(
+                                      text: '\$${transaction.totalAmount?.toStringAsFixed(2) ?? '0.00'}',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 2.h),
+                                Divider(thickness: 0.6, color: Colors.grey.shade200),
+                                SizedBox(height: 2.h),
+                                //====================> Payment Date <==================
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomText(
+                                      text: 'Payment Date :'.tr,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.sp,
+                                      maxLine: 3,
+                                    ),
+                                    CustomText(
+                                      text: transaction.createdAt != null
+                                          ? DateFormat('dd MMM yy h:mm a').format(transaction.createdAt!).toLowerCase()
+                                          : 'N/A',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  :  Center(
+                      child: CustomText(
+                        text: 'No transactions found',
+                        fontSize: 16.sp,
+                      ),
+                    ),
+              ),
+              SizedBox(height: 32.h),
+              //====================> Withdraw balance Button <==================
+              CustomButton(
+                onTap: () {
+                  // TODO: Implement withdraw functionality
+                  // For now, keeping the same functionality as before
+                },
+                text: AppStrings.withdrawBalance.tr,
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
 
   //========================> BalanceContainer Method <=============================
-  _balanceContainer(String balance, title) {
+  _balanceContainer(String balance, String title) {
     return Stack(
       clipBehavior: Clip.none,
       children: [

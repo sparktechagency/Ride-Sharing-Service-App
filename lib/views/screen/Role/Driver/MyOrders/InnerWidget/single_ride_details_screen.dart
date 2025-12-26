@@ -10,6 +10,7 @@ import 'package:ride_sharing/views/base/custom_text.dart';
 import '../../../../../../controllers/create_message_room_controller.dart';
 import '../../../../../../controllers/rating_controller.dart';
 import '../../../../../../controllers/single_ride_details_controller.dart';
+import '../../../../../../helpers/route.dart';
 import '../../../../../../models/single_ride_details_model.dart';
 
 class SingleRideDetailsScreen extends StatelessWidget {
@@ -450,9 +451,13 @@ class SingleRideDetailsScreen extends StatelessWidget {
               Expanded(
                 child: Obx(() => CustomButton(
                   loading: chatController.isCreateLoading.value,
-                  onTap: () {
+                  onTap: () async {
                     Navigator.pop(dialogContext);
-                    chatController.createChatRoom(participantId);
+                    bool success = await chatController.createChatRoom(participantId);
+                    if (success) {
+                      // Navigate to driver inbox screen after successful chat creation
+                      Get.offAllNamed(AppRoutes.driverInboxScreen);
+                    }
                   },
                   text: "Yes, Start",
                   textStyle: TextStyle(color: Colors.white, fontSize: 14.sp),

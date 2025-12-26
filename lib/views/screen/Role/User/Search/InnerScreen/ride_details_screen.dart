@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../controllers/booking_controller.dart';
+import '../../../../../../controllers/create_message_room_controller.dart';
+import '../../../../../../helpers/route.dart';
 import '../../../../../../models/booking_user_details_model.dart';
 import '../../../../../../models/booking_with_status_model.dart';
 import '../../../../../../service/api_constants.dart';
@@ -27,12 +29,14 @@ class RideDetailsScreen extends StatefulWidget {
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   String? selectedPayment;
   final BookingController bookingController = Get.find<BookingController>();
-
+  final ChatController chatController = Get.put(ChatController());
+  
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.
+  late String fromScreen;
+  late String driverId;
   late BookingAttribute? statusBooking;
   late BookingUserAttributes? userDetails;
-  late String formattedDate;
 
   void _onSubmit() {
     if (selectedPayment != null) {
@@ -42,28 +46,34 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // --- 1. RECEIVE AND EXTRACT ARGUMENTS ---
+  void initState() {
+    super.initState();
+    
+    // Get arguments
     final arguments = Get.arguments as Map<String, dynamic>?;
-    final String fromScreen = arguments?['from'] ?? '';
-
-    // Safely extract the passed data
+    fromScreen = arguments?['from'] ?? '';
+    driverId = arguments?['driverId'] ?? arguments?['booking']?['driverId'] ?? '';
     statusBooking = arguments?['booking'] as BookingAttribute?;
     userDetails = arguments?['user'] as BookingUserAttributes?;
+    
+    // Load user details for the driver if needed
+    if (driverId.isNotEmpty) {
+      bookingController.getBookingUserDetails(driverId);
+    }
+  }
 
-    // Handle null case (should not happen if navigation from PendingTab is correct)
+  @override
+  Widget build(BuildContext context) {
     if (statusBooking == null || userDetails == null) {
       return Scaffold(
         appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
         body: const Center(child: Text('Error: Ride or User details missing.')),
       );
     }
-
-    // Format the date using the retrieved booking data
-    formattedDate = DateFormat('EEE dd MMMM yyyy h.mm a')
+    
+    final formattedDate = DateFormat('EEE dd MMMM yyyy h.mm a')
         .format(DateTime.parse(statusBooking!.rideDate))
         .toLowerCase();
-    // -----------------------------------------
 
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.completedOrdersDetails.tr),
@@ -217,8 +227,6 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                       padding: EdgeInsets.only(right: 16.w, left: 16.w, bottom: 10.h),
                       child: Builder(
                         builder: (context) {
-                          final BookingController bookingController = Get.find<BookingController>();
-
                           if (fromScreen == 'ongoing') {
                             return Obx(() => CustomButton(
                               onTap: () async {
@@ -269,7 +277,12 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                 SizedBox(width: 8.w),
                                 CustomButton(
                                   onTap: () {
-                                    // Chat Logic
+                                    // // 🔥 Trigger the confirmation dialog
+                                    // if (userDetails?.id != null) {
+                                    //   _showChatConfirmation(context, userDetails!.id!);
+                                    // } else {
+                                    //   Fluttertoast.showToast(msg: "Passenger details not found".tr);
+                                    // }
                                   },
                                   text: "Chat Now".tr,
                                   width: 100.w,
@@ -458,71 +471,109 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                               : const SizedBox(),
 
                           (userDetails!.reviews.isNotEmpty)
-                              ? Column(
-                            children: userDetails!.reviews.map((review) {
-                              final reviewFormattedDate = review['date'] == null
-                                  ? ''
-                                  : DateFormat('EEE dd MMMM yyyy h.mm a')
-                                  .format(DateTime.parse(review['date']))
-                                  .toLowerCase();
+                              ? Obx(() {
+                            // Get current user ID to filter out their reviews
+                            String currentUserId = bookingController.userDetails.value?.userId ?? '';
 
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 8.h),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.r),
-                                    border: Border.all(width: 1.w, color: AppColors.borderColor),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(12.w),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        CustomNetworkImage(
-                                          imageUrl: review['userImage'] ??
-                                              "${ApiConstants.imageBaseUrl}${userDetails?.profileImage}",
-                                          height: 38.h,
-                                          width: 38.w,
-                                          boxShape: BoxShape.circle,
-                                        ),
-                                        SizedBox(width: 8.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              CustomText(
-                                                text: review['userName'] ?? '',
-                                                bottom: 4.h,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              CustomText(
-                                                text: reviewFormattedDate,
-                                                fontSize: 9.sp,
-                                              ),
-                                              Row(
-                                                children: List.generate(
-                                                  review['rating'] ?? 0,
-                                                      (index) => const Icon(
-                                                    Icons.star,
-                                                    color: Colors.orange,
-                                                    size: 20,
+                            // Filter reviews to exclude current user's reviews
+                            List filteredReviews = userDetails!.reviews
+                                .where((review) => review['userId'] != currentUserId)
+                                .toList();
+
+                            if (filteredReviews.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return Column(
+                              children: filteredReviews.map((review) {
+                                final reviewFormattedDate = review['date'] == null
+                                    ? ''
+                                    : DateFormat('EEE dd MMMM yyyy h.mm a')
+                                        .format(DateTime.parse(review['date']))
+                                        .toLowerCase();
+
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 8.h),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16.r),
+                                      border: Border.all(width: 1.w, color: AppColors.borderColor),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(12.w),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CustomNetworkImage(
+                                            imageUrl: review['userImage'] ??
+                                                "${ApiConstants.imageBaseUrl}${review['userImage'] ?? ''}",
+                                            height: 38.h,
+                                            width: 38.w,
+                                            boxShape: BoxShape.circle,
+                                          ),
+                                          SizedBox(width: 8.w),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                CustomText(
+                                                  text: review['userName'] ?? '',
+                                                  bottom: 4.h,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                CustomText(
+                                                  text: reviewFormattedDate,
+                                                  fontSize: 9.sp,
+                                                ),
+                                                Row(
+                                                  children: List.generate(
+                                                    review['rating'] ?? 0,
+                                                    (index) => const Icon(
+                                                      Icons.star,
+                                                      color: Colors.orange,
+                                                      size: 20,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              CustomText(
-                                                text: review['comment'] ?? '',
-                                                maxLine: 10,
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(width: 8.w),
+                                          OutlinedButton(
+                                            onPressed: () {
+                                              // Access the nested id: review['reviewerId']['id']
+                                              final reviewerId = review['reviewerId']?['id'] ?? '';
+                                              if (reviewerId.isNotEmpty) {
+                                                _showChatConfirmation(context, reviewerId);
+                                              } else {
+                                                // Handle case where ID might be missing
+                                                debugPrint("Reviewer ID not found");
+                                              }
+                                            },
+                                            style: OutlinedButton.styleFrom(
+                                              side: BorderSide(color: AppColors.primaryColor),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(8.r),
+                                              ),
+                                              minimumSize: Size(60.w, 30.h),
+                                            ),
+                                            child: Text(
+                                              "Chat".tr,
+                                              style: TextStyle(
+                                                color: AppColors.primaryColor,
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
-                          )
+                                );
+                              }).toList(),
+                            );
+                          })
                               : const SizedBox.shrink(),
 
                         ],
@@ -542,6 +593,9 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   //===============================> Payment Bottom Sheet <===============================
   _showPaymentBottomSheet(BuildContext context) {
     String? selectedPaymentOption;
+
+    // Get price based on booking data
+    double price = statusBooking?.price.toDouble() ?? 0.0;
 
     showModalBottomSheet(
       context: context,
@@ -581,14 +635,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                   ),
                   _paymentOption(
                     AppStrings.cashPayment.tr,
-                    statusBooking!.price.toDouble() , // Use actual price
+                    price, // Use actual price
                     'cash',
                     selectedPaymentOption,
                         (val) => setState(() => selectedPaymentOption = val),
                   ),
                   _paymentOption(
                     AppStrings.onlinePayment.tr,
-                    statusBooking!.price.toDouble(), // Use actual price
+                    price, // Use actual price
                     'online',
                     selectedPaymentOption,
                         (val) => setState(() => selectedPaymentOption = val),
@@ -619,8 +673,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 
   void _showCancelBottomSheet(BuildContext context) {
     // Get the controller and ID needed for the API call
-    final BookingController bookingController = Get.find<BookingController>();
-    final String bookingId = statusBooking!.id;
+    final String bookingId = statusBooking?.id ?? '';
 
     showModalBottomSheet(
       context: context,
@@ -695,15 +748,10 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                         onPressed: () async {
                           Navigator.pop(context); // Close the bottom sheet
 
-                          // 🔥 Logic to update status to Cancelled
-                          bool success = await bookingController.updateBookingStatus(
-                              bookingId,
-                              "Cancelled"
-                          );
-
+                          // Update status to Cancelled
+                          bool success = await bookingController.updateBookingStatus(bookingId, "Cancelled");
                           if (success) {
-                            // Go back to the previous screen and refresh list
-                            Navigator.pop(Get.context!, true);
+                            Navigator.pop(context, true);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -795,6 +843,50 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+
+  void _showChatConfirmation(BuildContext context, String participantId) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.cardColor, // Adjusted to match your app theme
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        title: CustomText(text: "Start Conversation".tr, fontSize: 18.sp, fontWeight: FontWeight.w600),
+        content: CustomText(text: "Do you want to create a chat room with this user?".tr, fontSize: 14.sp, maxLine: 2),
+        actionsPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  onTap: () => Navigator.pop(dialogContext),
+                  text: "No".tr,
+                  color: Colors.white,
+                  broderColor: Colors.grey.shade300,
+                  textColor: Colors.black,
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Obx(() => CustomButton(
+                  loading: chatController.isCreateLoading.value,
+                  onTap: () async {
+                    Navigator.pop(dialogContext);
+                    bool success = await chatController.createChatRoom(participantId);
+                    if (success) {
+                      // Navigate to user inbox screen after successful chat creation
+                      Get.offAllNamed(AppRoutes.userInboxScreen);
+                    }
+                  },
+                  text: "Yes, Start".tr,
+                )),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

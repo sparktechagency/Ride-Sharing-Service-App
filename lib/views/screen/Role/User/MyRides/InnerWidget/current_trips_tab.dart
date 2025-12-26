@@ -187,6 +187,7 @@ class CurrentTripsTab extends StatelessWidget {
                               final result = await Get.toNamed(
                                 AppRoutes.rideDetailsScreen,
                                 arguments: {
+                                  'driverId': statusBooking.driverId,
                                   'booking': statusBooking,
                                   'user': userDetails,
                                   'from': 'ongoing'

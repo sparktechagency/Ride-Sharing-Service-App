@@ -10,7 +10,7 @@ import 'message_room_controller.dart';
 class ChatController extends GetxController {
   RxBool isCreateLoading = false.obs;
 
-  Future<void> createChatRoom(String participantId) async {
+  Future<bool> createChatRoom(String participantId) async {
     isCreateLoading(true);
 
     Map<String, String> body = {
@@ -35,16 +35,15 @@ class ChatController extends GetxController {
           await Get.find<MessageRoomController>().getMessageRooms();
         }
 
-        // 2. Navigate to Driver Inbox (Tab 2)
-        // We use offAllNamed to ensure the bottom bar resets to the Inbox state
-        Get.offAllNamed(AppRoutes.driverInboxScreen, arguments: 2);
-
+        return true;
       } else {
         String errorMsg = response.body['message'] ?? "Failed to create room";
         Fluttertoast.showToast(msg: errorMsg, backgroundColor: Colors.red);
+        return false;
       }
     } catch (e) {
       Fluttertoast.showToast(msg: "An unexpected error occurred".tr);
+      return false;
     } finally {
       isCreateLoading(false);
     }

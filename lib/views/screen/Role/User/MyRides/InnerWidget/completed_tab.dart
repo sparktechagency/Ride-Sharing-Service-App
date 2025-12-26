@@ -188,6 +188,7 @@ class CompletedTab extends StatelessWidget {
                                 Get.toNamed(
                                   AppRoutes.rideDetailsScreen,
                                   arguments: {
+                                    'driverId': statusBooking.driverId,
                                     'booking': statusBooking,
                                     'user': userDetails,
                                     'from': 'completed'

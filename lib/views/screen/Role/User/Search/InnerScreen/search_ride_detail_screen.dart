@@ -24,7 +24,9 @@ class SearchRideDetailsScreen extends StatefulWidget {
 }
 
 class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
-  final BookingController bookingController = Get.find<BookingController>();
+  final BookingController bookingController = Get.isRegistered<BookingController>()
+      ? Get.find<BookingController>()
+      : Get.put(BookingController(), permanent: true);
 
   @override
   void initState() {

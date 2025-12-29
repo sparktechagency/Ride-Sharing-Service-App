@@ -183,7 +183,7 @@ class PostRideController extends GetxController {
         "pricePerSeat": estimatedPrice.value.toInt(),
         "seatsBooked": 0,
         "distanceKm": rawDist.toInt(),
-        "pricePerKm": pricePerKm.toInt()
+        "pricePerKm": estimatedPrice.value.toInt()
       };
 
       String token = await PrefsHelper.getString(AppConstants.bearerToken);

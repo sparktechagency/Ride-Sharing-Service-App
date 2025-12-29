@@ -39,9 +39,9 @@ class BookingUserAttributes {
   final String vehicleType;
   final String vehicleModel;
   final String profileImage;
-  final double averageRating;
+  final double? averageRating;
   final int totalReviews;
-  final List<dynamic> reviews;
+  final List<UserReview> reviews;
 
   BookingUserAttributes({
     required this.userId,
@@ -52,7 +52,7 @@ class BookingUserAttributes {
     required this.vehicleType,
     required this.vehicleModel,
     required this.profileImage,
-    required this.averageRating,
+    this.averageRating,
     required this.totalReviews,
     required this.reviews,
   });
@@ -67,9 +67,54 @@ class BookingUserAttributes {
       vehicleType: json['vehicleType'] ?? '',
       vehicleModel: json['vehicleModel'] ?? '',
       profileImage: json['profileImage'] ?? '',
-      averageRating: (json['averageRating'] ?? 0).toDouble(),
+      averageRating: (json['averageRating'] as num?)?.toDouble(),
       totalReviews: json['totalReviews'] ?? 0,
-      reviews: json['reviews'] ?? [],
+      reviews: (json['reviews'] as List<dynamic>?)
+          ?.map((e) => UserReview.fromJson(e))
+          .toList() ??
+          [],
     );
   }
 }
+class UserReview {
+  final Reviewer reviewer;
+  final int rating;
+  final String createDate;
+  final String review;
+
+  UserReview({
+    required this.reviewer,
+    required this.rating,
+    required this.createDate,
+    required this.review,
+  });
+
+  factory UserReview.fromJson(Map<String, dynamic> json) {
+    return UserReview(
+      reviewer: Reviewer.fromJson(json['reviewerId'] ?? {}),
+      rating: (json['rating'] as num?)?.toInt() ?? 0,
+      createDate: json['createDate'] ?? '',
+      review: json['review'] ?? '',
+    );
+  }
+}
+class Reviewer {
+  final String id;
+  final String userName;
+  final String image;
+
+  Reviewer({
+    required this.id,
+    required this.userName,
+    required this.image,
+  });
+
+  factory Reviewer.fromJson(Map<String, dynamic> json) {
+    return Reviewer(
+      id: json['id'] ?? '',
+      userName: json['userName'] ?? '',
+      image: json['image'] ?? '',
+    );
+  }
+}
+

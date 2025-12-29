@@ -32,7 +32,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
       ? Get.find<BookingController>()
       : Get.put(BookingController(), permanent: true);
   final ChatController chatController = Get.put(ChatController());
-  
+
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.
   late String fromScreen;
@@ -50,14 +50,14 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Get arguments
     final arguments = Get.arguments as Map<String, dynamic>?;
     fromScreen = arguments?['from'] ?? '';
     driverId = arguments?['driverId'] ?? arguments?['booking']?['driverId'] ?? '';
     statusBooking = arguments?['booking'] as BookingAttribute?;
     userDetails = arguments?['user'] as BookingUserAttributes?;
-    
+
     // Load user details for the driver if needed
     if (driverId.isNotEmpty) {
       bookingController.getBookingUserDetails(driverId);
@@ -72,7 +72,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
         body: const Center(child: Text('Error: Ride or User details missing.')),
       );
     }
-    
+
     final formattedDate = DateFormat('EEE dd MMMM yyyy h.mm a')
         .format(DateTime.parse(statusBooking!.rideDate))
         .toLowerCase();
@@ -469,103 +469,103 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             fontWeight: FontWeight.bold,
                             bottom: 16.h,
                           ),
-                          Obx(() {
-                            String currentUserId = bookingController.userDetails.value?.userId ?? '';
-
-                            // 1. Updated filter: Access userId from reviewerId object
-                            List filteredReviews = userDetails!.reviews
-                                .where((review) => review['reviewerId']?['id'] != currentUserId)
-                                .toList();
-
-                            if (filteredReviews.isEmpty) {
-                              return const SizedBox.shrink();
-                            }
-
-                            return Column(
-                              children: filteredReviews.map((review) {
-                                bool showChatButton = (fromScreen == 'pending' || fromScreen == 'ongoing');
-
-                                // Extract reviewer data for cleaner code
-                                var reviewer = review['reviewerId'];
-
-                                return Padding(
-                                  padding: EdgeInsets.only(bottom: 12.h),
-                                  child: Container(
-                                    padding: EdgeInsets.all(12.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12.r),
-                                      border: Border.all(color: Colors.grey.shade200),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 50.w,
-                                          height: 50.h,
-                                          decoration: BoxDecoration(
-                                            color: Colors.blue.shade50,
-                                            borderRadius: BorderRadius.circular(8.r),
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                // 2. Updated Image path: reviewer['image']
-                                                  reviewer?['image'] != null && reviewer?['image'] != ''
-                                                      ? "${ApiConstants.imageBaseUrl}${reviewer['image']}"
-                                                      : "https://via.placeholder.com/50"
-                                              ),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 12.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    // 3. Updated Name path: reviewer['userName']
-                                                    reviewer?['userName'] ?? 'Unknown User',
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 16.sp
-                                                    ),
-                                                  ),
-                                                  if (showChatButton) ...[
-                                                    SizedBox(width: 8.w),
-                                                    GestureDetector(
-                                                      // 4. Updated Chat ID path: reviewer['id']
-                                                      onTap: () => _showChatConfirmation(context, reviewer?['id'] ?? ''),
-                                                      child: Icon(
-                                                        Icons.chat_bubble_outline,
-                                                        size: 18.sp,
-                                                        color: AppColors.primaryColor,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ],
-                                              ),
-                                              SizedBox(height: 4.h),
-                                              Row(
-                                                children: [
-                                                  Text("Rating: ", style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
-                                                  Text(
-                                                    (review['rating'] ?? 0).toString(),
-                                                    style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-                                                  ),
-                                                  Icon(Icons.star, color: Colors.amber, size: 16.w),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          }),
+                          // Obx(() {
+                          //   String currentUserId = bookingController.userDetails.value?.userId ?? '';
+                          //
+                          //   // 1. Updated filter: Access userId from reviewerId object
+                          //   List filteredReviews = userDetails!.reviews
+                          //       .where((review) => review['reviewerId']?['id'] != currentUserId)
+                          //       .toList();
+                          //
+                          //   if (filteredReviews.isEmpty) {
+                          //     return const SizedBox.shrink();
+                          //   }
+                          //
+                          //   return Column(
+                          //     children: filteredReviews.map((review) {
+                          //       bool showChatButton = (fromScreen == 'pending' || fromScreen == 'ongoing');
+                          //
+                          //       // Extract reviewer data for cleaner code
+                          //       var reviewer = review['reviewerId'];
+                          //
+                          //       return Padding(
+                          //         padding: EdgeInsets.only(bottom: 12.h),
+                          //         child: Container(
+                          //           padding: EdgeInsets.all(12.w),
+                          //           decoration: BoxDecoration(
+                          //             color: Colors.white,
+                          //             borderRadius: BorderRadius.circular(12.r),
+                          //             border: Border.all(color: Colors.grey.shade200),
+                          //           ),
+                          //           child: Row(
+                          //             children: [
+                          //               Container(
+                          //                 width: 50.w,
+                          //                 height: 50.h,
+                          //                 decoration: BoxDecoration(
+                          //                   color: Colors.blue.shade50,
+                          //                   borderRadius: BorderRadius.circular(8.r),
+                          //                   image: DecorationImage(
+                          //                     image: NetworkImage(
+                          //                       // 2. Updated Image path: reviewer['image']
+                          //                         reviewer?['image'] != null && reviewer?['image'] != ''
+                          //                             ? "${ApiConstants.imageBaseUrl}${reviewer['image']}"
+                          //                             : "https://via.placeholder.com/50"
+                          //                     ),
+                          //                     fit: BoxFit.cover,
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //               SizedBox(width: 12.w),
+                          //               Expanded(
+                          //                 child: Column(
+                          //                   crossAxisAlignment: CrossAxisAlignment.start,
+                          //                   children: [
+                          //                     Row(
+                          //                       children: [
+                          //                         Text(
+                          //                           // 3. Updated Name path: reviewer['userName']
+                          //                           reviewer?['userName'] ?? 'Unknown User',
+                          //                           style: TextStyle(
+                          //                               fontWeight: FontWeight.bold,
+                          //                               fontSize: 16.sp
+                          //                           ),
+                          //                         ),
+                          //                         if (showChatButton) ...[
+                          //                           SizedBox(width: 8.w),
+                          //                           GestureDetector(
+                          //                             // 4. Updated Chat ID path: reviewer['id']
+                          //                             onTap: () => _showChatConfirmation(context, reviewer?['id'] ?? ''),
+                          //                             child: Icon(
+                          //                               Icons.chat_bubble_outline,
+                          //                               size: 18.sp,
+                          //                               color: AppColors.primaryColor,
+                          //                             ),
+                          //                           ),
+                          //                         ],
+                          //                       ],
+                          //                     ),
+                          //                     SizedBox(height: 4.h),
+                          //                     Row(
+                          //                       children: [
+                          //                         Text("Rating: ", style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+                          //                         Text(
+                          //                           (review['rating'] ?? 0).toString(),
+                          //                           style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
+                          //                         ),
+                          //                         Icon(Icons.star, color: Colors.amber, size: 16.w),
+                          //                       ],
+                          //                     ),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //       );
+                          //     }).toList(),
+                          //   );
+                          // }),
 
                         ],
                       ),

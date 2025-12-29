@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../../models/booking_with_status_model.dart';
 import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
@@ -14,8 +15,7 @@ import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
 
 class BookingCard extends StatelessWidget {
-  final dynamic booking;
-  final dynamic user;
+  final BookingAttribute booking;
   final VoidCallback onViewTap;
   final VoidCallback? onChatTap;
   final String from;
@@ -23,7 +23,6 @@ class BookingCard extends StatelessWidget {
   const BookingCard({
     super.key,
     required this.booking,
-    required this.user,
     required this.onViewTap,
     this.onChatTap,
     required this.from,
@@ -72,7 +71,7 @@ class BookingCard extends StatelessWidget {
                   Row(
                     children: [
                       CustomNetworkImage(
-                        imageUrl: "${ApiConstants.imageBaseUrl}${user?.profileImage}",
+                        imageUrl: "${ApiConstants.imageBaseUrl}${booking.driver.image}",
                         height: 38.h,
                         width: 38.w,
                         boxShape: BoxShape.circle,
@@ -81,10 +80,12 @@ class BookingCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(text: user?.userName ?? '', fontWeight: FontWeight.bold),
+                          CustomText(text: booking.driver.userName ?? '', fontWeight: FontWeight.bold),
+                          // Note: Driver rating is not available in the booking model, so we'll show a placeholder
+                          // If rating is needed, it would need to be fetched separately
+                          // For now, we'll just show the star icon without a rating value
                           Row(
                             children: [
-                              CustomText(text: user?.averageRating.toString() ?? '0', right: 4.w, fontSize: 12.sp),
                               SvgPicture.asset(AppIcons.star, height: 12.h),
                             ],
                           ),

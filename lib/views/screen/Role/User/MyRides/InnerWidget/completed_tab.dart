@@ -36,7 +36,6 @@ class CompletedTab extends StatelessWidget {
 
             return BookingCard(
               booking: booking,
-              user: user,
               from: booking.status.toLowerCase(), // 'completed', 'cancelled', or 'ongoing'
               onViewTap: () async {
                 final result = await Get.toNamed(
@@ -44,7 +43,7 @@ class CompletedTab extends StatelessWidget {
                   arguments: {
                     'driverId': booking.driver.id,
                     'booking': booking,
-                    'user': user,
+                    'user': user, // Keep user for ride details screen if needed
                     'from': booking.status.toLowerCase()
                   },
                 );

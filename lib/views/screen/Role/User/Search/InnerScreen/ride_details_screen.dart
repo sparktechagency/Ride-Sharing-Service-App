@@ -279,12 +279,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                 SizedBox(width: 8.w),
                                 CustomButton(
                                   onTap: () {
-                                    // // 🔥 Trigger the confirmation dialog
-                                    // if (userDetails?.id != null) {
-                                    //   _showChatConfirmation(context, userDetails!.id!);
-                                    // } else {
-                                    //   Fluttertoast.showToast(msg: "Passenger details not found".tr);
-                                    // }
+
                                   },
                                   text: "Chat Now".tr,
                                   width: 100.w,
@@ -353,17 +348,16 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                     bottom: 4.h,
                                     fontWeight: FontWeight.w500,
                                   ),
-                                  Row(
-                                    children: [
-                                      CustomText(
-                                        // Use rating
-                                          text: userDetails!.averageRating
-                                              .toString() ??
-                                              '0',
-                                          right: 4.w),
-                                      SvgPicture.asset(AppIcons.star),
-                                    ],
-                                  ),
+                                  if (userDetails?.averageRating != null && userDetails!.averageRating! > 0)
+                                    Row(
+                                      children: [
+                                        CustomText(
+                                          text: userDetails!.averageRating.toString(),
+                                          right: 4.w,
+                                        ),
+                                        SvgPicture.asset(AppIcons.star),
+                                      ],
+                                    ),
                                 ],
                               ),
                             ],
@@ -464,108 +458,99 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           SizedBox(height: 24.h),
                           //=====================> Users in Ride Section <=================
                           CustomText(
-                            text: "Users in this ride".tr,
+                            text: "User Reviews".tr,
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             bottom: 16.h,
                           ),
-                          // Obx(() {
-                          //   String currentUserId = bookingController.userDetails.value?.userId ?? '';
-                          //
-                          //   // 1. Updated filter: Access userId from reviewerId object
-                          //   List filteredReviews = userDetails!.reviews
-                          //       .where((review) => review['reviewerId']?['id'] != currentUserId)
-                          //       .toList();
-                          //
-                          //   if (filteredReviews.isEmpty) {
-                          //     return const SizedBox.shrink();
-                          //   }
-                          //
-                          //   return Column(
-                          //     children: filteredReviews.map((review) {
-                          //       bool showChatButton = (fromScreen == 'pending' || fromScreen == 'ongoing');
-                          //
-                          //       // Extract reviewer data for cleaner code
-                          //       var reviewer = review['reviewerId'];
-                          //
-                          //       return Padding(
-                          //         padding: EdgeInsets.only(bottom: 12.h),
-                          //         child: Container(
-                          //           padding: EdgeInsets.all(12.w),
-                          //           decoration: BoxDecoration(
-                          //             color: Colors.white,
-                          //             borderRadius: BorderRadius.circular(12.r),
-                          //             border: Border.all(color: Colors.grey.shade200),
-                          //           ),
-                          //           child: Row(
-                          //             children: [
-                          //               Container(
-                          //                 width: 50.w,
-                          //                 height: 50.h,
-                          //                 decoration: BoxDecoration(
-                          //                   color: Colors.blue.shade50,
-                          //                   borderRadius: BorderRadius.circular(8.r),
-                          //                   image: DecorationImage(
-                          //                     image: NetworkImage(
-                          //                       // 2. Updated Image path: reviewer['image']
-                          //                         reviewer?['image'] != null && reviewer?['image'] != ''
-                          //                             ? "${ApiConstants.imageBaseUrl}${reviewer['image']}"
-                          //                             : "https://via.placeholder.com/50"
-                          //                     ),
-                          //                     fit: BoxFit.cover,
-                          //                   ),
-                          //                 ),
-                          //               ),
-                          //               SizedBox(width: 12.w),
-                          //               Expanded(
-                          //                 child: Column(
-                          //                   crossAxisAlignment: CrossAxisAlignment.start,
-                          //                   children: [
-                          //                     Row(
-                          //                       children: [
-                          //                         Text(
-                          //                           // 3. Updated Name path: reviewer['userName']
-                          //                           reviewer?['userName'] ?? 'Unknown User',
-                          //                           style: TextStyle(
-                          //                               fontWeight: FontWeight.bold,
-                          //                               fontSize: 16.sp
-                          //                           ),
-                          //                         ),
-                          //                         if (showChatButton) ...[
-                          //                           SizedBox(width: 8.w),
-                          //                           GestureDetector(
-                          //                             // 4. Updated Chat ID path: reviewer['id']
-                          //                             onTap: () => _showChatConfirmation(context, reviewer?['id'] ?? ''),
-                          //                             child: Icon(
-                          //                               Icons.chat_bubble_outline,
-                          //                               size: 18.sp,
-                          //                               color: AppColors.primaryColor,
-                          //                             ),
-                          //                           ),
-                          //                         ],
-                          //                       ],
-                          //                     ),
-                          //                     SizedBox(height: 4.h),
-                          //                     Row(
-                          //                       children: [
-                          //                         Text("Rating: ", style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
-                          //                         Text(
-                          //                           (review['rating'] ?? 0).toString(),
-                          //                           style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-                          //                         ),
-                          //                         Icon(Icons.star, color: Colors.amber, size: 16.w),
-                          //                       ],
-                          //                     ),
-                          //                   ],
-                          //                 ),
-                          //               ),
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       );
-                          //     }).toList(),
-                          //   );
-                          // }),
+
+// Check if reviews list is empty
+                          userDetails!.reviews.isEmpty
+                              ? Center(child: CustomText(text: "No reviews yet".tr, top: 10.h, bottom: 10.h))
+                              : ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: userDetails!.reviews.length,
+                            separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                            itemBuilder: (context, index) {
+                              final review = userDetails!.reviews[index];
+
+                              // Formatting date (Assuming createDate is an ISO string)
+                              String reviewDate = "";
+                              try {
+                                reviewDate = DateFormat('dd MMM, yyyy').format(DateTime.parse(review.createDate));
+                              } catch (e) {
+                                reviewDate = review.createDate;
+                              }
+
+                              return Container(
+                                padding: EdgeInsets.all(12.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.05),
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  border: Border.all(color: AppColors.borderColor.withOpacity(0.5)),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+
+                                            CustomNetworkImage(
+                                              imageUrl: "${ApiConstants.imageBaseUrl}${review.reviewer.image}",
+                                              height: 38.h,
+                                              width: 38.w,
+                                              boxShape: BoxShape.circle,
+                                            ),
+
+                                            SizedBox(width: 10.w),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                CustomText(
+                                                  text: review.reviewer.userNameSelf,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14.sp,
+                                                ),
+                                                CustomText(
+                                                  text: reviewDate,
+                                                  fontSize: 12.sp,
+                                                  color: Colors.grey,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        // Star Rating Row
+                                        Row(
+                                          children: List.generate(5, (starIndex) {
+                                            return Icon(
+                                              Icons.star,
+                                              size: 16.sp,
+                                              color: starIndex < review.rating
+                                                  ? Colors.amber
+                                                  : Colors.grey.shade300,
+                                            );
+                                          }),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    CustomText(
+                                      text: review.review,
+                                      fontSize: 13.sp,
+                                      maxLine: 5,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+
 
                         ],
                       ),

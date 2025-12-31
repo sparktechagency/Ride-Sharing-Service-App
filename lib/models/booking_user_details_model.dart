@@ -13,7 +13,7 @@ class BookingUserDetails {
     return BookingUserDetails(
       code: json['code'] ?? 0,
       message: json['message'] ?? '',
-      data: BookingUserData.fromJson(json['data'] ?? {}),
+      data: json['data'] != null ? BookingUserData.fromJson(json['data']) : null,
     );
   }
 }
@@ -91,7 +91,7 @@ class UserReview {
 
   factory UserReview.fromJson(Map<String, dynamic> json) {
     return UserReview(
-      reviewer: Reviewer.fromJson(json['reviewerId'] ?? {}),
+      reviewer: json['reviewerId'] != null ? Reviewer.fromJson(json['reviewerId']) : Reviewer(id: '', userNameSelf: '', image: ''),
       rating: (json['rating'] as num?)?.toInt() ?? 0,
       createDate: json['createDate'] ?? '',
       review: json['review'] ?? '',
@@ -100,19 +100,19 @@ class UserReview {
 }
 class Reviewer {
   final String id;
-  final String userName;
+  final String userNameSelf;
   final String image;
 
   Reviewer({
     required this.id,
-    required this.userName,
+    required this.userNameSelf,
     required this.image,
   });
 
   factory Reviewer.fromJson(Map<String, dynamic> json) {
     return Reviewer(
       id: json['id'] ?? '',
-      userName: json['userName'] ?? '',
+      userNameSelf: json['userName'] ?? '',
       image: json['image'] ?? '',
     );
   }

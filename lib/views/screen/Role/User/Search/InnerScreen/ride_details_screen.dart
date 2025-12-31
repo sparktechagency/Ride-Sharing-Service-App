@@ -226,65 +226,71 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                     ),
                     //==================================> Action Buttons <===================
                     Padding(
-                      padding: EdgeInsets.only(right: 16.w, left: 16.w, bottom: 10.h),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                       child: Builder(
                         builder: (context) {
-                          if (fromScreen == 'ongoing') {
-                            return Obx(() => CustomButton(
-                              onTap: () async {
-                                bool success = await bookingController.updateBookingStatus(statusBooking!.id, "Completed");
-                                if (success) Navigator.pop(context, true);
-                              },
-                              loading: bookingController.isUpdatingStatus.value,
-                              text: "Start Trip".tr,
-                              width: double.infinity,
-                              height: 45.h,
-                            ));
-                          } else if (fromScreen == 'completed') {
+                          // 1. COMPLETED STATE
+                          if (fromScreen == 'completed') {
                             return CustomButton(
                               onTap: () {},
                               text: "Completed Trip".tr,
                               width: double.infinity,
-                              height: 45.h,
+                              height: 48.h,
                               color: Colors.grey,
                               broderColor: Colors.grey,
                             );
-                          } else if (fromScreen == 'cancelled') {
-                            // Show static Cancelled button if user is coming from Cancelled Tab
+                          }
+
+                          // 2. CANCELLED STATE
+                          else if (fromScreen == 'cancelled') {
                             return CustomButton(
                               onTap: () {},
                               text: "Cancelled".tr,
                               width: double.infinity,
-                              height: 45.h,
+                              height: 48.h,
                               color: Colors.red.shade300,
                               broderColor: Colors.red.shade300,
                             );
-                          } else {
-                            // Pending state: Show Cancel and Chat
+                          }
+
+                          // 3. ACTIVE STATE (Pending or Ongoing)
+                          else {
                             return Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                OutlinedButton(
-                                  onPressed: () => _showCancelBottomSheet(context),
-                                  style: OutlinedButton.styleFrom(
-                                    side: BorderSide(color: AppColors.primaryColor),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-                                    minimumSize: Size(90.w, 34.h),
-                                  ),
-                                  child: Text(
-                                    AppStrings.cancel.tr,
-                                    style: TextStyle(color: AppColors.primaryColor, fontSize: 12.sp, fontWeight: FontWeight.w500),
+                                // CANCEL BUTTON
+                                Expanded(
+                                  flex: 1,
+                                  child: OutlinedButton(
+                                    onPressed: () => _showCancelBottomSheet(context),
+                                    style: OutlinedButton.styleFrom(
+                                      side: BorderSide(color: Colors.red.shade400, width: 1.w),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                                      minimumSize: Size(double.infinity, 48.h),
+                                    ),
+                                    child: Text(
+                                      AppStrings.cancel.tr,
+                                      style: TextStyle(
+                                          color: Colors.red.shade400,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w600
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(width: 8.w),
-                                CustomButton(
-                                  onTap: () {
-
-                                  },
-                                  text: "Chat Now".tr,
-                                  width: 100.w,
-                                  height: 34.h,
-                                  fontSize: 12.sp,
+                                SizedBox(width: 12.w),
+                                // START / COMPLETE TRIP BUTTON
+                                Expanded(
+                                  flex: 2,
+                                  child: Obx(() => CustomButton(
+                                    onTap: () async {
+                                      String newStatus = (fromScreen == 'ongoing') ? "completed" : "ongoing";
+                                      bool success = await bookingController.updateBookingStatus(statusBooking!.id, newStatus);
+                                      if (success) Navigator.pop(context, true);
+                                    },
+                                    loading: bookingController.isUpdatingStatus.value,
+                                    text: fromScreen == 'ongoing' ? "Complete Trip".tr : "Start Trip".tr,
+                                    height: 48.h,
+                                  )),
                                 ),
                               ],
                             );
@@ -305,56 +311,72 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                 ),
                 child: Column(
                   children: [
-                    //========================> Top Container <=================
                     Padding(
                       padding: EdgeInsets.all(10.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: CustomText(
-                                    text: AppStrings.details.tr,
-                                    maxLine: 3,
+                          CustomText(
+                            text: AppStrings.details.tr,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          //=====================> CHAT NOW BUTTON (Moved Here) <=================
+                          GestureDetector(
+                            onTap: () {
+                              // Your Chat Logic here
+                              // chatController.gotoChat(userDetails!.userId);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20.r),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.chat_outlined, size: 16.sp, color: AppColors.primaryColor),
+                                  SizedBox(width: 4.w),
+                                  CustomText(
+                                    text: "Chat".tr,
+                                    fontSize: 12.sp,
+                                    color: AppColors.primaryColor,
                                     fontWeight: FontWeight.w600,
-                                    textAlign: TextAlign.start,
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
                     Divider(thickness: 1.5, color: AppColors.borderColor),
-                    //========================> Details Container <=================
                     Padding(
                       padding: EdgeInsets.all(12.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //=====================> Name & Image Row <=================
+                          // Name & Image Row
                           Row(
                             children: [
-                              SizedBox(width: 8.w),
+                              CustomNetworkImage(
+                                imageUrl: "${ApiConstants.imageBaseUrl}${userDetails!.profileImage}",
+                                height: 50.h,
+                                width: 50.w,
+                                boxShape: BoxShape.circle,
+                              ),
+                              SizedBox(width: 12.w),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    // Use user name
-                                    text: userDetails!.userName ?? '',
-                                    bottom: 4.h,
-                                    fontWeight: FontWeight.w500,
+                                    text: userDetails!.userName,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16.sp,
                                   ),
                                   if (userDetails?.averageRating != null && userDetails!.averageRating! > 0)
                                     Row(
                                       children: [
-                                        CustomText(
-                                          text: userDetails!.averageRating.toString(),
-                                          right: 4.w,
-                                        ),
+                                        CustomText(text: userDetails!.averageRating.toString(), right: 4.w),
                                         SvgPicture.asset(AppIcons.star),
                                       ],
                                     ),
@@ -751,6 +773,9 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
       },
     );
   }
+
+
+
 
   //===========================================> Payment Option <==================================
   _paymentOption(

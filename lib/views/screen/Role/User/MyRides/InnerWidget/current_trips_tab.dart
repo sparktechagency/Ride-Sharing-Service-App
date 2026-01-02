@@ -37,17 +37,26 @@ class CurrentTripsTab extends StatelessWidget {
               booking: booking,
               from: booking.status.toLowerCase(),
               onViewTap: () async {
+                // Capture the specific booking data at the moment of tap
+                // to prevent issues when the shared bookings list changes
+                final bookingToNavigate = booking;
+
+                // Fetch the specific user details for this booking's driver
+                // to ensure we have the correct user data even if the shared state changes
+                await controller.getBookingUserDetails(bookingToNavigate.driver.id);
+                final userToNavigate = controller.userDetails.value;
+
                 final result = await Get.toNamed(
                   AppRoutes.rideDetailsScreen,
                   arguments: {
-                    'driverId': booking.driver.id,
-                    'booking': booking,
-                    'user': user, // Keep user for ride details screen if needed
-                    'from': booking.status.toLowerCase()
+                    'driverId': bookingToNavigate.driver.id,
+                    'booking': bookingToNavigate,
+                    'user': userToNavigate, // Use the specific user details for this driver
+                    'from': bookingToNavigate.status.toLowerCase()
                   },
                 );
 
-                if (result == true && booking.status.toLowerCase() == "ongoing") {
+                if (result == true && bookingToNavigate.status.toLowerCase() == "ongoing") {
                   controller.getBookingsByStatus("ongoing");
                 }
               },

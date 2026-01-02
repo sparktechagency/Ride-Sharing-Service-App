@@ -323,8 +323,13 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           //=====================> CHAT NOW BUTTON (Moved Here) <=================
                           GestureDetector(
                             onTap: () {
-                              // Your Chat Logic here
-                              // chatController.gotoChat(userDetails!.userId);
+                              final userId = userDetails?.userId;
+
+                              if (userId != null && userId.isNotEmpty) {
+                                _showChatConfirmation(context, userId);
+                              } else {
+                                Get.snackbar("Notice", "Chat is currently unavailable for this user.");
+                              }
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),

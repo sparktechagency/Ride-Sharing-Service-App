@@ -93,9 +93,9 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     CustomText(
-                                      text: transaction.paymentType?.tr ?? AppStrings.withdrawal.tr,
+                                      text: transaction.paymentType?.tr.capitalize ?? AppStrings.withdrawal.tr,
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 18.sp,
+                                      fontSize: 15.sp,
                                       maxLine: 3,
                                     ),
                                     CustomText(
@@ -117,10 +117,11 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                     CustomText(
                                       text: 'Total Amount :'.tr,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 16.sp,
+                                      fontSize: 12.sp,
                                       maxLine: 3,
                                     ),
                                     CustomText(
+                                      fontSize: 12.sp,
                                       text: '\$${transaction.totalAmount?.toStringAsFixed(2) ?? '0.00'}',
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -136,10 +137,11 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                     CustomText(
                                       text: 'Payment Date :'.tr,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 16.sp,
+                                      fontSize: 12.sp,
                                       maxLine: 3,
                                     ),
                                     CustomText(
+                                      fontSize: 12.sp,
                                       text: transaction.createdAt != null
                                           ? DateFormat('dd MMM yy h:mm a').format(transaction.createdAt!).toLowerCase()
                                           : 'N/A',

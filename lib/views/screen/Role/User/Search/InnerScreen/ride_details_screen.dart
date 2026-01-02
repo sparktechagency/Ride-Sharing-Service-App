@@ -68,6 +68,10 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
     }
   }
 
+  double calculateWithdrawAmount(int price, int passengers) {
+    return (price * passengers) * 0.90;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (statusBooking == null || userDetails == null) {
@@ -634,88 +638,6 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
     );
   }
 
-  //===============================> Payment Bottom Sheet <===============================
-  _showPaymentBottomSheet(BuildContext context) {
-    String? selectedPaymentOption;
-
-    // Get price based on booking data
-    double price = statusBooking?.price.toDouble() ?? 0.0;
-
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-      ),
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Container(
-              height: 330.h,
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-              ),
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  Center(
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 20.h),
-                      width: 40.w,
-                      height: 5.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: CustomText(
-                      text: AppStrings.paymentSystem.tr,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                  _paymentOption(
-                    AppStrings.cashPayment.tr,
-                    price, // Use actual price
-                    'cash',
-                    selectedPaymentOption,
-                        (val) => setState(() => selectedPaymentOption = val),
-                  ),
-                  _paymentOption(
-                    AppStrings.onlinePayment.tr,
-                    price, // Use actual price
-                    'online',
-                    selectedPaymentOption,
-                        (val) => setState(() => selectedPaymentOption = val),
-                  ),
-                  SizedBox(height: 16.h),
-                  CustomButton(
-                    width: 288.w,
-                    onTap: () {
-                      if (selectedPaymentOption != null) {
-                        // Update the screen's state and close bottom sheet
-                        setState(() {
-                          selectedPayment = selectedPaymentOption;
-                        });
-                        Navigator.of(context).pop();
-                        _onSubmit();
-                      }
-                    },
-                    text: AppStrings.submit.tr,
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-
   void _showReviewDialog(BuildContext context, String user,) {
     final RatingController ratingController = Get.put(RatingController());
     final TextEditingController feedbackController = TextEditingController();
@@ -881,13 +803,28 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                       height: 44.h,
                       child: ElevatedButton(
                         onPressed: () async {
-                          Navigator.pop(context); // Close the bottom sheet
 
-                          // Update status to Cancelled
-                          bool success = await bookingController.updateBookingStatus(bookingId, "cancelled");
-                          if (success) {
-                            Navigator.pop(context, true);
-                          }
+                          double finalAmount = calculateWithdrawAmount(
+                              statusBooking?.price ?? 0,
+                              statusBooking?.numberOfPeople ?? 0
+                          );
+
+                          // 2. Pass it via arguments
+                          Get.toNamed(
+                            AppRoutes.withdrawRequestScreen,
+                            arguments: {
+                              'totalAmount': finalAmount,
+                              'bookingId': statusBooking!.id,
+                            },
+                          );
+
+                          // Navigator.pop(context); // Close the bottom sheet
+                          //
+                          // // Update status to Cancelled
+                          // bool success = await bookingController.updateBookingStatus(bookingId, "cancelled");
+                          // if (success) {
+                          //   Navigator.pop(context, true);
+                          // }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor,
@@ -910,81 +847,6 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
       },
     );
   }
-
-
-
-
-  //===========================================> Payment Option <==================================
-  _paymentOption(
-      String label,
-      double price,
-      String value,
-      String? groupValue,
-      ValueChanged<String?> onChanged,
-      ) {
-    final isSelected = value == groupValue;
-    return InkWell(
-      onTap: () => onChanged(value),
-      borderRadius: BorderRadius.circular(10.h),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
-        child: Container(
-          width: 288.w,
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.white,
-            border: Border.all(
-              color: isSelected ? Colors.blue : Colors.grey.shade300,
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.15),
-                blurRadius: 8,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Radio<String>(
-                value: value,
-                groupValue: groupValue,
-                onChanged: onChanged,
-                activeColor: Colors.blue,
-                fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return AppColors.primaryColor;
-                  }
-                  return Colors.grey;
-                }),
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Text(
-                '\$${price.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
 
   void _showChatConfirmation(BuildContext context, String participantId) {
     showDialog(

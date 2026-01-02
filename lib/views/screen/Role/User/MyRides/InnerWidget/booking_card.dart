@@ -170,18 +170,20 @@ class BookingCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (from == 'ongoing') ...[
-                    CustomButton(
-                      onTap: onChatTap ?? () {},
-                      width: 90.w,
-                      height: 34.h,
-                      text: AppStrings.chats.tr,
-                      color: Colors.white,
-                      broderColor: AppColors.borderColor,
-                      textColor: Colors.black,
-                    ),
-                    SizedBox(width: 8.w),
-                  ],
+                  // if (from == 'ongoing') ...[
+                  //   CustomButton(
+                  //     onTap: onChatTap ?? () {},
+                  //     width: 90.w,
+                  //     height: 34.h,
+                  //     text: AppStrings.chats.tr,
+                  //     color: Colors.white,
+                  //     broderColor: AppColors.borderColor,
+                  //     textColor: Colors.black,
+                  //   ),
+                  //   SizedBox(width: 8.w),
+                  // ],
+
+            if (from != 'cancelled') ...[
                   CustomButton(
                     onTap: onViewTap,
                     width: 90.w,
@@ -189,7 +191,9 @@ class BookingCard extends StatelessWidget {
                     text: AppStrings.view.tr,
                   ),
                 ],
+    ],
               ),
+
             )
           ],
         ),

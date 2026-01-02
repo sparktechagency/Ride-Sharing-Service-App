@@ -41,6 +41,7 @@ class CompletedTab extends StatelessWidget {
                 final result = await Get.toNamed(
                   AppRoutes.rideDetailsScreen,
                   arguments: {
+                    'rideId': booking.id,
                     'driverId': booking.driver.id,
                     'booking': booking,
                     'user': user, // Keep user for ride details screen if needed

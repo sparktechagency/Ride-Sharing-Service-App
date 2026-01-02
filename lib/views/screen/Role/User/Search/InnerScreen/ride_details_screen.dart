@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../controllers/booking_controller.dart';
 import '../../../../../../controllers/create_message_room_controller.dart';
+import '../../../../../../controllers/rating_controller.dart';
 import '../../../../../../helpers/route.dart';
 import '../../../../../../models/booking_user_details_model.dart';
 import '../../../../../../models/booking_with_status_model.dart';
+import '../../../../../../models/single_ride_details_model.dart';
 import '../../../../../../service/api_constants.dart';
 import '../../../../../../utils/app_colors.dart';
 import '../../../../../../utils/app_icons.dart';
@@ -36,6 +38,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.
   late String fromScreen;
+  late String riderId;
   late String driverId;
   late BookingAttribute? statusBooking;
   late BookingUserAttributes? userDetails;
@@ -53,11 +56,12 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 
     // Get arguments
     final arguments = Get.arguments as Map<String, dynamic>?;
+
     fromScreen = arguments?['from'] ?? '';
     driverId = arguments?['driverId'] ?? arguments?['booking']?['driverId'] ?? '';
     statusBooking = arguments?['booking'] as BookingAttribute?;
     userDetails = arguments?['user'] as BookingUserAttributes?;
-
+    riderId = statusBooking?.id ?? arguments?['id'] ?? '';
     // Load user details for the driver if needed
     if (driverId.isNotEmpty) {
       bookingController.getBookingUserDetails(driverId);
@@ -253,6 +257,18 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                             );
                           }
 
+                          else if (fromScreen == 'ongoing') {
+                            return Obx(() => CustomButton(
+                              onTap: () async {
+                                bool success = await bookingController.updateBookingStatus(statusBooking!.id, "completed");
+                                if (success) Navigator.pop(context, true);
+                              },
+                              loading: bookingController.isUpdatingStatus.value,
+                              text: "Complete Trip".tr,
+                              height: 48.h,
+                            ));
+                          }
+
                           // 3. ACTIVE STATE (Pending or Ongoing)
                           else {
                             return Row(
@@ -283,12 +299,11 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                   flex: 2,
                                   child: Obx(() => CustomButton(
                                     onTap: () async {
-                                      String newStatus = (fromScreen == 'ongoing') ? "completed" : "ongoing";
-                                      bool success = await bookingController.updateBookingStatus(statusBooking!.id, newStatus);
+                                      bool success = await bookingController.updateBookingStatus(statusBooking!.id, "ongoing");
                                       if (success) Navigator.pop(context, true);
                                     },
                                     loading: bookingController.isUpdatingStatus.value,
-                                    text: fromScreen == 'ongoing' ? "Complete Trip".tr : "Start Trip".tr,
+                                    text: "Start Trip".tr,
                                     height: 48.h,
                                   )),
                                 ),
@@ -484,11 +499,37 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                           ),
                           SizedBox(height: 24.h),
                           //=====================> Users in Ride Section <=================
-                          CustomText(
-                            text: "User Reviews".tr,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                            bottom: 16.h,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(
+                                text: "User Reviews".tr,
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                bottom: 16.h,
+                              ),
+                              // Only show "Give Review" if the trip is completed
+                              if (fromScreen == 'completed')
+                                TextButton.icon(
+                                  onPressed: () {
+
+                                    final userId = userDetails?.userId;
+
+                                    if (userId != null && userId.isNotEmpty) {
+                                      _showReviewDialog(context, userId);
+                                    } else {
+                                      Get.snackbar("Notice", "Review is currently unavailable for this user.");
+                                    }
+                                  },
+                                  icon: Icon(Icons.rate_review_outlined, size: 18.sp, color: AppColors.primaryColor),
+                                  label: CustomText(
+                                    text: "Give Review".tr,
+                                    fontSize: 14.sp,
+                                    color: AppColors.primaryColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                            ],
                           ),
 
 // Check if reviews list is empty
@@ -671,6 +712,97 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
           },
         );
       },
+    );
+  }
+
+
+  void _showReviewDialog(BuildContext context, String user,) {
+    final RatingController ratingController = Get.put(RatingController());
+    final TextEditingController feedbackController = TextEditingController();
+    RxInt selectedStars = 0.obs;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: AppColors.backgroundColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(color: Colors.green.withOpacity(0.1), shape: BoxShape.circle),
+                child: Icon(Icons.check_circle, color: Colors.green, size: 40.w),
+              ),
+              SizedBox(height: 16.h),
+              CustomText(text: "Give Person rating out of 5!".tr, fontSize: 18.sp, fontWeight: FontWeight.bold),
+              SizedBox(height: 20.h),
+              CustomText(text: userDetails?.userName ?? '', fontSize: 16.sp, fontWeight: FontWeight.w600),
+              SizedBox(height: 16.h),
+              Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (index) {
+                  return IconButton(
+                    onPressed: () => selectedStars.value = index + 1,
+                    icon: Icon(index < selectedStars.value ? Icons.star : Icons.star_border, color: Colors.amber, size: 32.w),
+                  );
+                }),
+              )),
+              SizedBox(height: 16.h),
+              Align(alignment: Alignment.centerLeft, child: CustomText(text: "Write your feedback".tr, fontSize: 14.sp)),
+              SizedBox(height: 8.h),
+              TextField(
+                controller: feedbackController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  hintText: "Type here...".tr,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                  filled: true,
+                  fillColor: Colors.grey.shade50,
+                ),
+              ),
+              SizedBox(height: 24.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      onTap: () => Navigator.pop(dialogContext),
+                      text: "Cancel".tr,
+                      color: AppColors.backgroundColor,
+                      broderColor: Colors.grey.shade300,
+                      textColor: Colors.black,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: Obx(() => CustomButton(
+                      loading: ratingController.isLoading.value,
+                      onTap: () async {
+                        if (selectedStars.value == 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please select stars")));
+                          return;
+                        }
+                        final result = await ratingController.createRating(
+                          context: context,
+                          ride: riderId,
+                          target_id: userDetails?.userId.toString() ?? '',
+                          stars: selectedStars.value,
+                          review: feedbackController.text,
+                        );
+                        if (result != null) Navigator.pop(dialogContext);
+                      },
+                      text: "Submit".tr,
+                    )),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 

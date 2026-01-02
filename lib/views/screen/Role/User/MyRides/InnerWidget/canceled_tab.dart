@@ -37,19 +37,19 @@ class CanceledTab extends StatelessWidget {
               booking: booking,
               from: booking.status.toLowerCase(), // 'completed', 'cancelled', or 'ongoing'
               onViewTap: () async {
-                final result = await Get.toNamed(
-                  AppRoutes.rideDetailsScreen,
-                  arguments: {
-                    'driverId': booking.driver.id,
-                    'booking': booking,
-                    'user': user, // Keep user for ride details screen if needed
-                    'from': booking.status.toLowerCase()
-                  },
-                );
+                // final result = await Get.toNamed(
+                //   AppRoutes.rideDetailsScreen,
+                //   arguments: {
+                //     'driverId': booking.driver.id,
+                //     'booking': booking,
+                //     'user': user, // Keep user for ride details screen if needed
+                //     'from': booking.status.toLowerCase()
+                //   },
+                // );
 
-                if (result == true && booking.status.toLowerCase() == "ongoing") {
-                  controller.getBookingsByStatus("ongoing");
-                }
+                // if (result == true && booking.status.toLowerCase() == "ongoing") {
+                //   controller.getBookingsByStatus("ongoing");
+                // }
               },
               onChatTap: () {
                 // Handle chat navigation

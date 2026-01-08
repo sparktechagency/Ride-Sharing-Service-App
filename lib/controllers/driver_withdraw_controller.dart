@@ -13,9 +13,25 @@ class DriverWithdrawController extends GetxController {
   final amountController = TextEditingController();
 
   var isLoading = false.obs;
+  // Hold the balance passed from the wallet screen
+  double totalAvailableBalance = 0.0;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Get the balance passed via Get.arguments
+    totalAvailableBalance = Get.arguments ?? 0.0;
+  }
+
+  // Logic for "Withdraw All" button
+  void setMaxAmount() {
+    amountController.text = totalAvailableBalance.toStringAsFixed(0);
+  }
 
   Future<void> requestWithdrawal() async {
-    // Basic Validation
+    double enteredAmount = double.tryParse(amountController.text) ?? 0.0;
+
+    // Validation Logic
     if (bankNameController.text.isEmpty ||
         accountNumberController.text.isEmpty ||
         accountTypeController.text.isEmpty ||
@@ -24,31 +40,33 @@ class DriverWithdrawController extends GetxController {
       return;
     }
 
-    isLoading.value = true;
+    if (enteredAmount > totalAvailableBalance) {
+      Fluttertoast.showToast(msg: "Insufficient balance".tr, backgroundColor: Colors.red);
+      return;
+    }
 
+    if (enteredAmount <= 0) {
+      Fluttertoast.showToast(msg: "Please enter a valid amount".tr, backgroundColor: Colors.red);
+      return;
+    }
+
+    isLoading.value = true;
     try {
       final body = {
         "bankName": bankNameController.text,
         "accountNumber": accountNumberController.text,
         "accountType": accountTypeController.text,
         "totalAmount": amountController.text,
-        "paymentType": "withdrawal" // Fixed as requested
+        "paymentType": "withdrawal"
       };
 
-      // Hit the withdrawal endpoint
       var response = await ApiClient.postData(ApiConstants.withdrawRequest, body);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        Fluttertoast.showToast(
-            msg: "Withdraw Request submitted successfully!".tr,
-            backgroundColor: Colors.green
-        );
-
-            } else {
-        Fluttertoast.showToast(
-            msg: response.body['message'] ?? "Failed to submit request".tr,
-            backgroundColor: Colors.red
-        );
+        Fluttertoast.showToast(msg: "Withdraw Request submitted successfully!".tr, backgroundColor: Colors.green);
+        Get.back();
+      } else {
+        Fluttertoast.showToast(msg: response.body['message'] ?? "Failed".tr, backgroundColor: Colors.red);
       }
     } catch (e) {
       Fluttertoast.showToast(msg: "Error: $e", backgroundColor: Colors.red);

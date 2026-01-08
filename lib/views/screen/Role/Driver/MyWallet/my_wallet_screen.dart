@@ -68,7 +68,8 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
               //====================> Withdraw Button (Moved Up) <==================
               CustomButton(
                 onTap: () {
-                  Get.toNamed(AppRoutes.driverWithdrawScreen);
+                  final balance = walletController.getWalletSummary()?.totalEarnings ?? 0.0;
+                  Get.toNamed(AppRoutes.driverWithdrawScreen, arguments: balance);
                 },
                 text: AppStrings.withdrawBalance.tr,
               ),

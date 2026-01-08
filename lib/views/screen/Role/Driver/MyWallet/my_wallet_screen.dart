@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ride_sharing/helpers/route.dart';
 import '../../../../../controllers/wallet_details_controller.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
@@ -10,8 +11,6 @@ import '../../../../../utils/app_strings.dart';
 import '../../../../base/custom_app_bar.dart';
 import '../../../../base/custom_button.dart';
 import '../../../../base/custom_text.dart';
-
-
 
 class MyWalletScreen extends StatefulWidget {
   const MyWalletScreen({super.key});
@@ -69,7 +68,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
               //====================> Withdraw Button (Moved Up) <==================
               CustomButton(
                 onTap: () {
-                  // TODO: Implement withdraw functionality
+                  Get.toNamed(AppRoutes.driverWithdrawScreen);
                 },
                 text: AppStrings.withdrawBalance.tr,
               ),

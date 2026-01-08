@@ -64,6 +64,10 @@ class DriverWithdrawController extends GetxController {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         Fluttertoast.showToast(msg: "Withdraw Request submitted successfully!".tr, backgroundColor: Colors.green);
+        if (Get.isRegistered<WalletDetailsController>()) {
+          Get.find<WalletDetailsController>().fetchWalletDetails();
+        }
+
         Get.back();
       } else {
         Fluttertoast.showToast(msg: response.body['message'] ?? "Failed".tr, backgroundColor: Colors.red);

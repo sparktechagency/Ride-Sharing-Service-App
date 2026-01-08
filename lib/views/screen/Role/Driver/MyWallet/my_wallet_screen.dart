@@ -69,7 +69,11 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
               CustomButton(
                 onTap: () {
                   final balance = walletController.getWalletSummary()?.totalEarnings ?? 0.0;
-                  Get.toNamed(AppRoutes.driverWithdrawScreen, arguments: balance);
+
+                  // Use .then() to catch the event when the user comes back
+                  Get.toNamed(AppRoutes.driverWithdrawScreen, arguments: balance)?.then((value) {
+                    walletController.fetchWalletDetails();
+                  });
                 },
                 text: AppStrings.withdrawBalance.tr,
               ),

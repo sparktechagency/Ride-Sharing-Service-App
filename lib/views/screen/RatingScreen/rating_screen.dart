@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ride_sharing/controllers/get_rating_controller.dart';
+import '../../../helpers/prefs_helpers.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_constants.dart';
 import '../../base/custom_text.dart';
 import 'InnerWidget/given_tab.dart';
 import 'InnerWidget/rating_tab.dart';
@@ -21,15 +23,25 @@ class _RatingScreenState extends State<RatingScreen>
 
   final GetRatingController ratingsController = Get.put(GetRatingController());
 
+  late String _userID; // Still use 'late'
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_onTabChanged);
 
-    // Initial fetch for the first tab (Received -> author)
+    // Call an async function to handle the ID retrieval
+    _setupInitialData();
+  }
+
+  Future<void> _setupInitialData() async {
+    // Use await to get the actual String out of the Future
+    _userID = await PrefsHelper.getString(AppConstants.id);
+
+    // Now that we have the ID, fetch the initial ratings
     ratingsController.fetchRatings(
-      userId: "68fb1a370a8b4dde2cbcfcf2",
+      userId: _userID,
       type: "author",
     );
   }
@@ -38,8 +50,9 @@ class _RatingScreenState extends State<RatingScreen>
     if (_tabController.indexIsChanging) return;
 
     final type = _tabController.index == 0 ? "author" : "user";
+
     ratingsController.fetchRatings(
-      userId: "68fb1a370a8b4dde2cbcfcf2",
+      userId: _userID, // This is now safe to use
       type: type,
     );
   }

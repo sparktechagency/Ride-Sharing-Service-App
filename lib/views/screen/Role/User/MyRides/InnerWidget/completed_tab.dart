@@ -13,6 +13,7 @@ import '../../../../../../utils/app_strings.dart';
 import '../../../../../base/custom_button.dart';
 import '../../../../../base/custom_network_image.dart';
 import '../../../../../base/custom_text.dart';
+import 'booking_card.dart';
 
 class CompletedTab extends StatelessWidget {
   const CompletedTab({super.key});
@@ -24,187 +25,46 @@ class CompletedTab extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
       child: Obx(() {
-        if (controller.isLoadingBooking.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (controller.bookings.isEmpty) {
-          return const Center(child: Text('No bookings found'));
-        }
+        if (controller.isLoadingBooking.value) return const Center(child: CircularProgressIndicator());
+        if (controller.bookings.isEmpty) return const Center(child: Text('No bookings found'));
 
         return ListView.builder(
           itemCount: controller.bookings.length,
           itemBuilder: (context, index) {
-            final statusBooking = controller.bookings[index];
-            final userDetails = controller.userDetails.value;
+            final booking = controller.bookings[index];
+            final user = controller.userDetails.value;
 
-            final formattedDate = DateFormat('EEE dd MMMM yyyy h.mm a')
-                .format(DateTime.parse(statusBooking.rideDate))
-                .toLowerCase();
+            return BookingCard(
+              booking: booking,
+              from: booking.status.toLowerCase(), // 'completed', 'cancelled', or 'ongoing'
+              onViewTap: () async {
+                // Capture the specific booking data at the moment of tap
+                // to prevent issues when the shared bookings list changes
+                final bookingToNavigate = booking;
 
-            return Padding(
-              padding: EdgeInsets.only(bottom: 8.h),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(
-                    width: 1.w,
-                    color: AppColors.borderColor,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    /// TOP
-                    Padding(
-                      padding: EdgeInsets.all(10.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              CustomNetworkImage(
+                // Fetch the specific user details for this booking's driver
+                // to ensure we have the correct user data even if the shared state changes
+                await controller.getBookingUserDetails(bookingToNavigate.driver.id);
+                final userToNavigate = controller.userDetails.value;
 
-                                imageUrl:
-                                "${ApiConstants.imageBaseUrl}${userDetails?.profileImage}",
-                                height: 38.h,
-                                width: 38.w,
-                                boxShape: BoxShape.circle,
-                              ),
-                              SizedBox(width: 8.w),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    text: userDetails?.userName ?? '',
-                                    bottom: 4.h,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CustomText(
-                                        text: userDetails?.averageRating
-                                            .toString() ??
-                                            '0',
-                                        right: 4.w,
-                                      ),
-                                      SvgPicture.asset(AppIcons.star),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                final result = await Get.toNamed(
+                  AppRoutes.rideDetailsScreen,
+                  arguments: {
+                    'rideId': bookingToNavigate.id,
+                    'driverId': bookingToNavigate.driver.id,
+                    'booking': bookingToNavigate,
+                    'user': userToNavigate, // Use the specific user details for this driver
+                    'from': bookingToNavigate.status.toLowerCase()
+                  },
+                );
 
-                          /// STATUS
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12.h,
-                                vertical: 4.h,
-                              ),
-                              child: CustomText(
-                                text: statusBooking.status.toUpperCase(),
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Divider(
-                      thickness: 1.5,
-                      color: AppColors.borderColor,
-                    ),
-
-                    /// DETAILS
-                    Padding(
-                      padding: EdgeInsets.all(12.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            text: '\$${statusBooking.price}',
-                            fontSize: 22.sp,
-                            bottom: 8.h,
-                          ),
-
-                          Row(
-                            children: [
-                              CustomText(text: AppStrings.bookingTime.tr),
-                              Expanded(
-                                child: CustomText(
-                                  text: formattedDate,
-                                  left: 4.h,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 8.h),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(text: AppStrings.pICKUP.tr),
-                                  CustomText(
-                                      text: statusBooking.pickUp.address ?? ''),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 102.w,
-                                child: Divider(
-                                  thickness: 1.5,
-                                  color: AppColors.borderColor,
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(text: AppStrings.dROPOFF.tr),
-                                  CustomText(
-                                      text: statusBooking.dropOff.address ?? ''),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Divider(thickness: 1.5, color: AppColors.borderColor),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CustomButton(
-                              onTap: () {
-                                Get.toNamed(
-                                  AppRoutes.rideDetailsScreen,
-                                  arguments: {
-                                    'driverId': statusBooking.driverId,
-                                    'booking': statusBooking,
-                                    'user': userDetails,
-                                    'from': 'completed'
-                                  },
-                                );
-                              },
-                              width: 100.w,
-                              height: 34.h,
-                              text: AppStrings.view.tr),
-                        ],
-                      ),
-                    )
-
-                  ],
-                ),
-              ),
+                if (result == true && bookingToNavigate.status.toLowerCase() == "ongoing") {
+                  controller.getBookingsByStatus("ongoing");
+                }
+              },
+              onChatTap: () {
+                // Handle chat navigation
+              },
             );
           },
         );

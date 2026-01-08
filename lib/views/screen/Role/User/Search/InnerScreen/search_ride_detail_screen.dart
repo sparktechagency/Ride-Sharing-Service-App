@@ -24,7 +24,9 @@ class SearchRideDetailsScreen extends StatefulWidget {
 }
 
 class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
-  final BookingController bookingController = Get.find<BookingController>();
+  final BookingController bookingController = Get.isRegistered<BookingController>()
+      ? Get.find<BookingController>()
+      : Get.put(BookingController(), permanent: true);
 
   @override
   void initState() {
@@ -333,7 +335,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomNetworkImage(
-            imageUrl: "${ApiConstants.imageBaseUrl}${review.userImage ?? ''}",
+            imageUrl: "${ApiConstants.imageBaseUrl}${review.reviewer?.image ?? ''}",
             height: 38.h, width: 38.w, boxShape: BoxShape.circle,
           ),
           SizedBox(width: 8.w),
@@ -341,7 +343,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(text: review.userName ?? 'User', fontWeight: FontWeight.w500),
+                CustomText(text: review.reviewer?.userNameSelf ?? 'User', fontWeight: FontWeight.w500),
                 Row(
                   children: List.generate(5, (index) => Icon(
                       Icons.star,
@@ -349,7 +351,7 @@ class _SearchRideDetailsScreenState extends State<SearchRideDetailsScreen> {
                       color: index < (review.rating ?? 0) ? Colors.orange : Colors.grey[300]
                   )),
                 ),
-                CustomText(text: review.comment ?? '', maxLine: 5),
+                CustomText(text: review.review ?? '', maxLine: 5),
               ],
             ),
           ),

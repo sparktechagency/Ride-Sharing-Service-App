@@ -42,6 +42,14 @@ class _MyRidesScreenState extends State<MyRidesScreen> with SingleTickerProvider
         _loadBookingsByStatus(_tabController.index);
       }
     });
+
+    // Listen for the flag to switch to cancelled tab after withdrawal request
+    bookingController.shouldSwitchToCancelledTab.listen((shouldSwitch) {
+      if (shouldSwitch) {
+        _tabController.animateTo(2); // Index 2 is the cancelled tab
+        bookingController.shouldSwitchToCancelledTab.value = false; // Reset the flag
+      }
+    });
   }
 
   Future<void> _initData() async {

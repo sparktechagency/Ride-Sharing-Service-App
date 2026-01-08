@@ -32,6 +32,7 @@ import '../views/screen/Role/Driver/Inbox/MessageInbox/driver_message_screen.dar
 import '../views/screen/Role/Driver/Inbox/driver_inbox_screen.dart';
 import '../views/screen/Role/Driver/MyOrders/my_orders_screen.dart';
 import '../views/screen/Role/Driver/MyRide/driver_my_ride_screen.dart';
+import '../views/screen/Role/Driver/MyWallet/driver_withdraw_screen.dart';
 import '../views/screen/Role/Driver/MyWallet/my_wallet_screen.dart';
 import '../views/screen/Role/Driver/PassengersTake/passengers_take_screen.dart';
 import '../views/screen/Role/Driver/PickUp/pick_up_screen.dart';
@@ -48,6 +49,7 @@ import '../views/screen/Role/User/Profile/user_profile_screen.dart';
 import '../views/screen/Role/User/Search/InnerScreen/ride_details_screen.dart';
 import '../views/screen/Role/User/Search/InnerScreen/see_all_screen.dart';
 import '../views/screen/Role/User/Search/user_search_screen.dart';
+import '../views/screen/Role/User/withdraw_request/withdraw_request_screen.dart';
 import '../views/screen/SelectRole/select_role_screen.dart';
 import '../views/screen/Settings/settings_screen.dart';
 import '../views/screen/Splash/onboarding_screen.dart';
@@ -113,6 +115,8 @@ class AppRoutes{
   static String seeAllScreen="/see_all_screen";
   static String rideDetailsScreen="/ride_details_screen";
   static String singleRideDetailsScreen="/single_ride_details_screen";
+  static String withdrawRequestScreen="/withdraw_request_screen";
+  static String driverWithdrawScreen="/driver_withdraw_screen";
 
 
  static List<GetPage> page=[
@@ -176,6 +180,9 @@ class AppRoutes{
      name: singleRideDetailsScreen,
      page: () => SingleRideDetailsScreen(rideId: Get.arguments as String),
    ),
+   GetPage(name:withdrawRequestScreen, page: ()=> WithdrawRequestScreen()),
+   GetPage(name:driverWithdrawScreen, page: ()=> DriverWithdrawScreen()),
+
 
  ];
 }

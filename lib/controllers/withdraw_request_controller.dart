@@ -58,15 +58,17 @@ class WithdrawRequestController extends GetxController {
             backgroundColor: Colors.green
         );
 
-        // 5. Navigate back to Main Tab Screen
-        Get.until((route) => Get.currentRoute == AppRoutes.myRidesScreen);
-
-        // 6. Refresh the Booking Lists
+        // 5. Refresh the Booking Lists and set flag to switch to cancelled tab
         if (Get.isRegistered<BookingController>()) {
           final bookingController = Get.find<BookingController>();
           bookingController.getBookingsByStatus("pending");
           bookingController.getBookingsByStatus("cancelled");
+          // Set flag to switch to cancelled tab after navigation
+          bookingController.shouldSwitchToCancelledTab.value = true;
         }
+
+        // 6. Navigate back to Main Tab Screen
+        Get.until((route) => Get.currentRoute == AppRoutes.myRidesScreen);
       } else {
         Fluttertoast.showToast(
             msg: response.body['message'] ?? "Failed to submit request".tr,

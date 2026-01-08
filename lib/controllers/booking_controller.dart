@@ -20,6 +20,7 @@ class BookingController extends GetxController {
   final errorMessage = ''.obs;
 
   final isUpdatingStatus = false.obs;
+  final shouldSwitchToCancelledTab = false.obs;
 
   /// =================== USER DETAILS ===================
   final userDetails = Rxn<BookingUserAttributes>();

@@ -1,11 +1,15 @@
-/*
+
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart' as AppSettings;
+import 'package:ride_sharing/helpers/prefs_helpers.dart';
 import '../utils/app_constants.dart';
 import 'logger_helpers.dart';
 
@@ -17,7 +21,7 @@ class NotificationHelper {
   static Future<void> getFcmToken() async {
     String? fcmToken = await _firebaseMessaging.getToken();
     if (fcmToken != null) {
-     PrefsHelper.setString(AppConstants.fcmToken, fcmToken);
+      PrefsHelper.setString(AppConstants.fcmToken, fcmToken);
     }
     print('FCM Token: $fcmToken');
   }
@@ -288,4 +292,3 @@ class NotificationHelper {
     //     message, flutterLocalNotificationsPlugin, false);
   }
 }
-*/

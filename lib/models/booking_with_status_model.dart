@@ -18,6 +18,7 @@ class BookingWithStatusModel {
   }
 }
 
+
 class BookingStatusData {
   final List<BookingAttribute> attributes;
 
@@ -37,7 +38,7 @@ class BookingAttribute {
   final PickDrop pickUp;
   final PickDrop dropOff;
   final String id;
-  final String driverId;
+  final DriverInfo driver;
   final String requestedId;
   final String authorName;
   final int price;
@@ -53,7 +54,7 @@ class BookingAttribute {
     required this.pickUp,
     required this.dropOff,
     required this.id,
-    required this.driverId,
+    required this.driver,
     required this.requestedId,
     required this.authorName,
     required this.price,
@@ -71,11 +72,11 @@ class BookingAttribute {
       pickUp: PickDrop.fromJson(json['pickUp'] ?? {}),
       dropOff: PickDrop.fromJson(json['dropOff'] ?? {}),
       id: json['_id'] ?? '',
-      driverId: json['driverId'] ?? '',
+      driver: DriverInfo.fromJson(json['driverId'] ?? {}),
       requestedId: json['requested_id'] ?? '',
       authorName: json['author_name'] ?? '',
-      price: json['price'] ?? 0,
-      numberOfPeople: json['number_of_people'] ?? 0,
+      price: (json['price'] as num?)?.toInt() ?? 0,
+      numberOfPeople: (json['number_of_people'] as num?)?.toInt() ?? 0,
       vehicleType: json['vehicle_type'] ?? '',
       rideDate: json['ride_date'] ?? '',
       status: json['status'] ?? '',
@@ -85,6 +86,27 @@ class BookingAttribute {
     );
   }
 }
+
+class DriverInfo {
+  final String id;
+  final String userName;
+  final String image;
+
+  DriverInfo({
+    required this.id,
+    required this.userName,
+    required this.image,
+  });
+
+  factory DriverInfo.fromJson(Map<String, dynamic> json) {
+    return DriverInfo(
+      id: json['id'] ?? '',
+      userName: json['userName'] ?? '',
+      image: json['image'] ?? '',
+    );
+  }
+}
+
 
 class PickDrop {
   final GeoLocation location;
@@ -102,6 +124,7 @@ class PickDrop {
     );
   }
 }
+
 
 class GeoLocation {
   final String type;
@@ -122,3 +145,4 @@ class GeoLocation {
     );
   }
 }
+

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574122454994",
+    "project_id": "adedo-ec51f",
+    "storage_bucket": "adedo-ec51f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574122454994:android:7bffb9e06c2f1cf5e8220b",
+        "android_client_info": {
+          "package_name": "com.mauro.adedo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZOgSlnqnA6_VMvyt4o8vtluE0yKm_Khw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

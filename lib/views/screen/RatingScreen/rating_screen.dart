@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:ride_sharing/controllers/get_rating_controller.dart';
+import '../../../helpers/prefs_helpers.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_constants.dart';
 import '../../base/custom_text.dart';
 import 'InnerWidget/given_tab.dart';
+import 'InnerWidget/rating_tab.dart';
 import 'InnerWidget/received_tab.dart';
 
 class RatingScreen extends StatefulWidget {
@@ -13,96 +17,133 @@ class RatingScreen extends StatefulWidget {
   State<RatingScreen> createState() => _RatingScreenState();
 }
 
-class _RatingScreenState extends State<RatingScreen> with SingleTickerProviderStateMixin {
-
+class _RatingScreenState extends State<RatingScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  final GetRatingController ratingsController = Get.put(GetRatingController());
+
+  late String _userID; // Still use 'late'
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(() {
-      setState(() {});
-    });
+    _tabController.addListener(_onTabChanged);
+
+    // Call an async function to handle the ID retrieval
+    _setupInitialData();
+  }
+
+  Future<void> _setupInitialData() async {
+    // Use await to get the actual String out of the Future
+    _userID = await PrefsHelper.getString(AppConstants.id);
+
+    // Now that we have the ID, fetch the initial ratings
+    ratingsController.fetchRatings(
+      userId: _userID,
+      type: "author",
+    );
+  }
+
+  void _onTabChanged() {
+    if (_tabController.indexIsChanging) return;
+
+    final type = _tabController.index == 0 ? "author" : "user";
+
+    ratingsController.fetchRatings(
+      userId: _userID, // This is now safe to use
+      type: type,
+    );
   }
 
   @override
   void dispose() {
-    _tabController.removeListener(() {});
+    _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              title: CustomText(
-                text: "Rating".tr,
-                fontSize: 16.sp,
-              ),
-              centerTitle: true,
-              bottom: TabBar(
-                padding: EdgeInsets.zero,
-                controller: _tabController,
-                indicatorColor: AppColors.primaryColor,
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey,
-                isScrollable: true,
-                tabs: [
-                  //========================> Received Tab <====================
-                  Tab(
-                    child: Container(
-                      width: 81.w,
-                      decoration: BoxDecoration(
-                        color: _tabController.index == 0
-                            ? const Color(0xFFebf9ff)
-                            : Colors.transparent,
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: CustomText(
-                          text: 'Received'.tr,
-                          fontSize: 14.sp,
-                        ),
-                      ),
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: CustomText(
+            text: "Rating".tr,
+            fontSize: 16.sp,
+          ),
+          centerTitle: true,
+          bottom: TabBar(
+            padding: EdgeInsets.zero,
+            controller: _tabController,
+            indicatorColor: AppColors.primaryColor,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            isScrollable: true,
+            tabs: [
+              Tab(
+                child: Container(
+                  width: 81.w,
+                  decoration: BoxDecoration(
+                    color: _tabController.index == 0
+                        ? const Color(0xFFebf9ff)
+                        : Colors.transparent,
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: CustomText(
+                      text: 'Received'.tr,
+                      fontSize: 14.sp,
                     ),
                   ),
-                  //========================> Given Tab <====================
-                  Tab(
-                    child: Container(
-                      width: 81.w,
-                      decoration: BoxDecoration(
-                        color: _tabController.index == 1
-                            ? const Color(0xFFebf9ff)
-                            : Colors.transparent,
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: CustomText(
-                          text: 'Given'.tr,
-                          fontSize: 14.sp,
-                        ),
-                      ),
+                ),
+              ),
+              Tab(
+                child: Container(
+                  width: 81.w,
+                  decoration: BoxDecoration(
+                    color: _tabController.index == 1
+                        ? const Color(0xFFebf9ff)
+                        : Colors.transparent,
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: CustomText(
+                      text: 'Given'.tr,
+                      fontSize: 14.sp,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-            body:TabBarView(
-              controller: _tabController,
-              children:  [
-                ReceivedTab(),
-                GivenTab(),
-              ],
-            ))
+            ],
+          ),
+        ),
+        body: Obx(
+              () {
+            if (ratingsController.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
+            final data = ratingsController.ratingsResponse.value?.data.attributes;
+            if (data == null) {
+              return Center(child: Text("No ratings found".tr));
+            }
+
+            // Both tabs can use the same UI
+            return TabBarView(
+              controller: _tabController,
+              children: [
+                RatingTab(attributes: data),
+                RatingTab(attributes: data),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }

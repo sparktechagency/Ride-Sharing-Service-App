@@ -134,19 +134,17 @@ class MyWalletScreen extends StatelessWidget {
           ),
           child: Padding(
             padding: EdgeInsets.all(24.w),
-            child: Expanded(
-              child: Column(
-                children: [
-                  SvgPicture.asset(AppIcons.doller),
-                  SizedBox(height: 16.h),
-                  CustomText(
-                    text: balance,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 24.sp,
-                    maxLine: 3,
-                  ),
-                ],
-              ),
+            child: Column(
+              children: [
+                SvgPicture.asset(AppIcons.doller),
+                SizedBox(height: 16.h),
+                CustomText(
+                  text: balance,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 24.sp,
+                  maxLine: 3,
+                ),
+              ],
             ),
           ),
         ),

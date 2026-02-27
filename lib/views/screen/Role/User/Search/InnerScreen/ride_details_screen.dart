@@ -26,7 +26,9 @@ class RideDetailsScreen extends StatefulWidget {
 
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   String? selectedPayment;
-  final BookingController bookingController = Get.find<BookingController>();
+  final BookingController bookingController = Get.isRegistered<BookingController>()
+      ? Get.find<BookingController>()
+      : Get.put(BookingController(), permanent: true);
 
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.

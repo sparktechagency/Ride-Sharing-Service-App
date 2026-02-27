@@ -25,8 +25,27 @@ class CustomNetworkImage extends StatelessWidget {
     this.boxShape = BoxShape.rectangle,
   });
 
+  bool _isValidUrl(String url) {
+    final uri = Uri.tryParse(url);
+    return uri != null && uri.hasScheme && uri.hasAuthority;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!_isValidUrl(imageUrl)) {
+      return Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          border: border,
+          color: Colors.grey.withOpacity(0.6),
+          borderRadius: borderRadius,
+          shape: boxShape,
+        ),
+        child: const Icon(Icons.person),
+      );
+    }
+
     return CachedNetworkImage(
         imageUrl: imageUrl,
         imageBuilder: (context, imageProvider) => Container(

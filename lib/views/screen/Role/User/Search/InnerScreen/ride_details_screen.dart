@@ -33,7 +33,6 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   final BookingController bookingController = Get.isRegistered<BookingController>()
       ? Get.find<BookingController>()
       : Get.put(BookingController(), permanent: true);
-  final ChatController chatController = Get.put(ChatController());
 
   // Variables to hold the data received via Get.arguments
   // Note: These are defined late and initialized in the build method.

@@ -163,7 +163,7 @@ class AppRoutes{
     GetPage(name:addCityScreen, page: ()=> AddCityScreen()),
     GetPage(name:cityViewScreen, page: ()=> CityViewScreen()),
    GetPage(name:passengersTakeScreen, page: ()=> PassengersTakeScreen()),
-   GetPage(name:driverMyRideScreen, page: ()=> DriverMyRideScreen()),
+   //GetPage(name:driverMyRideScreen, page: ()=> DriverMyRideScreen()),
    GetPage(name: riderPostSubmit, page: ()=> RiderPostSubmit()),
    //===================================================> User Role <=============================================
    GetPage(name:userSignUpScreen, page: ()=> UserSignUpScreen()),

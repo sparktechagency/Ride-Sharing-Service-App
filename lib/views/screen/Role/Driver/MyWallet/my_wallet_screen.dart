@@ -120,25 +120,20 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
             borderRadius: BorderRadius.circular(20.r),
             border: Border.all(width: 1.w, color: Colors.grey.shade400),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Circular Icon Placeholder
-              Container(
-                padding: EdgeInsets.all(10.w),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF00ADEE), // Light Blue from image
-                  shape: BoxShape.circle,
+          child: Padding(
+            padding: EdgeInsets.all(24.w),
+            child: Column(
+              children: [
+                SvgPicture.asset(AppIcons.doller),
+                SizedBox(height: 16.h),
+                CustomText(
+                  text: balance,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 24.sp,
+                  maxLine: 3,
                 ),
-                child: const Icon(Icons.attach_money, color: Colors.white, size: 30),
-              ),
-              SizedBox(height: 12.h),
-              CustomText(
-                text: balance,
-                fontWeight: FontWeight.bold,
-                fontSize: 28.sp,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         // Overlapping Blue Label
